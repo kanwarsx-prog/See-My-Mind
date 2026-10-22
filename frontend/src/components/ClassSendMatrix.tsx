@@ -198,14 +198,14 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               {/* Triggers & Calming Tools */}
               <div className="space-y-2 text-xs">
                 <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">
                     Primary Triggers to Avoid
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {pupil.primary_triggers.map((t, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-lg bg-coral-50 border border-coral-200/60 text-coral-dark text-[11px] font-medium"
+                        className="px-2 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-medium"
                       >
                         ⚡ {t}
                       </span>
@@ -289,7 +289,7 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-coral-dark uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider block">
                       ⚠️ Never do:
                     </span>
                     <span className="text-gray-700">

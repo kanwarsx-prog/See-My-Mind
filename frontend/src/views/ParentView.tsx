@@ -321,7 +321,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
                     <h3 className="text-sm font-bold text-navy">
                       Handover Sent · Awaiting Teacher Registration Check-In
                     </h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-coral-light text-coral-dark animate-pulse">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
                       Transmitted to School
                     </span>
                   </div>

@@ -118,7 +118,7 @@ export const IncidentModal: React.FC<IncidentModalProps> = ({
           </div>
 
           {severity === 'Safeguarding Incident' && (
-            <div className="p-3 bg-coral-light/50 border border-coral-dark/30 rounded-xl flex items-center gap-2 text-coral-dark font-medium">
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-center gap-2 text-rose-800 font-medium">
               <ShieldAlert className="w-4 h-4 shrink-0" />
               <span>This record will automatically alert the Designated Safeguarding Lead (DSL).</span>
             </div>

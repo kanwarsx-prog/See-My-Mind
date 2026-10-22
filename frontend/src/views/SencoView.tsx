@@ -448,35 +448,35 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </div>
               <div className="text-[10px] text-gray-500 mt-0.5">Whole-School SEND Caseload</div>
             </div>
-            <div className="stat-card border-purple-dark">
-              <div className="font-serif text-2xl font-bold text-purple-dark">
+            <div className="stat-card border border-gray-100 border-l-4 border-l-purple-600">
+              <div className="font-serif text-2xl font-bold text-purple-900">
                 {provisionMatrix?.ehcp_count || 12}
               </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">Statutory EHCPs Managed</div>
+              <div className="text-[10px] text-gray-600 mt-0.5">Statutory EHCPs Managed</div>
             </div>
-            <div className="stat-card border-indigo-600">
-              <div className="font-serif text-2xl font-bold text-indigo-700">
+            <div className="stat-card border border-gray-100 border-l-4 border-l-indigo-600">
+              <div className="font-serif text-2xl font-bold text-indigo-800">
                 {provisionMatrix?.sen_support_count || 22}
               </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">SEN Support (K) Learners</div>
+              <div className="text-[10px] text-gray-600 mt-0.5">SEN Support (K) Learners</div>
             </div>
-            <div className="stat-card border-emerald-600">
-              <div className="font-serif text-2xl font-bold text-emerald-700">
+            <div className="stat-card border border-gray-100 border-l-4 border-l-emerald-600">
+              <div className="font-serif text-2xl font-bold text-emerald-800">
                 {provisionMatrix ? `${provisionMatrix.total_ta_hours_weekly.toFixed(0)}h` : '185h'}
               </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">1:1 TA Hours / Week</div>
+              <div className="text-[10px] text-gray-600 mt-0.5">1:1 TA Hours / Week</div>
             </div>
-            <div className="stat-card border-gold">
-              <div className="font-serif text-2xl font-bold text-amber-700">
+            <div className="stat-card border border-gray-100 border-l-4 border-l-amber-500">
+              <div className="font-serif text-2xl font-bold text-amber-800">
                 {provisionMatrix?.high_needs_funding_total || '£148,600'}
               </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">High Needs Block Funding</div>
+              <div className="text-[10px] text-gray-600 mt-0.5">High Needs Block Funding</div>
             </div>
-            <div className="stat-card border-coral-dark">
-              <div className="font-serif text-2xl font-bold text-coral-dark">
+            <div className="stat-card border border-gray-100 border-l-4 border-l-rose-500">
+              <div className="font-serif text-2xl font-bold text-rose-700">
                 {provisionMatrix?.reviews_due_next_30_days || 3}
               </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">Reviews Due in &le; 30 Days</div>
+              <div className="text-[10px] text-gray-600 mt-0.5">Reviews Due in &le; 30 Days</div>
             </div>
           </div>
 
@@ -757,7 +757,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 {onOpenIncidentModal && (
                   <button
                     onClick={onOpenIncidentModal}
-                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-coral-light text-coral-dark rounded-lg hover:bg-coral-200 cursor-pointer"
+                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200 rounded-lg hover:bg-rose-100 cursor-pointer"
                   >
                     <span>+ Report ABC</span>
                   </button>

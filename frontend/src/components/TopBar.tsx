@@ -28,12 +28,12 @@ export const TopBar: React.FC<TopBarProps> = ({
   onToggleMobileMenu,
 }) => {
   const pillColors = {
-    red: 'bg-coral-light text-coral-dark',
-    amber: 'bg-amber-light text-amber-dark',
-    gold: 'bg-gold-light text-[#7A5A00]',
-    green: 'bg-green-light text-[#1f6040]',
-    teal: 'bg-mint-pale text-teal',
-    purple: 'bg-purple-light text-purple-dark',
+    red: 'bg-rose-50 text-rose-800 border border-rose-200',
+    amber: 'bg-amber-50 text-amber-900 border border-amber-200',
+    gold: 'bg-amber-50 text-[#7A5A00] border border-amber-300',
+    green: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+    teal: 'bg-teal-50 text-teal-800 border border-teal-200',
+    purple: 'bg-purple-50 text-purple-800 border border-purple-200',
   };
 
   return (

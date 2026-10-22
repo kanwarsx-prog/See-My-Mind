@@ -53,7 +53,7 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
       need: 'Auditory step-by-step verbal walkthrough · minimal visual clutter',
       route: 'Verbal instruction strip',
       method: 'Auditory',
-      color: 'bg-purple-light text-purple-dark',
+      color: 'bg-purple-50 text-purple-800 border border-purple-200',
     },
     {
       initials: 'RP',
@@ -61,7 +61,7 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
       need: 'Short 10-minute chunked tasks with scheduled movement break at step 2',
       route: 'Kinesthetic chunking',
       method: 'Kinesthetic',
-      color: 'bg-coral-light text-coral-dark',
+      color: 'bg-rose-50 text-rose-800 border border-rose-200',
     },
     {
       initials: 'AM',
@@ -69,7 +69,7 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
       need: 'Written prompt cards only · non-verbal partner pairing with Jake O\'Brien',
       route: 'Written & partner work',
       method: 'Written',
-      color: 'bg-amber-light text-amber-dark',
+      color: 'bg-amber-50 text-amber-900 border border-amber-200',
     },
   ];
 

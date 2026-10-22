@@ -110,7 +110,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             }`}
           >
             <span>🧒</span>
-            <span>{child.preferred_name || child.first_name || 'Phoenix'} Carter · 1:1 Focus</span>
+            <span>{child.preferred_name || child.first_name || 'Phoenix'} {child.last_name || ''} · 1:1 Focus</span>
           </button>
 
           <button
@@ -137,77 +137,77 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         <>
           {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="stat-card border-coral-dark">
-          <div className="font-serif text-2xl font-bold text-coral-dark">
+        <div className="stat-card border border-gray-100 border-l-4 border-l-rose-500">
+          <div className="font-serif text-2xl font-bold text-rose-700">
             {effectiveHandover?.morning_mood || 'Anxious'}
           </div>
-          <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+          <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
             Sleep: {effectiveHandover?.sleep_quality || 'Restless (woke at 4am)'}
           </div>
         </div>
 
-        <div className="stat-card border-amber-dark">
-          <div className="font-serif text-2xl font-bold text-amber-dark">3</div>
-          <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+        <div className="stat-card border border-gray-100 border-l-4 border-l-amber-500">
+          <div className="font-serif text-2xl font-bold text-amber-800">3</div>
+          <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
             Active alerts needing attention today
           </div>
         </div>
 
-        <div className="stat-card border-emerald-600">
-          <div className="font-serif text-2xl font-bold text-emerald-700">92%</div>
-          <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+        <div className="stat-card border border-gray-100 border-l-4 border-l-emerald-600">
+          <div className="font-serif text-2xl font-bold text-emerald-800">92%</div>
+          <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
             Strategy effectiveness this week
           </div>
         </div>
 
-        <div className="stat-card border-gold">
-          <div className="font-serif text-2xl font-bold text-amber-600">Year 5</div>
-          <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+        <div className="stat-card border border-gray-100 border-l-4 border-l-teal">
+          <div className="font-serif text-2xl font-bold text-teal-800">Year 5</div>
+          <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
             St. Jude's Inclusive Academy · Room 4
           </div>
         </div>
       </div>
 
       {/* Pupil Profile Banner */}
-      <div className="card p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-l-purple-dark">
+      <div className="card p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-l-purple-600">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-coral-light/60 flex items-center justify-center text-2xl shadow-inner">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
             🧒
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-serif font-bold text-navy">{child.full_name || 'Phoenix Carter'}</h2>
-              <span className="bg-purple-light text-purple-dark text-[10px] font-bold px-2 py-0.5 rounded-full">
+              <h2 className="text-xl font-serif font-bold text-navy">{child.full_name || `${child.first_name || 'Phoenix'} ${child.last_name || 'Carter'}`}</h2>
+              <span className="bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
                 EHCP Active
               </span>
             </div>
-            <p className="text-xs text-gray-600 mt-0.5">
-              Year 5 · {child.support_profile?.primary_need || 'Autism Spectrum Condition'} · Communication: Visual Task Cards
+            <p className="text-xs text-gray-700 mt-0.5 font-medium">
+              Year {child.year_group || '5'} · {child.support_profile?.primary_need || 'Autism Spectrum Condition'} · Communication: Visual Task Cards
             </p>
-            <p className="text-[11px] text-gray-400 mt-0.5">
-              Emergency Contact: Mum (Dana Carter) · 07700 900123
+            <p className="text-[11px] text-gray-500 mt-0.5">
+              Emergency Contact: {child.last_name === 'Carter' || !child.last_name ? 'Mum (Dana Carter) · 07700 900123' : `Parent/Guardian · ${child.first_name}'s Contact`}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-coral-light text-coral-dark">
+          <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200">
             ⚡ Assembly Alert 9:05am
           </span>
-          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-mint-pale text-teal">
+          <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-teal-50 text-teal-800 border border-teal-200">
             🎧 Noise Defenders
           </span>
-          <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg ${
+          <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg ${
             effectiveHandover?.breakfast_eaten === false
-              ? 'bg-coral-light text-coral-dark'
-              : 'bg-amber-light text-amber-dark'
+              ? 'bg-rose-50 text-rose-800 border border-rose-200'
+              : 'bg-amber-50 text-amber-900 border border-amber-200'
           }`}>
             {effectiveHandover?.breakfast_eaten === false ? '🍽 Skipped Breakfast' : '🥣 Breakfast Eaten'}
           </span>
-          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-purple-light text-purple-dark">
+          <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-800 border border-purple-200">
             💊 Meds Taken (Week 1)
           </span>
-          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-gold-light text-[#7A5A00]">
+          <span className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-sky-50 text-sky-800 border border-sky-200">
             🎮 Goal: Game Designer
           </span>
           <button
@@ -222,42 +222,63 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
       {/* ⭐ PRE-FLIGHT MORNING HANDOVER & OPERATIONAL RISK CARD */}
       <div id="preflight-handover" className={`card p-5 border-l-4 transition-all scroll-mt-6 ${
-        effectiveHandover?.acknowledged_by_staff
-          ? 'border-l-emerald-600 bg-white'
-          : 'border-l-amber-dark bg-amber-50/25 border-amber-200'
+        !effectiveHandover
+          ? 'border-l-slate-300 bg-slate-50/40'
+          : effectiveHandover.acknowledged_by_staff
+            ? 'border-l-emerald-600 bg-white'
+            : 'border-l-amber-500 bg-amber-50/30 border-amber-200'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              effectiveHandover?.acknowledged_by_staff ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-light text-amber-dark'
+              !effectiveHandover
+                ? 'bg-slate-100 text-slate-600'
+                : effectiveHandover.acknowledged_by_staff
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-amber-100 text-amber-800'
             }`}>
               <Clock className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-navy">Pre-Flight Morning Handover · Dana Carter (Mum)</h3>
-                {effectiveHandover?.acknowledged_by_staff ? (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                <h3 className="text-sm font-bold text-navy">
+                  Pre-Flight Morning Handover · {child.last_name === 'Carter' || !child.last_name ? 'Dana Carter (Mum)' : `${child.preferred_name || child.first_name}'s Home Handover`}
+                </h3>
+                {!effectiveHandover ? (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                    ⏳ Awaiting Home Submission
+                  </span>
+                ) : effectiveHandover.acknowledged_by_staff ? (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
                     ✓ Read Receipt Delivered
                   </span>
                 ) : (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-coral-light text-coral-dark animate-pulse">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs">
                     🔔 Needs Teacher Acknowledgment
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-gray-500">Submitted at 8:47am · Direct home-to-classroom loop</p>
+              <p className="text-[11px] text-gray-500">
+                {effectiveHandover
+                  ? 'Submitted at 8:47am · Direct home-to-classroom loop'
+                  : 'No morning transition log received yet today · Standing sensory baselines active'}
+              </p>
             </div>
           </div>
 
-          {effectiveHandover && !effectiveHandover.acknowledged_by_staff ? (
+          {!effectiveHandover ? (
+            <div className="w-full sm:w-auto text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-2 sm:py-1.5 rounded-xl border border-slate-200 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
+              <Clock className="w-4 h-4 text-slate-500" />
+              <span>Awaiting Parent Log</span>
+            </div>
+          ) : !effectiveHandover.acknowledged_by_staff ? (
             <button
               onClick={handleAcknowledge}
               disabled={acknowledging}
               className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
             >
               <CheckCircle2 className="w-4 h-4 text-mint" />
-              <span>{acknowledging ? 'Acknowledging...' : '✓ Acknowledge Handover — Notify Mum'}</span>
+              <span>{acknowledging ? 'Acknowledging...' : '✓ Acknowledge Handover — Notify Home'}</span>
             </button>
           ) : (
             <div className="w-full sm:w-auto text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-2 sm:py-1.5 rounded-xl border border-emerald-200 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
@@ -270,28 +291,30 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         {/* Handover Data Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-b border-gray-100">
           <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Sleep Quality</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Sleep Quality</div>
             <div className="text-xs font-bold text-navy mt-0.5">
               {effectiveHandover?.sleep_quality || 'Restless (woke at 4am)'}
             </div>
           </div>
           <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Morning Mood</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Morning Mood</div>
             <div className="text-xs font-bold text-navy mt-0.5">
               {effectiveHandover?.morning_mood || 'Anxious / Apprehensive'}
             </div>
           </div>
           <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Breakfast Status</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Breakfast Status</div>
             <div className={`text-xs font-bold mt-0.5 ${
-              effectiveHandover?.breakfast_eaten === false ? 'text-coral-dark' : 'text-emerald-700'
+              effectiveHandover?.breakfast_eaten === false ? 'text-rose-700' : 'text-emerald-700'
             }`}>
               {effectiveHandover?.breakfast_eaten === false ? '⚠️ Skipped (Dip Risk)' : '🥣 Breakfast Eaten'}
             </div>
           </div>
           <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Medication</div>
-            <div className="text-xs font-bold text-teal mt-0.5">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Medication</div>
+            <div className={`text-xs font-bold mt-0.5 ${
+              effectiveHandover?.medication_given ? 'text-teal-800' : 'text-amber-800'
+            }`}>
               {effectiveHandover?.medication_given ? '💊 Taken at 8:30am' : '⚠️ Not Taken'}
             </div>
           </div>
@@ -300,19 +323,23 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         {/* Parent Notes & Status Note */}
         <div className="pt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="text-gray-700">
-            <span className="font-bold text-navy">Mum's Note: </span>
+            <span className="font-bold text-navy">{child.last_name === 'Carter' || !child.last_name ? "Mum's Note: " : "Home Note: "}</span>
             <span className="italic">
-              "{effectiveHandover?.special_notes_for_day || 'Worried about assembly noise. Noise defenders packed in his bag.'}"
+              "{effectiveHandover?.special_notes_for_day || (child.last_name === 'Carter' || !child.last_name ? 'Worried about assembly noise. Noise defenders packed in his bag.' : 'Please ensure sensory toolkit is available during transition.')}"
             </span>
           </div>
 
-          {!effectiveHandover?.acknowledged_by_staff ? (
-            <div className="text-[11px] text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 flex-shrink-0">
-              💡 Dana's app will update with a read receipt instantly when acknowledged
+          {!effectiveHandover ? (
+            <div className="text-[11px] text-gray-500 bg-gray-100 px-2.5 py-1 rounded-lg border border-gray-200 flex-shrink-0">
+              Standing instruction: Offer sensory movement break at 10:00am
+            </div>
+          ) : !effectiveHandover.acknowledged_by_staff ? (
+            <div className="text-[11px] text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 flex-shrink-0 font-medium">
+              💡 {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app will update with a read receipt instantly when acknowledged
             </div>
           ) : (
-            <div className="text-[11px] text-emerald-700 font-medium flex-shrink-0">
-              ✓ Dana's app shows: "Read by Ms Johnson at {ackTimeFormatted}"
+            <div className="text-[11px] text-emerald-800 font-semibold flex-shrink-0">
+              ✓ {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app shows: "Read by Ms Johnson at {ackTimeFormatted}"
             </div>
           )}
         </div>
@@ -423,7 +450,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
                 {onOpenIncidentModal && (
                   <button
                     onClick={onOpenIncidentModal}
-                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-coral-light text-coral-dark rounded-lg hover:bg-coral-200 cursor-pointer transition-all"
+                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200 rounded-lg hover:bg-rose-100 cursor-pointer transition-all"
                   >
                     <span>+ Log ABC</span>
                   </button>

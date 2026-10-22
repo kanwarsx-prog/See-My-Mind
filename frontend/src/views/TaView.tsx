@@ -102,7 +102,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                 <h3 className="text-sm font-bold text-navy">Today's Assigned Pupils</h3>
                 <p className="text-[10px] text-gray-500">Priority order · with immediate operational actions</p>
               </div>
-              <span className="text-[10px] font-bold text-coral-dark bg-coral-light px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
                 3 Pupils
               </span>
             </div>
@@ -120,7 +120,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-coral-dark bg-coral-light px-2 py-1 rounded-md flex-shrink-0">
+                <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-1 rounded-md flex-shrink-0">
                   Act Now
                 </span>
               </div>
@@ -137,7 +137,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-amber-dark bg-amber-light px-2 py-1 rounded-md flex-shrink-0">
+                <span className="text-[10px] font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2 py-1 rounded-md flex-shrink-0">
                   Watch
                 </span>
               </div>
@@ -282,20 +282,20 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                   <p className="text-[10px] text-gray-500">What to watch · When · What to do</p>
                 </div>
               </div>
-              <span className="text-[10px] font-bold text-coral-dark bg-coral-light px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
                 SEND Protocol
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
               <div className="p-3 rounded-xl bg-coral-50/40 border border-coral-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-coral-dark text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+                <span className="font-mono font-bold text-rose-700 text-xs bg-white px-2 py-1 rounded-lg border border-rose-200 shadow-2xs flex-shrink-0">
                   8:55am
                 </span>
                 <div>
                   <div className="font-bold text-navy flex items-center gap-1.5">
                     <span>⚡ Door Arrival</span>
-                    <span className="text-[10px] text-coral-dark font-semibold bg-coral-light px-1.5 py-0.2 rounded">Critical</span>
+                    <span className="text-[10px] text-rose-800 font-semibold bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">Critical</span>
                   </div>
                   <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
                     Position at classroom door. Offer Phoenix headphones <em>before</em> he reaches the hall. Don't wait until he is already in the crowd noise.
@@ -304,7 +304,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
               </div>
 
               <div className="p-3 rounded-xl bg-amber-50/40 border border-amber-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-amber-dark text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+                <span className="font-mono font-bold text-amber-800 text-xs bg-white px-2 py-1 rounded-lg border border-amber-200 shadow-2xs flex-shrink-0">
                   9:05am
                 </span>
                 <div>
@@ -339,13 +339,13 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
               </div>
 
               <div className="p-3 rounded-xl bg-coral-50/40 border border-coral-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-coral-dark text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+                <span className="font-mono font-bold text-rose-700 text-xs bg-white px-2 py-1 rounded-lg border border-rose-200 shadow-2xs flex-shrink-0">
                   10:00am
                 </span>
                 <div>
                   <div className="font-bold text-navy flex items-center gap-1.5">
                     <span>⚡ Medication Dip Window</span>
-                    <span className="text-[10px] text-coral-dark font-semibold bg-coral-light px-1.5 py-0.2 rounded">Risk</span>
+                    <span className="text-[10px] text-rose-800 font-semibold bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">Risk</span>
                   </div>
                   <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
                     Have crackers and water ready for Phoenix before 10am. Do not wait for him to ask. Signs: sweating, fidgeting, tummy pain. Do not interpret restlessness as defiance.
