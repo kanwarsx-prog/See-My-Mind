@@ -84,34 +84,34 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Level View Switcher: 1:1 Support Focus vs Room 4 SEND Matrix */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-xs">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab('focused')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'focused'
                 ? 'bg-teal text-white shadow-xs'
                 : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
             }`}
           >
             <span>🧒</span>
-            <span>{child.preferred_name || child.first_name || 'Phoenix'} Carter · 1:1 Support Focus</span>
+            <span>{child.preferred_name || child.first_name || 'Phoenix'} Carter · 1:1 Focus</span>
           </button>
 
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'matrix'
                 ? 'bg-navy text-white shadow-xs'
                 : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
             }`}
           >
             <span>🏫</span>
-            <span>Room 4 SEND Matrix · Whole Class (4 Pupils)</span>
+            <span>Room 4 SEND Matrix (4 Pupils)</span>
           </button>
         </div>
 
-        <div className="text-[11px] text-gray-400 font-medium px-2">
+        <div className="text-[11px] text-gray-400 font-medium px-2 hidden sm:block">
           {activeTab === 'focused' ? 'Personalized EHCP interventions' : 'Whole-class differentiated adaptations'}
         </div>
       </div>
@@ -239,13 +239,13 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             <button
               onClick={handleAcknowledge}
               disabled={acknowledging}
-              className="px-4 py-2 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
             >
               <CheckCircle2 className="w-4 h-4 text-mint" />
               <span>{acknowledging ? 'Acknowledging...' : '✓ Acknowledge Handover — Notify Mum'}</span>
             </button>
           ) : (
-            <div className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-1.5 flex-shrink-0">
+            <div className="w-full sm:w-auto text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-2 sm:py-1.5 rounded-xl border border-emerald-200 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>Acknowledged by Ms Johnson at {ackTimeFormatted}</span>
             </div>

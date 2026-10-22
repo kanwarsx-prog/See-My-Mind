@@ -42,19 +42,19 @@ export const ParentPlusView: React.FC<ParentPlusViewProps> = ({ child }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="card p-6 bg-gradient-to-r from-gold-light via-white to-mint-light border-l-4 border-l-gold">
-        <div className="flex items-center justify-between">
+      <div className="card p-4 sm:p-6 bg-gradient-to-r from-gold-light via-white to-mint-light border-l-4 border-l-gold">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🎯</span>
-              <h2 className="text-xl font-serif font-bold text-navy">Parent Plus · Future Pathways & Careers</h2>
+              <h2 className="text-base sm:text-xl font-serif font-bold text-navy">Parent Plus · Future Pathways & Careers</h2>
               <span className="bg-gold text-navy text-[10px] font-bold px-2 py-0.5 rounded-full">Year 10+</span>
             </div>
             <p className="text-xs text-gray-600 mt-1">
               Translating {pupilName}'s strengths, hyperfocus, and spatial reasoning into real-world career destinations.
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <div className="text-xs font-bold text-navy">RIASEC Profile: Realistic / Investigative</div>
             <div className="text-[10px] text-gray-400">Validated by classroom observations</div>
           </div>

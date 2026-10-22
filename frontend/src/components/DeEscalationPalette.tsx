@@ -232,9 +232,9 @@ export const DeEscalationPalette: React.FC<DeEscalationPaletteProps> = ({
           </div>
 
           {/* Active Timer Bar */}
-          <div className="bg-white p-3 rounded-xl border border-teal/30 flex items-center justify-between">
+          <div className="bg-white p-3 rounded-xl border border-teal/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center font-mono font-bold text-teal text-sm">
+              <div className="w-14 h-10 rounded-xl bg-teal/10 flex items-center justify-center font-mono font-bold text-teal text-sm flex-shrink-0">
                 <Clock className="w-4 h-4 animate-pulse mr-1" />
                 {formatTimer(timerSecondsLeft)}
               </div>
@@ -245,11 +245,11 @@ export const DeEscalationPalette: React.FC<DeEscalationPaletteProps> = ({
             </div>
 
             {/* 2-Button Feedback Controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
               <button
                 onClick={() => handleOutcome(true)}
                 disabled={loggingOutcome}
-                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                className="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{loggingOutcome ? 'Logging...' : '✓ Calmed & Re-engaged'}</span>
@@ -257,7 +257,7 @@ export const DeEscalationPalette: React.FC<DeEscalationPaletteProps> = ({
               <button
                 onClick={() => handleOutcome(false)}
                 disabled={loggingOutcome}
-                className="px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                className="px-3 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
                 <span>⚠️ Still Escalating</span>

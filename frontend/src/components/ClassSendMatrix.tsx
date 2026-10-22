@@ -48,7 +48,7 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
   return (
     <div className="space-y-6">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-navy flex items-center gap-2">
@@ -63,10 +63,10 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => setShowSupplyModal(true)}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-navy to-slate-800 hover:from-slate-800 hover:to-navy text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer flex-shrink-0"
+            className="w-full sm:w-auto justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-navy to-slate-800 hover:from-slate-800 hover:to-navy text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer flex-shrink-0"
           >
             <Printer className="w-4 h-4 text-mint" />
             <span>60s Supply Teacher Briefing</span>
@@ -247,23 +247,23 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
 
       {/* Supply Teacher 60-Second Briefing Modal */}
       {showSupplyModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 p-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-3 sm:pb-4">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-light text-amber-dark">
                   Emergency Cover Protocol
                 </span>
-                <h3 className="text-lg font-serif font-bold text-navy mt-1">
+                <h3 className="text-base sm:text-lg font-serif font-bold text-navy mt-1">
                   Room 4 SEND: 60-Second Cover Briefing Sheet
                 </h3>
-                <p className="text-xs text-gray-500">
+                <p className="text-[11px] sm:text-xs text-gray-500">
                   St. Jude&apos;s Academy · Year 5 · Lead Teacher: Ms Clara Johnson · TA: Melissa Grant
                 </p>
               </div>
               <button
                 onClick={() => setShowSupplyModal(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -313,16 +313,16 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               ))}
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-4 border-t border-gray-100">
               <button
                 onClick={() => setShowSupplyModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer text-center"
               >
                 Close
               </button>
               <button
                 onClick={() => window.print()}
-                className="px-4 py-2 rounded-xl bg-teal hover:bg-teal-medium text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="w-full sm:w-auto justify-center px-4 py-2 rounded-xl bg-teal hover:bg-teal-medium text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print / Save as PDF</span>

@@ -54,6 +54,7 @@ export const App: React.FC = () => {
   const [isParentOnboardingOpen, setIsParentOnboardingOpen] = useState(false);
   const [onboardingToken, setOnboardingToken] = useState<string | null>(null);
   const [latestInvitation, setLatestInvitation] = useState<EmailPreview | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Check existing session token on startup
   useEffect(() => {
@@ -444,9 +445,11 @@ export const App: React.FC = () => {
         onLogout={handleLogout}
         onSwitchPersona={handleLogout}
         onRegisterChild={() => setIsRegisterModalOpen(true)}
+        isMobileOpen={mobileMenuOpen}
+        onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
-      <main className="ml-64 min-h-screen flex flex-col flex-1">
+      <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden">
         <InvitationNotificationBanner
           onOpenInvitation={handleOpenParentOnboarding}
           latestInvitation={latestInvitation}
@@ -460,9 +463,10 @@ export const App: React.FC = () => {
           pupils={currentUser.role === 'senco' || currentUser.role === 'teacher' ? pupils : undefined}
           selectedChildId={child.id}
           onSelectChild={handleChildSelect}
+          onToggleMobileMenu={() => setMobileMenuOpen(true)}
         />
 
-        <div className="p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
+        <div className="p-3.5 sm:p-5 lg:p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
           {activeView === 'teacher' && (
             <TeacherView
               child={child}

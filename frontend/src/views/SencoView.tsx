@@ -103,7 +103,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
               Ask questions across Phoenix's observation history, morning handovers, and EHCP provision records. Answers include verifiable citations.
             </p>
 
-            <form onSubmit={handleAsk} className="flex gap-2 mb-4">
+            <form onSubmit={handleAsk} className="flex flex-col sm:flex-row gap-2 mb-4">
               <input
                 type="text"
                 value={query}
@@ -114,7 +114,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2.5 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2.5 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Search className="w-3.5 h-3.5" />
                 <span>{loading ? 'Searching...' : 'Ask'}</span>

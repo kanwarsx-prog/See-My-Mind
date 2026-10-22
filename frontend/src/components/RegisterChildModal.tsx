@@ -98,26 +98,26 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
       <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
+        <div className="p-4 sm:p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-500/20">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-500/20 flex-shrink-0">
               📋
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 Register SEND Pupil
-                <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
-                  SENCO Portal
+                <span className="text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 rounded-full font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                  SENCO
                 </span>
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Register pupil profile, establish SEND baseline, and invite parents to onboard.
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
+                Register pupil profile, establish SEND baseline, and invite parents.
               </p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0"
           >
             ✕
           </button>
@@ -125,14 +125,14 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
 
         {/* Wizard Steps Tracker */}
         {step < 4 && (
-          <div className="px-6 py-3 bg-slate-50 dark:bg-slate-850 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold">
+          <div className="px-3 sm:px-6 py-3 bg-slate-50 dark:bg-slate-850 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold">
             <div
-              className={`flex items-center gap-2 ${
+              className={`flex items-center gap-1.5 sm:gap-2 ${
                 step === 1 ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'
               }`}
             >
               <span
-                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs ${
                   step === 1
                     ? 'bg-indigo-600 text-white'
                     : step > 1
@@ -142,16 +142,17 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
               >
                 {step > 1 ? '✓' : '1'}
               </span>
-              Pupil Demographics
+              <span className="hidden sm:inline">Pupil Demographics</span>
+              <span className="sm:hidden text-[11px]">Demographics</span>
             </div>
-            <div className="h-0.5 w-8 bg-slate-200 dark:bg-slate-700" />
+            <div className="h-0.5 w-4 sm:w-8 bg-slate-200 dark:bg-slate-700" />
             <div
-              className={`flex items-center gap-2 ${
+              className={`flex items-center gap-1.5 sm:gap-2 ${
                 step === 2 ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'
               }`}
             >
               <span
-                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs ${
                   step === 2
                     ? 'bg-indigo-600 text-white'
                     : step > 2
@@ -161,16 +162,17 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
               >
                 {step > 2 ? '✓' : '2'}
               </span>
-              SEND & EHCP Profile
+              <span className="hidden sm:inline">SEND & EHCP Profile</span>
+              <span className="sm:hidden text-[11px]">SEND Profile</span>
             </div>
-            <div className="h-0.5 w-8 bg-slate-200 dark:bg-slate-700" />
+            <div className="h-0.5 w-4 sm:w-8 bg-slate-200 dark:bg-slate-700" />
             <div
-              className={`flex items-center gap-2 ${
+              className={`flex items-center gap-1.5 sm:gap-2 ${
                 step === 3 ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'
               }`}
             >
               <span
-                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs ${
                   step === 3
                     ? 'bg-indigo-600 text-white'
                     : 'bg-slate-200 dark:bg-slate-700 text-slate-600'
@@ -178,7 +180,8 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
               >
                 3
               </span>
-              Guardian & Invite
+              <span className="hidden sm:inline">Guardian & Invite</span>
+              <span className="sm:hidden text-[11px]">Guardian</span>
             </div>
           </div>
         )}

@@ -38,27 +38,29 @@ export const InvitationNotificationBanner: React.FC<InvitationNotificationBanner
   if (!token) return null;
 
   return (
-    <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white px-4 py-2.5 text-xs flex items-center justify-between shadow-md border-b border-indigo-700/50">
-      <div className="flex items-center gap-3 overflow-hidden">
-        <span className="flex h-2 w-2 relative">
+    <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 text-white px-3 sm:px-4 py-2 sm:py-2.5 text-xs flex items-center justify-between shadow-md border-b border-indigo-700/50">
+      <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+        <span className="flex h-2 w-2 relative flex-shrink-0">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
         </span>
-        <div className="flex items-center gap-2 truncate">
-          <span className="font-bold text-indigo-200">📩 Parent Invitation Dispatched:</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 truncate">
+          <span className="font-bold text-indigo-200 hidden sm:inline">📩 Parent Invitation Dispatched:</span>
+          <span className="font-bold text-indigo-200 sm:hidden">📩 Invite:</span>
           <span className="truncate text-slate-200">
-            {activeInvite.to_email} &bull; &ldquo;{activeInvite.subject}&rdquo;
+            {activeInvite.to_email}
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 flex-shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <button
           onClick={() => onOpenInvitation(token)}
-          className="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all shadow-sm hover:shadow text-[11px] flex items-center gap-1.5"
+          className="px-2.5 sm:px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all shadow-sm hover:shadow text-[11px] flex items-center gap-1 sm:gap-1.5"
         >
           <span>🚀</span>
-          <span>Simulate Parent Acceptance</span>
+          <span className="hidden sm:inline">Simulate Parent Acceptance</span>
+          <span className="sm:hidden">Open</span>
         </button>
         <button
           onClick={() => setIsDismissed(true)}

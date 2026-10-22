@@ -51,29 +51,29 @@ export const ChildView: React.FC<ChildViewProps> = ({ child, onCheckIn, onOpenWo
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* CHILD HERO GREETING & EMOJI CHECK-IN */}
-      <div className="card p-6 bg-gradient-to-br from-[#1A3A4A] via-[#2D5A6E] to-[#1A3A4A] text-white rounded-3xl text-center shadow-lg relative overflow-hidden">
+      <div className="card p-4 sm:p-6 bg-gradient-to-br from-[#1A3A4A] via-[#2D5A6E] to-[#1A3A4A] text-white rounded-3xl text-center shadow-lg relative overflow-hidden">
         <div className="absolute right-4 top-2 text-7xl opacity-5 select-none pointer-events-none">⭐</div>
-        <div className="font-serif text-2xl font-bold mb-1">
+        <div className="font-serif text-xl sm:text-2xl font-bold mb-1">
           How are you feeling right now, {child.preferred_name || 'Phoenix'}?
         </div>
-        <p className="text-xs text-white/60 mb-5 max-w-md mx-auto">
+        <p className="text-xs text-white/60 mb-4 sm:mb-5 max-w-md mx-auto">
           Tap the face that feels right today. Nobody judges — this is just for you.
         </p>
 
         {/* Emoji Selector Row */}
-        <div className="flex justify-center items-center gap-3 sm:gap-4 mb-4">
+        <div className="flex justify-center items-center gap-2 sm:gap-4 mb-4 flex-wrap">
           {emojis.map((em) => (
             <button
               key={em.label}
               type="button"
               onClick={() => handleMoodSelect(em.emoji, em.label)}
-              className={`w-13 h-13 sm:w-16 sm:h-16 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer ${
+              className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer ${
                 selectedMood === em.emoji
-                  ? 'bg-white text-navy scale-110 shadow-xl ring-4 ring-mint'
+                  ? 'bg-white text-navy scale-105 sm:scale-110 shadow-xl ring-2 sm:ring-4 ring-mint'
                   : 'bg-white/10 hover:bg-white/20 text-white opacity-85'
               }`}
             >
-              <span className="text-2xl sm:text-3xl">{em.emoji}</span>
+              <span className="text-xl sm:text-3xl">{em.emoji}</span>
               <span className="text-[9px] font-bold mt-0.5">{em.label}</span>
             </button>
           ))}

@@ -15,6 +15,7 @@ import {
   Award,
   Sun,
   Layers,
+  X,
 } from 'lucide-react';
 
 interface NavItem {
@@ -40,6 +41,8 @@ interface SidebarProps {
   onLogout: () => void;
   onSwitchPersona: () => void;
   onRegisterChild?: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -48,6 +51,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onLogout,
   onSwitchPersona,
   onRegisterChild,
+  isMobileOpen = false,
+  onCloseMobile,
 }) => {
   const personaDict: Record<RoleView, PersonaInfo> = {
     teacher: {
@@ -135,106 +140,142 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const RoleIcon = personaMeta.icon;
 
   return (
-    <aside className="w-64 bg-navy text-white min-h-screen flex flex-col fixed left-0 top-0 z-30 shadow-xl select-none justify-between border-r border-white/10">
-      <div>
-        {/* Brand header */}
-        <div className="p-4 border-b border-white/10 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-sm">
-            <div className="w-full h-full bg-navy rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-mint" />
-            </div>
-          </div>
-          <div>
-            <div className="font-serif font-bold text-base tracking-wide text-white">See My Mind</div>
-            <div className="text-[10px] text-white/40 tracking-wider uppercase font-medium">
-              St. Jude&apos;s Academy
-            </div>
-          </div>
-        </div>
+    <>
+      {/* Mobile Backdrop Overlay */}
+      {isMobileOpen && (
+        <div
+          onClick={onCloseMobile}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+        />
+      )}
 
-        {/* Current Authenticated Persona Banner */}
-        <div className="p-3.5 mx-3 mt-4 rounded-2xl bg-white/5 border border-white/10">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-sm flex-shrink-0"
-              style={{ backgroundColor: personaMeta.bg }}
-            >
-              {personaMeta.av}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-xs font-bold text-white truncate">{personaMeta.name}</div>
-              <div className="text-[10px] text-teal flex items-center gap-1 font-semibold truncate">
-                <RoleIcon className="w-3 h-3 flex-shrink-0" />
-                <span>{personaMeta.roleTitle}</span>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-navy text-white min-h-screen flex flex-col justify-between border-r border-white/10 shadow-2xl select-none transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:z-30 ${
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div>
+          {/* Brand header */}
+          <div className="p-4 border-b border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-sm">
+                <div className="w-full h-full bg-navy rounded-[14px] flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-mint" />
+                </div>
+              </div>
+              <div>
+                <div className="font-serif font-bold text-base tracking-wide text-white">See My Mind</div>
+                <div className="text-[10px] text-white/40 tracking-wider uppercase font-medium">
+                  St. Jude&apos;s Academy
+                </div>
               </div>
             </div>
+
+            {/* Mobile Close Button */}
+            {onCloseMobile && (
+              <button
+                onClick={onCloseMobile}
+                className="lg:hidden w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
+                title="Close menu"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
-          <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-white/50">
-            <span>{personaMeta.sub}</span>
-            <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">
-              Active Role
-            </span>
+
+          {/* Current Authenticated Persona Banner */}
+          <div className="p-3.5 mx-3 mt-4 rounded-2xl bg-white/5 border border-white/10">
+            <div className="flex items-center gap-2.5">
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-sm flex-shrink-0"
+                style={{ backgroundColor: personaMeta.bg }}
+              >
+                {personaMeta.av}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-bold text-white truncate">{personaMeta.name}</div>
+                <div className="text-[10px] text-teal flex items-center gap-1 font-semibold truncate">
+                  <RoleIcon className="w-3 h-3 flex-shrink-0" />
+                  <span>{personaMeta.roleTitle}</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-white/50">
+              <span>{personaMeta.sub}</span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">
+                Active Role
+              </span>
+            </div>
+          </div>
+
+          {/* Platform Spine Status */}
+          <div className="px-3 py-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-white/70 bg-white/5 text-[11px] font-medium">
+              <Sparkles className="w-3.5 h-3.5 text-amber" />
+              <span>NOYA Intelligence Engine</span>
+              <span className="ml-auto bg-mint/20 text-mint text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                v2.0
+              </span>
+            </div>
+          </div>
+
+          {/* Role-Locked Navigation Items */}
+          <div className="px-3 py-2">
+            <div className="text-[9px] font-bold tracking-widest text-white/30 uppercase px-3 mb-2">
+              {personaMeta.roleTitle} Workspace
+            </div>
+
+            <div className="space-y-1">
+              {personaMeta.navItems.map((item, idx) => {
+                const ItemIcon = item.icon;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      item.action?.();
+                      onCloseMobile?.();
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
+                      item.active
+                        ? 'bg-teal text-white shadow-sm font-bold'
+                        : 'text-white/60 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <ItemIcon className="w-4 h-4 text-mint/80 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Platform Spine Status */}
-        <div className="px-3 py-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-white/70 bg-white/5 text-[11px] font-medium">
-            <Sparkles className="w-3.5 h-3.5 text-amber" />
-            <span>NOYA Intelligence Engine</span>
-            <span className="ml-auto bg-mint/20 text-mint text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-              v2.0
-            </span>
-          </div>
+        {/* Footer: User Profile & Session Logout */}
+        <div className="p-3 border-t border-white/10 bg-black/20 space-y-2">
+          <button
+            onClick={() => {
+              onSwitchPersona();
+              onCloseMobile?.();
+            }}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-xs font-semibold transition-all cursor-pointer border border-white/5"
+            title="Switch to another persona for testing"
+          >
+            <Repeat className="w-3.5 h-3.5 text-amber flex-shrink-0" />
+            <span>Switch Account (Demo)</span>
+          </button>
+
+          <button
+            onClick={() => {
+              onLogout();
+              onCloseMobile?.();
+            }}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-500/20"
+          >
+            <LogOut className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" />
+            <span>Sign Out</span>
+          </button>
         </div>
-
-        {/* Role-Locked Navigation Items */}
-        <div className="px-3 py-2">
-          <div className="text-[9px] font-bold tracking-widest text-white/30 uppercase px-3 mb-2">
-            {personaMeta.roleTitle} Workspace
-          </div>
-
-          <div className="space-y-1">
-            {personaMeta.navItems.map((item, idx) => {
-              const ItemIcon = item.icon;
-              return (
-                <button
-                  key={idx}
-                  onClick={item.action}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
-                    item.active
-                      ? 'bg-teal text-white shadow-sm font-bold'
-                      : 'text-white/60 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <ItemIcon className="w-4 h-4 text-mint/80" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Footer: User Profile & Session Logout */}
-      <div className="p-3 border-t border-white/10 bg-black/20 space-y-2">
-        <button
-          onClick={onSwitchPersona}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-xs font-semibold transition-all cursor-pointer border border-white/5"
-          title="Switch to another persona for testing"
-        >
-          <Repeat className="w-3.5 h-3.5 text-amber" />
-          <span>Switch Account (Demo)</span>
-        </button>
-
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-500/20"
-        >
-          <LogOut className="w-3.5 h-3.5 text-rose-400" />
-          <span>Sign Out</span>
-        </button>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 };

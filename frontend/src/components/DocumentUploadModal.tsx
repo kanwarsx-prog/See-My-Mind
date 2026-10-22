@@ -43,22 +43,22 @@ export const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/60 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 p-6 space-y-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-navy/60 backdrop-blur-xs">
+      <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 p-4 sm:p-6 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-purple-light rounded-xl text-purple-dark">
+            <div className="p-2 bg-purple-light rounded-xl text-purple-dark flex-shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-navy text-base">Upload SEND Document</h3>
-              <p className="text-xs text-gray-500">Add statutory document or report for {childName}</p>
+              <h3 className="font-serif font-bold text-navy text-sm sm:text-base">Upload SEND Document</h3>
+              <p className="text-[11px] sm:text-xs text-gray-500">Add statutory document or report for {childName}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-gray-400 hover:text-navy hover:bg-gray-100 cursor-pointer"
+            className="p-1 rounded-lg text-gray-400 hover:text-navy hover:bg-gray-100 cursor-pointer flex-shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -114,18 +114,18 @@ export const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-3 border-t border-gray-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer text-center"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !file}
-              className="px-5 py-2 rounded-xl bg-purple-dark hover:bg-purple-900 text-white font-bold cursor-pointer transition-all shadow-xs"
+              className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl bg-purple-dark hover:bg-purple-900 text-white font-bold cursor-pointer transition-all shadow-xs"
             >
               {submitting ? 'Uploading...' : 'Save Document'}
             </button>

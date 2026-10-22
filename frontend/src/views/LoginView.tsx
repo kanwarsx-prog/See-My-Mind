@@ -145,25 +145,26 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Navbar */}
-      <header className="p-6 max-w-7xl w-full mx-auto flex items-center justify-between z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-lg shadow-teal/20">
+      <header className="p-4 sm:p-6 max-w-7xl w-full mx-auto flex items-center justify-between z-10 gap-2">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-lg shadow-teal/20 flex-shrink-0">
             <div className="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-mint" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-mint" />
             </div>
           </div>
           <div>
-            <div className="font-serif font-bold text-lg tracking-wide text-white">See My Mind</div>
-            <div className="text-[11px] text-slate-400 font-medium">St. Jude&apos;s Inclusive Academy</div>
+            <div className="font-serif font-bold text-base sm:text-lg tracking-wide text-white">See My Mind</div>
+            <div className="text-[10px] sm:text-[11px] text-slate-400 font-medium">St. Jude&apos;s Inclusive Academy</div>
           </div>
         </div>
 
         <button
           onClick={() => setShowTokenInput(!showTokenInput)}
-          className="text-xs px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1.5"
+          className="text-xs px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
         >
           <KeyRound className="w-3.5 h-3.5 text-teal" />
-          <span>Have an invite token?</span>
+          <span className="hidden sm:inline">Have an invite token?</span>
+          <span className="sm:hidden">Invite Token</span>
         </button>
       </header>
 
@@ -200,7 +201,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
       {/* Main Container */}
       <main className="max-w-6xl w-full mx-auto px-4 py-6 z-10 flex flex-col lg:flex-row gap-8 items-center">
         {/* Left: Login Card */}
-        <div className="w-full lg:w-5/12 bg-slate-800/90 backdrop-blur-md border border-slate-700/80 rounded-3xl p-7 shadow-2xl space-y-6">
+        <div className="w-full lg:w-5/12 bg-slate-800/90 backdrop-blur-md border border-slate-700/80 rounded-3xl p-4 sm:p-7 shadow-2xl space-y-6">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-teal">Role-Based Access Control</span>
             <h1 className="text-2xl font-bold font-serif text-white mt-1">Sign in to your account</h1>
