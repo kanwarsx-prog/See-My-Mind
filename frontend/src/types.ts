@@ -146,4 +146,21 @@ export interface DocumentItem {
   created_at: string;
 }
 
+export interface PathwayStep {
+  number: number;
+  title: string;
+  description: string;
+  status: 'done' | 'active' | 'next' | 'locked';
+  badge: string;
+}
+
+export interface PeerAdaptation {
+  initials: string;
+  name: string;
+  need: string;
+  route: string;
+  method: 'Auditory' | 'Kinesthetic' | 'Written';
+  color: string;
+}
+
 export type RoleView = 'teacher' | 'senco' | 'parent' | 'child' | 'ta' | 'parentplus';

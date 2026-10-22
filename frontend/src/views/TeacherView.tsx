@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Child, ChildEvent, MorningBriefing, TransitionLogDetail } from '../types';
 import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, ChevronDown, Plus, Clock } from 'lucide-react';
+import { AdaptedPathwayCard } from '../components/AdaptedPathwayCard';
 
 interface TeacherViewProps {
   child: Child;
@@ -11,6 +12,8 @@ interface TeacherViewProps {
   onAcknowledgeHandover?: (transitionId: string) => Promise<void>;
   onOpenObservationModal: () => void;
   onOpenIncidentModal?: () => void;
+  onOpenWorksheet: (worksheetKey: string) => void;
+  onLogMilestone?: (milestoneTitle: string, note: string) => Promise<void>;
 }
 
 export const TeacherView: React.FC<TeacherViewProps> = ({
@@ -22,6 +25,8 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   onAcknowledgeHandover,
   onOpenObservationModal,
   onOpenIncidentModal,
+  onOpenWorksheet,
+  onLogMilestone,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [acknowledging, setAcknowledging] = useState(false);
@@ -318,6 +323,12 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
               </div>
             )}
           </div>
+
+          {/* Adapted Learning Pathway — This Lesson */}
+          <AdaptedPathwayCard
+            onOpenWorksheet={onOpenWorksheet}
+            onLogMilestone={onLogMilestone}
+          />
 
           {/* Strategies for Phoenix Today */}
           <div className="card p-4 space-y-3">

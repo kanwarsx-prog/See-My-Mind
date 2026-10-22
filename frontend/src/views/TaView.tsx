@@ -7,9 +7,10 @@ interface TaViewProps {
   timeline: ChildEvent[];
   onOpenObservationModal: () => void;
   onDirectLog?: (data: any) => Promise<void>;
+  onOpenWorksheet?: (worksheetKey: string) => void;
 }
 
-export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservationModal, onDirectLog }) => {
+export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservationModal, onDirectLog, onOpenWorksheet }) => {
   const [selectedPupil, setSelectedPupil] = useState('Phoenix');
   const [logType, setLogType] = useState('⭐ Learning win');
   const [logNotes, setLogNotes] = useState('');
@@ -318,8 +319,19 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                 <span className="font-mono font-bold text-teal text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
                   9:45am
                 </span>
-                <div>
-                  <div className="font-bold text-navy">Maths — Adapted Visual Path Active</div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <div className="font-bold text-navy">Maths — Adapted Visual Path Active</div>
+                    {onOpenWorksheet && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenWorksheet('graphs')}
+                        className="text-[10px] font-bold text-teal hover:underline cursor-pointer"
+                      >
+                        Open Worksheet →
+                      </button>
+                    )}
+                  </div>
                   <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
                     Phoenix doing visual-spatial gradient route (game design hook). Riya needs movement break at step 2. Archie needs verbal walkthrough support.
                   </p>

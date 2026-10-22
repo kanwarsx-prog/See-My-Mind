@@ -6,6 +6,7 @@ import { TopBar } from './components/TopBar';
 import { ObservationModal } from './components/ObservationModal';
 import { IncidentModal } from './components/IncidentModal';
 import { DocumentUploadModal } from './components/DocumentUploadModal';
+import { WorksheetModal } from './components/WorksheetModal';
 import { TeacherView } from './views/TeacherView';
 import { ParentView } from './views/ParentView';
 import { SencoView } from './views/SencoView';
@@ -24,6 +25,8 @@ export const App: React.FC = () => {
   const [isObsModalOpen, setIsObsModalOpen] = useState(false);
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState(false);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+  const [isWorksheetModalOpen, setIsWorksheetModalOpen] = useState(false);
+  const [activeWorksheet, setActiveWorksheet] = useState('graphs');
 
   // Load pupil, timeline, and morning handover from live backend
   useEffect(() => {
@@ -139,6 +142,33 @@ export const App: React.FC = () => {
     setTimeline(refreshed);
   };
 
+  const handleOpenWorksheet = (key: string) => {
+    setActiveWorksheet(key);
+    setIsWorksheetModalOpen(true);
+  };
+
+  const handleLogMilestone = async (title: string, summary: string) => {
+    if (!child) return;
+    const newEvent = await api.logEvent({
+      child_id: child.id,
+      school_id: child.school_id,
+      event_type: 'Observation',
+      reporter_type: 'Teacher',
+      reporter_name: 'Ms Johnson',
+      title: title,
+      summary: summary,
+      significance: 'Notable Win',
+      visibility: 'Shared',
+      observation: {
+        activity_context: 'Maths Adaptation',
+        strategy_used: 'Visual-Spatial Learning Pathway',
+        strategy_worked: true,
+        strengths_observed: 'Spatial reasoning, gradient geometry, independent task completion',
+      },
+    });
+    setTimeline([newEvent, ...timeline]);
+  };
+
   const handleUploadDocument = async (title: string, docType: string, file: File) => {
     if (!child) return;
     await api.uploadDocument(child.id, title, docType, file);
@@ -243,6 +273,8 @@ export const App: React.FC = () => {
               onAcknowledgeHandover={handleAcknowledgeHandover}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
               onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
+              onOpenWorksheet={handleOpenWorksheet}
+              onLogMilestone={handleLogMilestone}
             />
           )}
 
@@ -268,6 +300,7 @@ export const App: React.FC = () => {
             <ChildView
               child={child}
               onCheckIn={handleChildCheckIn}
+              onOpenWorksheet={handleOpenWorksheet}
             />
           )}
 
@@ -277,6 +310,7 @@ export const App: React.FC = () => {
               timeline={timeline}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
               onDirectLog={handleDirectLog}
+              onOpenWorksheet={handleOpenWorksheet}
             />
           )}
 
@@ -304,6 +338,13 @@ export const App: React.FC = () => {
         onClose={() => setIsDocModalOpen(false)}
         onSubmit={handleUploadDocument}
         childName={child.preferred_name || child.first_name}
+      />
+
+      <WorksheetModal
+        isOpen={isWorksheetModalOpen}
+        onClose={() => setIsWorksheetModalOpen(false)}
+        initialWorksheet={activeWorksheet}
+        onCompleteStep={handleLogMilestone}
       />
     </div>
   );
