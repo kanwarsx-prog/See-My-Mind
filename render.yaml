@@ -17,3 +17,19 @@ services:
         sync: false
       - key: SECRET_KEY
         generateValue: true
+
+  - type: web
+    name: seemy-mind-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://see-my-mind.onrender.com/api/v1
+
