@@ -3,6 +3,7 @@ services:
     name: seemy-mind-backend
     rootDir: backend
     env: python
+    plan: free
     buildCommand: "pip install ."
     startCommand: "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     envVars:
