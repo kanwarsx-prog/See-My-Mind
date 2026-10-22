@@ -13,6 +13,8 @@ import {
   EmailPreview,
   UserProfile,
   ClassroomMatrixData,
+  AnnualReviewPackResponse,
+  SchoolProvisionMatrixResponse,
 } from './types';
 
 const API_BASE =
@@ -361,6 +363,22 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to fetch classroom matrix');
+    return res.json();
+  },
+
+  async getAnnualReviewPack(childId: string): Promise<AnnualReviewPackResponse> {
+    const res = await fetch(`${API_BASE}/pupils/${childId}/annual-review-pack`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch annual review pack');
+    return res.json();
+  },
+
+  async getSchoolProvisionMatrix(): Promise<SchoolProvisionMatrixResponse> {
+    const res = await fetch(`${API_BASE}/pupils/school/provision-matrix`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch school provision matrix');
     return res.json();
   },
 };

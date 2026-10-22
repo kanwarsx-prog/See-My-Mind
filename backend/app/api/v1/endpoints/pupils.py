@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session, joinedload
 from app.core.database import get_db
 from app.models.pupil import Child
 from app.models.support import ChildSupportProfile
+from app.schemas.annual_review import AnnualReviewPackResponse, SchoolProvisionMatrixResponse
 from app.schemas.pupil import ChildCreate, ChildResponse
+from app.services.annual_review_service import AnnualReviewService
 
 router = APIRouter()
 
@@ -185,6 +187,21 @@ def get_classroom_matrix(room_name: str, db: Session = Depends(get_db)):
             },
         ],
     }
+
+
+@router.get("/school/provision-matrix", response_model=SchoolProvisionMatrixResponse)
+def get_school_provision_matrix(db: Session = Depends(get_db)):
+    """Retrieve the whole-school SEND provision and funding distribution matrix."""
+    return AnnualReviewService.get_school_provision_matrix(db)
+
+
+@router.get("/{child_id}/annual-review-pack", response_model=AnnualReviewPackResponse)
+def get_annual_review_pack(child_id: UUID, db: Session = Depends(get_db)):
+    """Generate or retrieve the statutory EHCP Annual Review Evidence Pack for a pupil."""
+    try:
+        return AnnualReviewService.generate_annual_review_pack(db, child_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/{child_id}", response_model=ChildResponse)

@@ -288,3 +288,97 @@ export interface ClassroomMatrixData {
   ehcp_count: number;
   cohort: ClassroomPupilSummary[];
 }
+
+export interface SectionAViews {
+  child_views: string;
+  child_aspirations: string;
+  parent_views: string;
+  parent_aspirations: string;
+  co_production_notes: string;
+}
+
+export interface SectionBNeed {
+  area_of_need: string;
+  statutory_summary: string;
+  observed_impact: string;
+  evidence_count: number;
+  citations: string[];
+}
+
+export interface SectionEOutcome {
+  target_id: string;
+  title: string;
+  category: string;
+  status: 'Met' | 'On Track' | 'Needs Review';
+  evidence_summary: string;
+  last_reviewed: string;
+}
+
+export interface SectionFProvision {
+  provision_id: string;
+  title: string;
+  quantified_support: string;
+  evidence_delivery_rate: string;
+  strategies_used: string[];
+  impact_notes: string;
+}
+
+export interface AnnualReviewMetrics {
+  total_evidence_observations: number;
+  de_escalation_win_rate: string;
+  morning_handovers_received: number;
+  safeguarding_incidents: number;
+  active_ehcp_days: number;
+}
+
+export interface AnnualReviewPackResponse {
+  child_id: string;
+  child_name: string;
+  date_of_birth: string;
+  year_group: string;
+  primary_need: string;
+  school_name: string;
+  senco_name: string;
+  review_date: string;
+  statutory_status: string;
+  metrics: {
+    total_evidence_observations: number;
+    de_escalation_win_rate: string;
+    morning_handovers_received: number;
+    safeguarding_incidents: number;
+    active_ehcp_days: number;
+  };
+  section_a: SectionAViews;
+  section_b: SectionBNeed[];
+  section_e: SectionEOutcome[];
+  section_f: SectionFProvision[];
+  senco_recommendations: string;
+}
+
+export interface ProvisionMapPupil {
+  id: string;
+  name: string;
+  year_group: string;
+  primary_need: string;
+  support_tier: string;
+  funding_band: string;
+  allocated_ta_hours: number;
+  assigned_ta: string;
+  annual_review_due: string;
+  days_until_review: number;
+  review_status: 'overdue' | 'due_soon' | 'scheduled';
+}
+
+export interface SchoolProvisionMatrixResponse {
+  school_name: string;
+  academic_year: string;
+  lead_senco: string;
+  total_send_count: number;
+  ehcp_count: number;
+  sen_support_count: number;
+  total_ta_hours_weekly: number;
+  high_needs_funding_total: string;
+  reviews_due_next_30_days: number;
+  pupils: ProvisionMapPupil[];
+}
+
