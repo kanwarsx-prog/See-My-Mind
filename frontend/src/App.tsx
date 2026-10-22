@@ -299,6 +299,33 @@ export const App: React.FC = () => {
     await api.uploadDocument(child.id, title, docType, file);
   };
 
+  const handleLogDeEscalation = async (data: {
+    strategyName: string;
+    category: string;
+    worked: boolean;
+    notes: string;
+  }) => {
+    if (!child) return;
+    const newEvent = await api.logEvent({
+      child_id: child.id,
+      school_id: child.school_id,
+      event_type: 'Observation',
+      reporter_type: 'Teacher',
+      reporter_name: currentUser?.full_name || 'Ms Clara Johnson',
+      title: `In-the-Moment De-Escalation: ${data.strategyName}`,
+      summary: data.notes,
+      significance: data.worked ? 'Notable Win' : 'Routine Note',
+      visibility: 'Shared',
+      observation: {
+        activity_context: 'Classroom Support (Room 4)',
+        strategy_used: data.strategyName,
+        strategy_worked: data.worked,
+        notes: data.notes,
+      },
+    });
+    setTimeline([newEvent, ...timeline]);
+  };
+
   // 1. Initial Auth Check Spinner
   if (authChecking) {
     return (
@@ -448,6 +475,7 @@ export const App: React.FC = () => {
               onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
               onOpenWorksheet={handleOpenWorksheet}
               onLogMilestone={handleLogMilestone}
+              onLogDeEscalation={handleLogDeEscalation}
             />
           )}
 

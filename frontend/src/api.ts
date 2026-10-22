@@ -12,6 +12,7 @@ import {
   ChildAccountResponse,
   EmailPreview,
   UserProfile,
+  ClassroomMatrixData,
 } from './types';
 
 const API_BASE =
@@ -354,4 +355,13 @@ export const api = {
     if (!res.ok) throw new Error('Failed to fetch documents');
     return res.json();
   },
+
+  async getClassMatrix(roomName: string = 'room-4'): Promise<ClassroomMatrixData> {
+    const res = await fetch(`${API_BASE}/pupils/classrooms/${roomName}/matrix`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch classroom matrix');
+    return res.json();
+  },
 };
+

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Child, ChildEvent, MorningBriefing, TransitionLogDetail } from '../types';
 import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, ChevronDown, Plus, Clock } from 'lucide-react';
 import { AdaptedPathwayCard } from '../components/AdaptedPathwayCard';
+import { DeEscalationPalette } from '../components/DeEscalationPalette';
+import { ClassSendMatrix } from '../components/ClassSendMatrix';
 
 interface TeacherViewProps {
   child: Child;
@@ -14,6 +16,12 @@ interface TeacherViewProps {
   onOpenIncidentModal?: () => void;
   onOpenWorksheet: (worksheetKey: string) => void;
   onLogMilestone?: (milestoneTitle: string, note: string) => Promise<void>;
+  onLogDeEscalation?: (data: {
+    strategyName: string;
+    category: string;
+    worked: boolean;
+    notes: string;
+  }) => Promise<void>;
 }
 
 export const TeacherView: React.FC<TeacherViewProps> = ({
@@ -27,7 +35,9 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   onOpenIncidentModal,
   onOpenWorksheet,
   onLogMilestone,
+  onLogDeEscalation,
 }) => {
+  const [activeTab, setActiveTab] = useState<'focused' | 'matrix'>('focused');
   const [refreshing, setRefreshing] = useState(false);
   const [acknowledging, setAcknowledging] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(true);
@@ -36,6 +46,19 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
     setRefreshing(true);
     await onRefreshBriefing();
     setRefreshing(false);
+  };
+
+  const handleLogStrategyResult = async (data: {
+    strategyName: string;
+    category: string;
+    worked: boolean;
+    notes: string;
+  }) => {
+    if (onLogDeEscalation) {
+      await onLogDeEscalation(data);
+    } else if (onLogMilestone && data.worked) {
+      await onLogMilestone(`De-Escalation Success: ${data.strategyName}`, data.notes);
+    }
   };
 
   // Resolve handover from prop or timeline
@@ -60,7 +83,44 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* KPI Stats Strip */}
+      {/* Top Level View Switcher: 1:1 Support Focus vs Room 4 SEND Matrix */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-xs">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab('focused')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'focused'
+                ? 'bg-teal text-white shadow-xs'
+                : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
+            }`}
+          >
+            <span>🧒</span>
+            <span>{child.preferred_name || child.first_name || 'Phoenix'} Carter · 1:1 Support Focus</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('matrix')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'matrix'
+                ? 'bg-navy text-white shadow-xs'
+                : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
+            }`}
+          >
+            <span>🏫</span>
+            <span>Room 4 SEND Matrix · Whole Class (4 Pupils)</span>
+          </button>
+        </div>
+
+        <div className="text-[11px] text-gray-400 font-medium px-2">
+          {activeTab === 'focused' ? 'Personalized EHCP interventions' : 'Whole-class differentiated adaptations'}
+        </div>
+      </div>
+
+      {activeTab === 'matrix' ? (
+        <ClassSendMatrix onSelectPupil={() => setActiveTab('focused')} />
+      ) : (
+        <>
+          {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <div className="stat-card border-coral-dark">
           <div className="font-serif text-2xl font-bold text-coral-dark">
@@ -324,68 +384,17 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             )}
           </div>
 
+          {/* Real-Time Sensory De-Escalation Palette */}
+          <DeEscalationPalette
+            pupilName={child.preferred_name || child.first_name || 'Phoenix'}
+            onLogStrategyResult={handleLogStrategyResult}
+          />
+
           {/* Adapted Learning Pathway — This Lesson */}
           <AdaptedPathwayCard
             onOpenWorksheet={onOpenWorksheet}
             onLogMilestone={onLogMilestone}
           />
-
-          {/* Strategies for Phoenix Today */}
-          <div className="card p-4 space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-              <div>
-                <h4 className="text-xs font-bold text-navy">Strategies for Phoenix Today</h4>
-                <p className="text-[10px] text-gray-500">Ranked by verified effectiveness for this pupil</p>
-              </div>
-              <span className="text-[10px] font-bold text-teal bg-mint-pale px-2 py-0.5 rounded-md">EHCP Aligned</span>
-            </div>
-
-            <div className="space-y-2 text-xs">
-              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-base">🎧</span>
-                  <div>
-                    <div className="font-bold text-navy">Noise-cancelling headphones</div>
-                    <div className="text-[11px] text-gray-500">Offer at classroom door before assembly — not after arriving in hall.</div>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">92%</span>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-base">💧</span>
-                  <div>
-                    <div className="font-bold text-navy">Water bottle — always on desk</div>
-                    <div className="text-[11px] text-gray-500">Methylphenidate increases fluid loss. Cold water works better. Target 3–4 drinks before lunch.</div>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">94%</span>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-base">🎮</span>
-                  <div>
-                    <div className="font-bold text-navy">Connect learning to game design</div>
-                    <div className="text-[11px] text-gray-500">Frame gradient as "slope of a game level" — Phoenix engages immediately when STEM connects to his goal.</div>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">88%</span>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
-                <div className="flex items-center gap-2.5">
-                  <span className="text-base">⏰</span>
-                  <div>
-                    <div className="font-bold text-navy">5-min transition warning</div>
-                    <div className="text-[11px] text-gray-500">Visual timer + quiet verbal warning before every activity change today.</div>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">85%</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Right Column: Live Timeline of Events */}
@@ -435,6 +444,8 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

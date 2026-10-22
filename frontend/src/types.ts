@@ -255,3 +255,36 @@ export interface UserProfile {
   username?: string;
   avatar_emoji?: string;
 }
+
+export interface ClassroomPupilSummary {
+  id: string;
+  name: string;
+  preferred_name: string;
+  year_group: string;
+  primary_need: string;
+  secondary_need?: string;
+  has_ehcp: boolean;
+  support_tier: string;
+  readiness_status: string;
+  readiness_level: 'green' | 'amber' | 'red';
+  primary_triggers: string[];
+  sensory_calming_tools: string[];
+  buddy_pairing?: string;
+  subject_accommodations: {
+    maths?: string;
+    english?: string;
+    science?: string;
+    assembly?: string;
+    [key: string]: string | undefined;
+  };
+}
+
+export interface ClassroomMatrixData {
+  room_name: string;
+  year_group: string;
+  lead_teacher: string;
+  assigned_ta: string;
+  total_send_count: number;
+  ehcp_count: number;
+  cohort: ClassroomPupilSummary[];
+}
