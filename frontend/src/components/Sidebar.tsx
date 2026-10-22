@@ -49,6 +49,7 @@ interface SidebarProps {
   onOpenObservationModal?: () => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
+  onOpenTour?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -63,6 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenObservationModal,
   isMobileOpen = false,
   onCloseMobile,
+  onOpenTour,
 }) => {
   const scrollTo = (id: string) => {
     setTimeout(() => {
@@ -435,6 +437,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Footer: User Profile & Session Logout */}
         <div className="p-3 border-t border-white/10 bg-black/20 space-y-2">
+          {onOpenTour && (
+            <button
+              onClick={() => {
+                onOpenTour();
+                onCloseMobile?.();
+              }}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-teal/40 via-purple-600/30 to-teal/40 hover:from-teal/60 hover:to-teal/60 text-white text-xs font-bold transition-all cursor-pointer border border-teal/40 shadow-xs"
+              title="Interactive Persona Tour & Walkthrough"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber animate-pulse flex-shrink-0" />
+              <span>✨ Interactive Persona Tour</span>
+            </button>
+          )}
+
           <button
             onClick={() => {
               onSwitchPersona();

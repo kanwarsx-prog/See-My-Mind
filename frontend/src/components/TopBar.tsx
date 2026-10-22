@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, UserCheck, Menu } from 'lucide-react';
+import { Database, UserCheck, Menu, Sparkles } from 'lucide-react';
 import { Child } from '../types';
 
 interface TopBarProps {
@@ -15,6 +15,7 @@ interface TopBarProps {
   selectedChildId?: string;
   onSelectChild?: (childId: string) => void;
   onToggleMobileMenu?: () => void;
+  onOpenTour?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -26,6 +27,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   selectedChildId,
   onSelectChild,
   onToggleMobileMenu,
+  onOpenTour,
 }) => {
   const pillColors = {
     red: 'bg-rose-50 text-rose-800 border border-rose-200',
@@ -75,10 +77,21 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5">
         {/* Render/Supabase cloud status badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-medium mr-2">
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-medium mr-1">
           <Database className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
           <span>Live · Supabase EU-West-1</span>
         </div>
+
+        {onOpenTour && (
+          <button
+            onClick={onOpenTour}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-teal/10 via-purple-500/10 to-teal/10 hover:from-teal/20 hover:to-purple-500/20 text-navy border border-teal/25 text-[11px] font-bold cursor-pointer transition-all shadow-2xs active:scale-95 mr-1"
+            title="Open Interactive Persona Tour"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+            <span>✨ Persona Tour</span>
+          </button>
+        )}
 
         {pills.map((p, idx) => (
           <span

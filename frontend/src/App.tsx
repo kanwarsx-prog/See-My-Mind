@@ -26,6 +26,7 @@ import { SencoView } from './views/SencoView';
 import { ChildView } from './views/ChildView';
 import { TaView } from './views/TaView';
 import { ParentPlusView } from './views/ParentPlusView';
+import { PersonaTourModal } from './components/PersonaTourModal';
 import { Plus } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -48,6 +49,7 @@ export const App: React.FC = () => {
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
   const [isWorksheetModalOpen, setIsWorksheetModalOpen] = useState(false);
   const [activeWorksheet, setActiveWorksheet] = useState('graphs');
+  const [isTourModalOpen, setIsTourModalOpen] = useState(false);
 
   // Sub-Navigation state per persona
   const [activeNavId, setActiveNavId] = useState<string>('');
@@ -185,6 +187,20 @@ export const App: React.FC = () => {
   const handleLoginSuccess = (user: UserProfile) => {
     setCurrentUser(user);
     handleViewChange(user.role as RoleView);
+  };
+
+  const handleTourSelectRole = async (role: RoleView) => {
+    try {
+      setLoading(true);
+      const res = await api.demoLogin(role);
+      handleLoginSuccess(res.user);
+    } catch (err) {
+      console.error('Failed to demo login as', role, err);
+      handleViewChange(role);
+    } finally {
+      setLoading(false);
+      setIsTourModalOpen(false);
+    }
   };
 
   const handleLogout = () => {
@@ -385,6 +401,13 @@ export const App: React.FC = () => {
         <LoginView
           onLoginSuccess={handleLoginSuccess}
           onOpenInvitation={handleOpenParentOnboarding}
+          onOpenTour={() => setIsTourModalOpen(true)}
+        />
+        <PersonaTourModal
+          isOpen={isTourModalOpen}
+          onClose={() => setIsTourModalOpen(false)}
+          onSelectRole={handleTourSelectRole}
+          initialRole="teacher"
         />
         <ParentOnboardingModal
           isOpen={isParentOnboardingOpen}
@@ -492,6 +515,7 @@ export const App: React.FC = () => {
         onOpenObservationModal={() => setIsObsModalOpen(true)}
         isMobileOpen={mobileMenuOpen}
         onCloseMobile={() => setMobileMenuOpen(false)}
+        onOpenTour={() => setIsTourModalOpen(true)}
       />
 
       <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden">
@@ -509,6 +533,7 @@ export const App: React.FC = () => {
           selectedChildId={child.id}
           onSelectChild={handleChildSelect}
           onToggleMobileMenu={() => setMobileMenuOpen(true)}
+          onOpenTour={() => setIsTourModalOpen(true)}
         />
 
         <div className="p-3.5 sm:p-5 lg:p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
@@ -625,6 +650,13 @@ export const App: React.FC = () => {
         token={onboardingToken}
         onClose={() => setIsParentOnboardingOpen(false)}
         onCompleted={handleOnboardingCompleted}
+      />
+
+      <PersonaTourModal
+        isOpen={isTourModalOpen}
+        onClose={() => setIsTourModalOpen(false)}
+        onSelectRole={handleTourSelectRole}
+        initialRole={activeView}
       />
     </div>
   );

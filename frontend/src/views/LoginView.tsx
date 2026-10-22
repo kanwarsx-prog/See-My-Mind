@@ -6,9 +6,10 @@ import { Sparkles, GraduationCap, ShieldCheck, HeartHandshake, User, Users, Lock
 interface LoginViewProps {
   onLoginSuccess: (user: UserProfile) => void;
   onOpenInvitation?: (token: string) => void;
+  onOpenTour?: () => void;
 }
 
-export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvitation }) => {
+export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvitation, onOpenTour }) => {
   const [tab, setTab] = useState<'portal' | 'pupil'>('portal');
   const [loading, setLoading] = useState(false);
   const [demoLoadingRole, setDemoLoadingRole] = useState<string | null>(null);
@@ -158,14 +159,26 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
           </div>
         </div>
 
-        <button
-          onClick={() => setShowTokenInput(!showTokenInput)}
-          className="text-xs px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
-        >
-          <KeyRound className="w-3.5 h-3.5 text-teal" />
-          <span className="hidden sm:inline">Have an invite token?</span>
-          <span className="sm:hidden">Invite Token</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {onOpenTour && (
+            <button
+              onClick={onOpenTour}
+              className="text-xs px-3 sm:px-4 py-1.5 rounded-xl border border-teal/40 bg-teal/20 hover:bg-teal/30 text-mint font-bold transition-all flex items-center gap-1.5 flex-shrink-0 shadow-xs active:scale-95 cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber animate-pulse" />
+              <span>✨ Interactive Tour</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => setShowTokenInput(!showTokenInput)}
+            className="text-xs px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
+          >
+            <KeyRound className="w-3.5 h-3.5 text-teal" />
+            <span className="hidden sm:inline">Have an invite token?</span>
+            <span className="sm:hidden">Invite Token</span>
+          </button>
+        </div>
       </header>
 
       {/* Manual Invitation Acceptance Drawer */}
@@ -385,6 +398,36 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
 
         {/* Right: Quick Demo Persona Picker */}
         <div className="w-full lg:w-7/12 space-y-4">
+          {onOpenTour && (
+            <div
+              onClick={onOpenTour}
+              className="p-3.5 rounded-2xl bg-gradient-to-r from-teal/20 via-purple-600/20 to-teal/20 border border-teal/40 hover:border-teal text-white flex items-center justify-between transition-all hover:scale-[1.01] cursor-pointer shadow-lg shadow-teal/10 group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber via-coral to-mint p-0.5 flex items-center justify-center flex-shrink-0">
+                  <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-mint animate-pulse" />
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5 font-serif">
+                    <span>✨ Interactive Persona Tour & Demo Animation</span>
+                    <span className="text-[9px] bg-teal/30 text-mint px-2 py-0.5 rounded-full font-mono">
+                      Explore Flow
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-300">
+                    See how Teacher, Parent, TA, SENCO & Pupil connect through real-world operational loops
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 text-xs font-bold text-mint group-hover:translate-x-1 transition-transform flex-shrink-0 ml-2">
+                <span className="hidden sm:inline">Start Tour</span>
+                <ArrowRight className="w-4 h-4" />
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-mint flex items-center gap-1.5">
