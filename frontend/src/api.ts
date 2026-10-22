@@ -1,4 +1,4 @@
-import { Child, ChildEvent, MorningBriefing, AskNoyaResponse } from './types';
+import { Child, ChildEvent, MorningBriefing, AskNoyaResponse, TransitionLogDetail } from './types';
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -66,6 +66,12 @@ export const api = {
       method: 'PATCH',
     });
     if (!res.ok) throw new Error('Failed to acknowledge transition');
+    return res.json();
+  },
+
+  async getLatestHandover(childId: string): Promise<TransitionLogDetail | null> {
+    const res = await fetch(`${API_BASE}/transitions/children/${childId}/latest`);
+    if (!res.ok) throw new Error('Failed to fetch latest handover');
     return res.json();
   },
 

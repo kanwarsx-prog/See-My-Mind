@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Child, ChildEvent, MorningBriefing } from '../types';
-import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, ChevronDown, Plus } from 'lucide-react';
+import { Child, ChildEvent, MorningBriefing, TransitionLogDetail } from '../types';
+import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, ChevronDown, Plus, Clock } from 'lucide-react';
 
 interface TeacherViewProps {
   child: Child;
   timeline: ChildEvent[];
   briefing: MorningBriefing | null;
+  latestHandover?: TransitionLogDetail | null;
   onRefreshBriefing: () => Promise<void>;
+  onAcknowledgeHandover?: (transitionId: string) => Promise<void>;
   onOpenObservationModal: () => void;
   onOpenIncidentModal?: () => void;
 }
@@ -15,11 +17,14 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   child,
   timeline,
   briefing,
+  latestHandover,
   onRefreshBriefing,
+  onAcknowledgeHandover,
   onOpenObservationModal,
   onOpenIncidentModal,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
+  const [acknowledging, setAcknowledging] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(true);
 
   const handleRefresh = async () => {
@@ -28,7 +33,25 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
     setRefreshing(false);
   };
 
-  const latestTransition = timeline.find((e) => e.event_type === 'Transition');
+  // Resolve handover from prop or timeline
+  const timelineHandover = timeline.find((e) => e.event_type === 'Transition')?.transition_log;
+  const effectiveHandover = latestHandover || timelineHandover;
+
+  const handleAcknowledge = async () => {
+    if (!effectiveHandover || !onAcknowledgeHandover) return;
+    setAcknowledging(true);
+    try {
+      await onAcknowledgeHandover(effectiveHandover.id);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAcknowledging(false);
+    }
+  };
+
+  const ackTimeFormatted = effectiveHandover?.acknowledged_at
+    ? new Date(effectiveHandover.acknowledged_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : '8:48am';
 
   return (
     <div className="space-y-6">
@@ -36,17 +59,17 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <div className="stat-card border-coral-dark">
           <div className="font-serif text-2xl font-bold text-coral-dark">
-            {latestTransition?.transition_log?.morning_mood || 'Anxious'}
+            {effectiveHandover?.morning_mood || 'Anxious'}
           </div>
           <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
-            Morning Handover: {latestTransition?.transition_log?.sleep_quality || 'Restless'}
+            Sleep: {effectiveHandover?.sleep_quality || 'Restless (woke at 4am)'}
           </div>
         </div>
 
         <div className="stat-card border-amber-dark">
           <div className="font-serif text-2xl font-bold text-amber-dark">3</div>
           <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
-            Sensory alerts needing attention today
+            Active alerts needing attention today
           </div>
         </div>
 
@@ -60,7 +83,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         <div className="stat-card border-gold">
           <div className="font-serif text-2xl font-bold text-amber-600">Year 5</div>
           <div className="text-[11px] text-gray-500 mt-0.5 leading-snug">
-            St. Jude's Inclusive Academy
+            St. Jude's Inclusive Academy · Room 4
           </div>
         </div>
       </div>
@@ -89,21 +112,129 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-coral-light text-coral-dark">
-            ⚡ Assembly Alert Today
+            ⚡ Assembly Alert 9:05am
           </span>
           <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-mint-pale text-teal">
             🎧 Noise Defenders
           </span>
-          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-amber-light text-amber-dark">
-            🥣 Breakfast Eaten
+          <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg ${
+            effectiveHandover?.breakfast_eaten === false
+              ? 'bg-coral-light text-coral-dark'
+              : 'bg-amber-light text-amber-dark'
+          }`}>
+            {effectiveHandover?.breakfast_eaten === false ? '🍽 Skipped Breakfast' : '🥣 Breakfast Eaten'}
+          </span>
+          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-purple-light text-purple-dark">
+            💊 Meds Taken (Week 1)
+          </span>
+          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-gold-light text-[#7A5A00]">
+            🎮 Goal: Game Designer
           </span>
           <button
             onClick={onOpenObservationModal}
-            className="flex items-center gap-1.5 ml-2 bg-teal hover:bg-teal-medium text-white px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95"
+            className="flex items-center gap-1.5 ml-2 bg-teal hover:bg-teal-medium text-white px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Quick Observation</span>
           </button>
+        </div>
+      </div>
+
+      {/* ⭐ PRE-FLIGHT MORNING HANDOVER & OPERATIONAL RISK CARD */}
+      <div className={`card p-5 border-l-4 transition-all ${
+        effectiveHandover?.acknowledged_by_staff
+          ? 'border-l-emerald-600 bg-white'
+          : 'border-l-amber-dark bg-amber-50/25 border-amber-200'
+      }`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              effectiveHandover?.acknowledged_by_staff ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-light text-amber-dark'
+            }`}>
+              <Clock className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-navy">Pre-Flight Morning Handover · Dana Carter (Mum)</h3>
+                {effectiveHandover?.acknowledged_by_staff ? (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    ✓ Read Receipt Delivered
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-coral-light text-coral-dark animate-pulse">
+                    🔔 Needs Teacher Acknowledgment
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-gray-500">Submitted at 8:47am · Direct home-to-classroom loop</p>
+            </div>
+          </div>
+
+          {effectiveHandover && !effectiveHandover.acknowledged_by_staff ? (
+            <button
+              onClick={handleAcknowledge}
+              disabled={acknowledging}
+              className="px-4 py-2 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
+            >
+              <CheckCircle2 className="w-4 h-4 text-mint" />
+              <span>{acknowledging ? 'Acknowledging...' : '✓ Acknowledge Handover — Notify Mum'}</span>
+            </button>
+          ) : (
+            <div className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 flex items-center gap-1.5 flex-shrink-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Acknowledged by Ms Johnson at {ackTimeFormatted}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Handover Data Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-b border-gray-100">
+          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Sleep Quality</div>
+            <div className="text-xs font-bold text-navy mt-0.5">
+              {effectiveHandover?.sleep_quality || 'Restless (woke at 4am)'}
+            </div>
+          </div>
+          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Morning Mood</div>
+            <div className="text-xs font-bold text-navy mt-0.5">
+              {effectiveHandover?.morning_mood || 'Anxious / Apprehensive'}
+            </div>
+          </div>
+          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Breakfast Status</div>
+            <div className={`text-xs font-bold mt-0.5 ${
+              effectiveHandover?.breakfast_eaten === false ? 'text-coral-dark' : 'text-emerald-700'
+            }`}>
+              {effectiveHandover?.breakfast_eaten === false ? '⚠️ Skipped (Dip Risk)' : '🥣 Breakfast Eaten'}
+            </div>
+          </div>
+          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Medication</div>
+            <div className="text-xs font-bold text-teal mt-0.5">
+              {effectiveHandover?.medication_given ? '💊 Taken at 8:30am' : '⚠️ Not Taken'}
+            </div>
+          </div>
+        </div>
+
+        {/* Parent Notes & Status Note */}
+        <div className="pt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div className="text-gray-700">
+            <span className="font-bold text-navy">Mum's Note: </span>
+            <span className="italic">
+              "{effectiveHandover?.special_notes_for_day || 'Worried about assembly noise. Noise defenders packed in his bag.'}"
+            </span>
+          </div>
+
+          {!effectiveHandover?.acknowledged_by_staff ? (
+            <div className="text-[11px] text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 flex-shrink-0">
+              💡 Dana's app will update with a read receipt instantly when acknowledged
+            </div>
+          ) : (
+            <div className="text-[11px] text-emerald-700 font-medium flex-shrink-0">
+              ✓ Dana's app shows: "Read by Ms Johnson at {ackTimeFormatted}"
+            </div>
+          )}
         </div>
       </div>
 
@@ -140,7 +271,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
               )}
             </div>
 
-            {briefing && briefing.citations.length > 0 && (
+            {briefing && briefing.citations && briefing.citations.length > 0 && (
               <div className="mt-3.5 pt-2.5 border-t border-white/10 flex items-center gap-2 text-[10px] text-white/50">
                 <span className="font-bold uppercase tracking-wider text-white/70">Verified Citations:</span>
                 <span className="truncate">{briefing.citations.map((c) => c.citation_text).join(' · ')}</span>
@@ -157,8 +288,8 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
               <div className="flex items-center gap-2.5">
                 <AlertTriangle className="w-4 h-4 text-amber-dark" />
                 <div>
-                  <h4 className="text-xs font-bold text-navy">Proactive Support Alerts</h4>
-                  <p className="text-[10px] text-gray-500">Live signals synced from parent handover</p>
+                  <h4 className="text-xs font-bold text-navy">Today's Support Alerts</h4>
+                  <p className="text-[10px] text-gray-500">Live signals synced from parent handover & sensory profile</p>
                 </div>
               </div>
               <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${alertsOpen ? 'rotate-180' : ''}`} />
@@ -169,13 +300,13 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
                 <div className="pt-2 first:pt-0 flex items-start gap-3">
                   <span className="w-2 h-2 rounded-full bg-coral-dark mt-1.5 flex-shrink-0" />
                   <div>
-                    <span className="font-bold text-navy">10:00am Whole-School Assembly:</span> Sensory load is high in the main hall. Noise defenders should be placed on Phoenix's desk beforehand.
+                    <span className="font-bold text-navy">9:05am Whole-School Assembly:</span> Sensory load is peak in the main hall. Noise defenders should be offered at classroom door before moving to the hall. Buddy pairing with Jake O'Brien active.
                   </div>
                 </div>
                 <div className="pt-2.5 flex items-start gap-3">
                   <span className="w-2 h-2 rounded-full bg-amber-dark mt-1.5 flex-shrink-0" />
                   <div>
-                    <span className="font-bold text-navy">Restless Night:</span> Mother reported restless sleep (woke at 4:00am). Allow quiet recovery pauses if attention wanes in Lesson 2.
+                    <span className="font-bold text-navy">Restless Night (4:00am wake-up):</span> Dana reported disturbed sleep. Potential attention dip around 10:00am. Provide a 5-min movement pause if fidgeting escalates.
                   </div>
                 </div>
                 <div className="pt-2.5 flex items-start gap-3">
@@ -186,6 +317,63 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Strategies for Phoenix Today */}
+          <div className="card p-4 space-y-3">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+              <div>
+                <h4 className="text-xs font-bold text-navy">Strategies for Phoenix Today</h4>
+                <p className="text-[10px] text-gray-500">Ranked by verified effectiveness for this pupil</p>
+              </div>
+              <span className="text-[10px] font-bold text-teal bg-mint-pale px-2 py-0.5 rounded-md">EHCP Aligned</span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base">🎧</span>
+                  <div>
+                    <div className="font-bold text-navy">Noise-cancelling headphones</div>
+                    <div className="text-[11px] text-gray-500">Offer at classroom door before assembly — not after arriving in hall.</div>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">92%</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base">💧</span>
+                  <div>
+                    <div className="font-bold text-navy">Water bottle — always on desk</div>
+                    <div className="text-[11px] text-gray-500">Methylphenidate increases fluid loss. Cold water works better. Target 3–4 drinks before lunch.</div>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">94%</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base">🎮</span>
+                  <div>
+                    <div className="font-bold text-navy">Connect learning to game design</div>
+                    <div className="text-[11px] text-gray-500">Frame gradient as "slope of a game level" — Phoenix engages immediately when STEM connects to his goal.</div>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">88%</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-gray-50 flex items-center justify-between border border-gray-100">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base">⏰</span>
+                  <div>
+                    <div className="font-bold text-navy">5-min transition warning</div>
+                    <div className="text-[11px] text-gray-500">Visual timer + quiet verbal warning before every activity change today.</div>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg">85%</span>
+              </div>
+            </div>
           </div>
         </div>
 

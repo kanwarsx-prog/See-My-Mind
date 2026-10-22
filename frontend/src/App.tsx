@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RoleView, Child, ChildEvent, MorningBriefing, IncidentSubmission } from './types';
+import { RoleView, Child, ChildEvent, MorningBriefing, IncidentSubmission, TransitionLogDetail } from './types';
 import { api } from './api';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
@@ -19,12 +19,13 @@ export const App: React.FC = () => {
   const [child, setChild] = useState<Child | null>(null);
   const [timeline, setTimeline] = useState<ChildEvent[]>([]);
   const [briefing, setBriefing] = useState<MorningBriefing | null>(null);
+  const [latestHandover, setLatestHandover] = useState<TransitionLogDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [isObsModalOpen, setIsObsModalOpen] = useState(false);
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState(false);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
-  // Load pupil and timeline from live backend
+  // Load pupil, timeline, and morning handover from live backend
   useEffect(() => {
     async function loadData() {
       try {
@@ -34,12 +35,14 @@ export const App: React.FC = () => {
           const selected = pupils[0]; // Phoenix Carter
           setChild(selected);
 
-          const [events, brief] = await Promise.all([
+          const [events, brief, handover] = await Promise.all([
             api.getTimeline(selected.id),
             api.getMorningBriefing(selected.id).catch(() => null),
+            api.getLatestHandover(selected.id).catch(() => null),
           ]);
           setTimeline(events);
           setBriefing(brief);
+          setLatestHandover(handover);
         }
       } catch (err) {
         console.error('Error connecting to backend:', err);
@@ -70,16 +73,62 @@ export const App: React.FC = () => {
     setTimeline([newEvent, ...timeline]);
   };
 
+  const handleAcknowledgeHandover = async (transitionId: string) => {
+    try {
+      const updated = await api.acknowledgeTransition(transitionId);
+      setLatestHandover((prev) =>
+        prev
+          ? {
+              ...prev,
+              acknowledged_by_staff: true,
+              acknowledged_at: updated.acknowledged_at || new Date().toISOString(),
+            }
+          : null
+      );
+
+      setTimeline((prev) =>
+        prev.map((evt) => {
+          if (evt.transition_log && evt.transition_log.id === transitionId) {
+            return {
+              ...evt,
+              status: 'Acknowledged',
+              transition_log: {
+                ...evt.transition_log,
+                acknowledged_by_staff: true,
+                acknowledged_at: updated.acknowledged_at || new Date().toISOString(),
+              },
+            };
+          }
+          return evt;
+        })
+      );
+    } catch (err) {
+      console.error('Failed to acknowledge transition handover:', err);
+    }
+  };
+
   const handleSubmitHandover = async (handoverData: any) => {
     if (!child) return;
     const newEvent = await api.submitMorningHandover(child.id, handoverData);
     setTimeline([newEvent, ...timeline]);
+    const freshHandover = await api.getLatestHandover(child.id).catch(() => null);
+    setLatestHandover(freshHandover);
     await handleRefreshBriefing();
   };
 
   const handleChildCheckIn = async (checkInData: any) => {
     if (!child) return;
     const newEvent = await api.logCheckIn(child.id, checkInData);
+    setTimeline([newEvent, ...timeline]);
+  };
+
+  const handleDirectLog = async (eventData: any) => {
+    if (!child) return;
+    const newEvent = await api.logEvent({
+      ...eventData,
+      child_id: child.id,
+      school_id: child.school_id,
+    });
     setTimeline([newEvent, ...timeline]);
   };
 
@@ -105,13 +154,21 @@ export const App: React.FC = () => {
     );
   }
 
+  const isHandoverAcknowledged = latestHandover?.acknowledged_by_staff;
+  const isBreakfastSkipped = latestHandover?.breakfast_eaten === false;
+
   const topBarConfig = {
     teacher: {
       title: 'Good morning, Ms Johnson 👋',
       subtitle: 'Wednesday 22 October 2026 · Year 5 · Room 4',
       pills: [
-        { label: '⚡ Assembly 10:00am', color: 'red' as const },
-        { label: '⏰ Medication Taken', color: 'amber' as const },
+        latestHandover && !isHandoverAcknowledged
+          ? { label: '🔔 Handover Needs Ack', color: 'red' as const }
+          : { label: '✓ Handover Acknowledged', color: 'green' as const },
+        isBreakfastSkipped
+          ? { label: '🍽 Skipped Breakfast', color: 'amber' as const }
+          : { label: '🥣 Breakfast Eaten', color: 'teal' as const },
+        { label: '⚡ Assembly 9:05am', color: 'red' as const },
         { label: '📚 Maths: Straight Lines', color: 'gold' as const },
       ],
       actionButton: {
@@ -132,8 +189,10 @@ export const App: React.FC = () => {
       title: 'Phoenix Carter · Parent Hub',
       subtitle: 'Dana Carter · Year 5 St. Jude’s Inclusive Academy',
       pills: [
-        { label: '✓ Handover Sent (7:45am)', color: 'green' as const },
-        { label: 'Noise Defenders in Bag', color: 'teal' as const },
+        isHandoverAcknowledged
+          ? { label: '✓ Read by Ms Johnson', color: 'green' as const }
+          : { label: '⏳ Handover Sent · Awaiting Check-In', color: 'amber' as const },
+        { label: '🎧 Noise Defenders in Bag', color: 'teal' as const },
       ],
     },
     child: {
@@ -144,7 +203,10 @@ export const App: React.FC = () => {
     ta: {
       title: 'Teaching Assistant View · Melissa Grant',
       subtitle: '1-to-1 Support Focus · Phoenix Carter',
-      pills: [{ label: 'Noise Defenders Prepared', color: 'amber' as const }],
+      pills: [
+        { label: '⚡ Phoenix: High Priority', color: 'red' as const },
+        { label: '🎧 Headphones at Door (8:55am)', color: 'amber' as const },
+      ],
       actionButton: {
         label: '+ Log Note',
         onClick: () => setIsObsModalOpen(true),
@@ -176,7 +238,9 @@ export const App: React.FC = () => {
               child={child}
               timeline={timeline}
               briefing={briefing}
+              latestHandover={latestHandover}
               onRefreshBriefing={handleRefreshBriefing}
+              onAcknowledgeHandover={handleAcknowledgeHandover}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
               onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
             />
@@ -186,6 +250,7 @@ export const App: React.FC = () => {
             <ParentView
               child={child}
               timeline={timeline}
+              latestHandover={latestHandover}
               onSubmitHandover={handleSubmitHandover}
             />
           )}
@@ -211,6 +276,7 @@ export const App: React.FC = () => {
               child={child}
               timeline={timeline}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
+              onDirectLog={handleDirectLog}
             />
           )}
 

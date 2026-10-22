@@ -51,6 +51,19 @@ class TransitionService:
 
         trans.acknowledged_by_staff = True
         trans.acknowledged_at = datetime.now(UTC)
+        if trans.event:
+            trans.event.status = "Acknowledged"
         db.commit()
         db.refresh(trans)
         return trans
+
+    @staticmethod
+    def get_latest_handover(db: Session, child_id: UUID) -> TransitionLog | None:
+        """Retrieve the most recent morning handover for a child."""
+        return (
+            db.query(TransitionLog)
+            .join(ChildEvent, TransitionLog.event_id == ChildEvent.id)
+            .filter(ChildEvent.child_id == child_id)
+            .order_by(ChildEvent.event_time.desc())
+            .first()
+        )

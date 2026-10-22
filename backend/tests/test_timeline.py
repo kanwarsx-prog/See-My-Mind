@@ -107,6 +107,14 @@ def test_timeline_observation_and_transition(client):
     assert ack_resp.status_code == 200
     assert ack_resp.json()["acknowledged_by_staff"] is True
 
+    # Check latest handover endpoint
+    latest_resp = client.get(f"/api/v1/transitions/children/{child_id}/latest")
+    assert latest_resp.status_code == 200
+    latest_data = latest_resp.json()
+    assert latest_data["id"] == trans_id
+    assert latest_data["acknowledged_by_staff"] is True
+    assert latest_data["morning_mood"] == "Anxious"
+
     # 3. Retrieve the child's unified timeline
     timeline_resp = client.get(f"/api/v1/timeline/children/{child_id}/events")
     assert timeline_resp.status_code == 200

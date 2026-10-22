@@ -42,3 +42,9 @@ def acknowledge_transition(transition_id: UUID, db: Session = Depends(get_db)):
         return TransitionService.acknowledge_transition(db=db, transition_id=transition_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/children/{child_id}/latest", response_model=TransitionLogResponse | None)
+def get_latest_handover(child_id: UUID, db: Session = Depends(get_db)):
+    """Retrieve the latest morning handover details and staff acknowledgment state."""
+    return TransitionService.get_latest_handover(db=db, child_id=child_id)
