@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
+    auth,
     documents,
     health,
     incidents,
@@ -15,6 +16,7 @@ from app.api.v1.endpoints import (
 api_router = APIRouter()
 
 api_router.include_router(health.router, tags=["Health"])
+api_router.include_router(auth.router, prefix="/auth", tags=["Authentication & Identity"])
 api_router.include_router(schools.router, prefix="/schools", tags=["Schools"])
 api_router.include_router(pupils.router, prefix="/pupils", tags=["Pupils"])
 api_router.include_router(timeline.router, prefix="/timeline", tags=["Transactional Spine"])

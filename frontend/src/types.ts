@@ -252,4 +252,6 @@ export interface UserProfile {
   full_name: string;
   role: string;
   child_id?: string;
+  username?: string;
+  avatar_emoji?: string;
 }

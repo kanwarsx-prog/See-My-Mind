@@ -134,12 +134,79 @@ export const api = {
     return res.json();
   },
 
-  async getCurrentUser(): Promise<UserProfile | null> {
-    const res = await fetch(`${API_BASE}/registration/current-user`, {
-      headers: getHeaders(),
+  // Authentication & Identity
+  async login(
+    emailOrUsername: string,
+    passwordOrPin: string
+  ): Promise<{
+    access_token: string;
+    token_type: string;
+    user: UserProfile;
+  }> {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email_or_username: emailOrUsername,
+        password_or_pin: passwordOrPin,
+      }),
     });
-    if (!res.ok) return null;
-    return res.json();
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Login failed. Please check your credentials.');
+    }
+    const data = await res.json();
+    if (data.access_token) {
+      setAuthToken(data.access_token);
+      setApiRole(data.user.role);
+    }
+    return data;
+  },
+
+  async demoLogin(role: string): Promise<{
+    access_token: string;
+    token_type: string;
+    user: UserProfile;
+  }> {
+    const res = await fetch(`${API_BASE}/auth/demo-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Demo login failed.');
+    }
+    const data = await res.json();
+    if (data.access_token) {
+      setAuthToken(data.access_token);
+      setApiRole(data.user.role);
+    }
+    return data;
+  },
+
+  logout() {
+    setAuthToken(null);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('smm_auth_token');
+      localStorage.removeItem('smm_user_profile');
+    }
+  },
+
+  async getCurrentUser(): Promise<UserProfile | null> {
+    if (!activeToken) return null;
+    try {
+      const res = await fetch(`${API_BASE}/auth/me`, {
+        headers: getHeaders(),
+      });
+      if (!res.ok) {
+        setAuthToken(null);
+        return null;
+      }
+      return await res.json();
+    } catch {
+      return null;
+    }
   },
 
   // Timeline / Events

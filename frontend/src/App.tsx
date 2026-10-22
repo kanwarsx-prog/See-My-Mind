@@ -7,6 +7,7 @@ import {
   IncidentSubmission,
   TransitionLogDetail,
   EmailPreview,
+  UserProfile,
 } from './types';
 import { api, setApiRole } from './api';
 import { Sidebar } from './components/Sidebar';
@@ -18,6 +19,7 @@ import { WorksheetModal } from './components/WorksheetModal';
 import { RegisterChildModal } from './components/RegisterChildModal';
 import { ParentOnboardingModal } from './components/ParentOnboardingModal';
 import { InvitationNotificationBanner } from './components/InvitationNotificationBanner';
+import { LoginView } from './views/LoginView';
 import { TeacherView } from './views/TeacherView';
 import { ParentView } from './views/ParentView';
 import { SencoView } from './views/SencoView';
@@ -27,13 +29,20 @@ import { ParentPlusView } from './views/ParentPlusView';
 import { Plus } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<RoleView>('teacher');
+  // Authentication & Session State
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [authChecking, setAuthChecking] = useState<boolean>(true);
+
+  // Active Persona View (Locked to currentUser.role)
+  const [activeView, setActiveView] = useState<RoleView>('senco');
   const [pupils, setPupils] = useState<Child[]>([]);
   const [child, setChild] = useState<Child | null>(null);
   const [timeline, setTimeline] = useState<ChildEvent[]>([]);
   const [briefing, setBriefing] = useState<MorningBriefing | null>(null);
   const [latestHandover, setLatestHandover] = useState<TransitionLogDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Modals state
   const [isObsModalOpen, setIsObsModalOpen] = useState(false);
   const [isIncidentModalOpen, setIsIncidentModalOpen] = useState(false);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
@@ -45,6 +54,25 @@ export const App: React.FC = () => {
   const [isParentOnboardingOpen, setIsParentOnboardingOpen] = useState(false);
   const [onboardingToken, setOnboardingToken] = useState<string | null>(null);
   const [latestInvitation, setLatestInvitation] = useState<EmailPreview | null>(null);
+
+  // Check existing session token on startup
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const user = await api.getCurrentUser();
+        if (user) {
+          setCurrentUser(user);
+          setActiveView(user.role as RoleView);
+          setApiRole(user.role === 'parentplus' ? 'parent' : user.role);
+        }
+      } catch (err) {
+        console.error('Session check failed:', err);
+      } finally {
+        setAuthChecking(false);
+      }
+    }
+    checkSession();
+  }, []);
 
   // Sync API role when active view changes
   const handleViewChange = (view: RoleView) => {
@@ -72,15 +100,22 @@ export const App: React.FC = () => {
     }
   };
 
-  // Load pupil, timeline, and morning handover from live backend
+  // Load pupil, timeline, and morning handover when authenticated
   useEffect(() => {
+    if (!currentUser) return;
+
     async function loadData() {
       try {
         setLoading(true);
         const pupilList = await api.getPupils();
         setPupils(pupilList);
         if (pupilList.length > 0) {
-          const selected = pupilList[0]; // Primary pupil
+          let selected = pupilList[0];
+          // If logged in as parent or pupil with linked child_id, select their child
+          if (currentUser?.child_id) {
+            const linked = pupilList.find((p) => p.id === currentUser.child_id);
+            if (linked) selected = linked;
+          }
           setChild(selected);
 
           const [events, brief, handover, recentInvites] = await Promise.all([
@@ -103,7 +138,18 @@ export const App: React.FC = () => {
       }
     }
     loadData();
-  }, []);
+  }, [currentUser]);
+
+  const handleLoginSuccess = (user: UserProfile) => {
+    setCurrentUser(user);
+    handleViewChange(user.role as RoleView);
+  };
+
+  const handleLogout = () => {
+    api.logout();
+    setCurrentUser(null);
+    setChild(null);
+  };
 
   const handleChildRegistered = async (newChildId: string) => {
     try {
@@ -191,7 +237,7 @@ export const App: React.FC = () => {
 
   const handleSubmitHandover = async (handoverData: any) => {
     if (!child) return;
-    const newEvent = await api.submitMorningHandover(child.id, handoverData);
+    const newEvent = await api.submitMorningHandover(child.id, handoverData, currentUser?.full_name || 'Dana Carter');
     setTimeline([newEvent, ...timeline]);
     const freshHandover = await api.getLatestHandover(child.id).catch(() => null);
     setLatestHandover(freshHandover);
@@ -232,8 +278,8 @@ export const App: React.FC = () => {
       child_id: child.id,
       school_id: child.school_id,
       event_type: 'Observation',
-      reporter_type: 'Teacher',
-      reporter_name: 'Ms Johnson',
+      reporter_type: currentUser?.role === 'ta' ? 'Teaching Assistant' : 'Teacher',
+      reporter_name: currentUser?.full_name || 'Ms Johnson',
       title: title,
       summary: summary,
       significance: 'Notable Win',
@@ -253,12 +299,41 @@ export const App: React.FC = () => {
     await api.uploadDocument(child.id, title, docType, file);
   };
 
+  // 1. Initial Auth Check Spinner
+  if (authChecking) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center space-y-3 text-white">
+        <div className="w-10 h-10 rounded-full border-3 border-teal border-t-transparent animate-spin" />
+        <div className="text-sm font-semibold text-slate-300">Checking See My Mind session...</div>
+      </div>
+    );
+  }
+
+  // 2. Unauthenticated: Render Login Layer
+  if (!currentUser) {
+    return (
+      <>
+        <LoginView
+          onLoginSuccess={handleLoginSuccess}
+          onOpenInvitation={handleOpenParentOnboarding}
+        />
+        <ParentOnboardingModal
+          isOpen={isParentOnboardingOpen}
+          token={onboardingToken}
+          onClose={() => setIsParentOnboardingOpen(false)}
+          onCompleted={handleOnboardingCompleted}
+        />
+      </>
+    );
+  }
+
+  // 3. Authenticated: Render Single-Persona View
   if (loading || !child) {
     return (
       <div className="min-h-screen bg-[#F7FAFB] flex flex-col items-center justify-center space-y-3">
         <div className="w-12 h-12 rounded-full border-4 border-teal border-t-transparent animate-spin" />
         <div className="text-sm font-bold text-navy font-serif">Connecting to See My Mind & NOYA AI...</div>
-        <div className="text-xs text-gray-400">Fetching live data from Supabase & Render</div>
+        <div className="text-xs text-gray-400">Loading {currentUser.full_name}&apos;s Workspace</div>
       </div>
     );
   }
@@ -268,7 +343,7 @@ export const App: React.FC = () => {
 
   const topBarConfig = {
     teacher: {
-      title: 'Good morning, Ms Johnson 👋',
+      title: `Good morning, ${currentUser.full_name} 👋`,
       subtitle: 'Wednesday 22 October 2026 · Year 5 · Room 4',
       pills: [
         latestHandover && !isHandoverAcknowledged
@@ -287,7 +362,7 @@ export const App: React.FC = () => {
       },
     },
     senco: {
-      title: 'Inclusion & SEND Dashboard · Ms Okafor',
+      title: `Inclusion & SEND Caseload · ${currentUser.full_name}`,
       subtitle: 'St. Jude’s Inclusive Academy · Autumn Term 2026',
       pills: [
         { label: `${pupils.length} Pupils on Caseload`, color: 'teal' as const },
@@ -301,7 +376,7 @@ export const App: React.FC = () => {
     },
     parent: {
       title: `${child.preferred_name || child.first_name} ${child.last_name} · Parent Hub`,
-      subtitle: 'Parent & Home-School Communication · St. Jude’s Inclusive Academy',
+      subtitle: `${currentUser.full_name} · St. Jude’s Inclusive Academy`,
       pills: [
         isHandoverAcknowledged
           ? { label: '✓ Read by Ms Johnson', color: 'green' as const }
@@ -315,7 +390,7 @@ export const App: React.FC = () => {
       pills: [{ label: '😊 Feeling Great', color: 'green' as const }],
     },
     ta: {
-      title: 'Teaching Assistant View · Melissa Grant',
+      title: `Teaching Assistant View · ${currentUser.full_name}`,
       subtitle: `1-to-1 Support Focus · ${child.preferred_name || child.first_name}`,
       pills: [
         { label: `⚡ ${child.preferred_name || child.first_name}: High Priority`, color: 'red' as const },
@@ -336,7 +411,13 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F7FAFB] text-[#1A3A4A] flex font-sans">
-      <Sidebar activeView={activeView} onViewChange={handleViewChange} />
+      <Sidebar
+        activeView={activeView}
+        currentUser={currentUser}
+        onLogout={handleLogout}
+        onSwitchPersona={handleLogout}
+        onRegisterChild={() => setIsRegisterModalOpen(true)}
+      />
 
       <main className="ml-64 min-h-screen flex flex-col flex-1">
         <InvitationNotificationBanner
@@ -349,7 +430,7 @@ export const App: React.FC = () => {
           subtitle={topBarConfig.subtitle}
           pills={topBarConfig.pills}
           actionButton={topBarConfig.actionButton}
-          pupils={pupils}
+          pupils={currentUser.role === 'senco' || currentUser.role === 'teacher' ? pupils : undefined}
           selectedChildId={child.id}
           onSelectChild={handleChildSelect}
         />
