@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mint: #9ECFC4;
+  --mint-l: #C9E4DE;
+  --mint-p: #E8F4F1;
+  --teal: #2A6B62;
+  --teal-m: #3D8C82;
+  --navy: #1A3A4A;
+  --navy-l: #2D5A6E;
+  --navy-ll: #3A6A80;
+  --coral: #F4A89A;
+  --coral-d: #C5503E;
+  --coral-l: #FCDCD6;
+  --amber: #F5C77E;
+  --amber-d: #B87A2A;
+  --amber-l: #FBE8C8;
+  --purple: #9B8DC2;
+  --purple-d: #5E4D9A;
+  --purple-l: #DDD8F0;
+  --green: #4CAF82;
+  --green-l: #D4EDE0;
+  --gold: #E8B84B;
+  --gold-l: #FDF3DC;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #F7FAFB;
+  color: var(--navy);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+}
+
+.noya-block {
+  background: linear-gradient(135deg, #1A3A4A 0%, #2D5A6E 100%);
+  border-radius: 16px;
+  padding: 18px 20px;
+  color: white;
+  box-shadow: 0 4px 14px rgba(26,58,74,0.11);
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(26,58,74,0.08);
+  border: 1px solid #EDF2F4;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 3px rgba(26,58,74,0.08);
+  border-left-width: 4px;
+}

@@ -11,6 +11,9 @@ dist/
 venv/
 env/
 
+# Node dependencies
+node_modules/
+
 # Databases & local sqlite
 *.db
 *.sqlite3

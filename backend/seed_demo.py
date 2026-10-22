@@ -1,14 +1,15 @@
 """Seed demo script for See My Mind & NOYA AI.
 Populates realistic demo data matching the prototype wireframe (Phoenix Carter, Ms Johnson, Dana Carter).
 """
-import sys
-from datetime import datetime, timezone, date
-from app.core.database import SessionLocal, Base, engine
-import app.models as models
+
+from datetime import date
+
+from app import models
+from app.ai.rag_service import NoyaRAGService
+from app.core.database import Base, SessionLocal, engine
+from app.schemas.timeline import ChildEventCreate, ObservationCreate, TransitionLogCreate
 from app.services.timeline_service import TimelineService
 from app.services.transition_service import TransitionService
-from app.ai.rag_service import NoyaRAGService
-from app.schemas.timeline import ChildEventCreate, ObservationCreate, TransitionLogCreate
 
 
 def seed_demo_data():
@@ -18,7 +19,9 @@ def seed_demo_data():
 
     try:
         # Check if already seeded
-        existing_school = db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first()
+        existing_school = (
+            db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first()
+        )
         if existing_school:
             print("Demo data already seeded! Fetching existing records...")
             school = existing_school
@@ -51,10 +54,22 @@ def seed_demo_data():
             db.add_all([senco, teacher])
             db.flush()
 
-            db.add_all([
-                models.StaffSchoolAssignment(staff_id=senco.id, school_id=school.id, role="SENCO", job_title="Head of SEND"),
-                models.StaffSchoolAssignment(staff_id=teacher.id, school_id=school.id, role="Teacher", job_title="Year 5 Class Teacher"),
-            ])
+            db.add_all(
+                [
+                    models.StaffSchoolAssignment(
+                        staff_id=senco.id,
+                        school_id=school.id,
+                        role="SENCO",
+                        job_title="Head of SEND",
+                    ),
+                    models.StaffSchoolAssignment(
+                        staff_id=teacher.id,
+                        school_id=school.id,
+                        role="Teacher",
+                        job_title="Year 5 Class Teacher",
+                    ),
+                ]
+            )
 
             print("3. Creating Pupil: Phoenix Carter...")
             child = models.Child(
@@ -82,13 +97,15 @@ def seed_demo_data():
             db.add(guardian)
             db.flush()
 
-            db.add(models.ChildGuardianLink(
-                child_id=child.id,
-                guardian_id=guardian.id,
-                parental_responsibility=True,
-                emergency_contact=True,
-                primary_carer=True,
-            ))
+            db.add(
+                models.ChildGuardianLink(
+                    child_id=child.id,
+                    guardian_id=guardian.id,
+                    parental_responsibility=True,
+                    emergency_contact=True,
+                    primary_carer=True,
+                )
+            )
 
             print("5. Building Phoenix's Support Profile & Strategies...")
             profile = models.ChildSupportProfile(
@@ -105,48 +122,53 @@ def seed_demo_data():
             db.flush()
 
             # Add Triggers & Strategies
-            db.add_all([
-                models.ChildTrigger(
-                    profile_id=profile.id,
-                    trigger_title="Unannounced Schedule Changes / Assemblies",
-                    trigger_category="Sensory & Transition",
-                    description="Sudden changes of room or loud multi-class assemblies can trigger rising sensory overwhelm.",
-                ),
-                models.ChildDistressIndicator(
-                    profile_id=profile.id,
-                    stage="Early Warning (Rumbling)",
-                    observable_behaviour="Pacing, tapping pencil rapidly, putting hands over ears.",
-                    recommended_staff_action="Offer 5-minute quiet corner break with noise-canceling headphones.",
-                ),
-                models.ChildSupportStrategy(
-                    profile_id=profile.id,
-                    custom_title="Visual Task Strip",
-                    custom_instructions="Break each lesson into 3 checklist items on Phoenix's desk whiteboard.",
-                    priority=1,
-                    effective_rating="Highly Effective",
-                ),
-            ])
+            db.add_all(
+                [
+                    models.ChildTrigger(
+                        profile_id=profile.id,
+                        trigger_title="Unannounced Schedule Changes / Assemblies",
+                        trigger_category="Sensory & Transition",
+                        description="Sudden changes of room or loud multi-class assemblies can trigger rising sensory overwhelm.",
+                    ),
+                    models.ChildDistressIndicator(
+                        profile_id=profile.id,
+                        stage="Early Warning (Rumbling)",
+                        observable_behaviour="Pacing, tapping pencil rapidly, putting hands over ears.",
+                        recommended_staff_action="Offer 5-minute quiet corner break with noise-canceling headphones.",
+                    ),
+                    models.ChildSupportStrategy(
+                        profile_id=profile.id,
+                        custom_title="Visual Task Strip",
+                        custom_instructions="Break each lesson into 3 checklist items on Phoenix's desk whiteboard.",
+                        priority=1,
+                        effective_rating="Highly Effective",
+                    ),
+                ]
+            )
             db.commit()
 
             print("6. Logging Yesterday's Science Observation...")
-            TimelineService.create_event(db, ChildEventCreate(
-                child_id=child.id,
-                school_id=school.id,
-                event_type="Observation",
-                reporter_type="Teacher",
-                reporter_name="Ms Johnson",
-                title="Superb Science Practical Engagement",
-                summary="Phoenix excelled in the density experiment, helping group peers and explaining water displacement clearly.",
-                significance="Notable Win",
-                visibility="Shared",
-                observation=ObservationCreate(
-                    activity_context="Year 5 Science Practical",
-                    engagement_level="High",
-                    strategy_used="Visual Task Strip",
-                    strategy_worked=True,
-                    strengths_observed="Leadership, logical analysis, peer collaboration",
-                )
-            ))
+            TimelineService.create_event(
+                db,
+                ChildEventCreate(
+                    child_id=child.id,
+                    school_id=school.id,
+                    event_type="Observation",
+                    reporter_type="Teacher",
+                    reporter_name="Ms Johnson",
+                    title="Superb Science Practical Engagement",
+                    summary="Phoenix excelled in the density experiment, helping group peers and explaining water displacement clearly.",
+                    significance="Notable Win",
+                    visibility="Shared",
+                    observation=ObservationCreate(
+                        activity_context="Year 5 Science Practical",
+                        engagement_level="High",
+                        strategy_used="Visual Task Strip",
+                        strategy_worked=True,
+                        strengths_observed="Leadership, logical analysis, peer collaboration",
+                    ),
+                ),
+            )
 
             print("7. Logging Today's Morning Handover from Dana Carter (Parent)...")
             TransitionService.log_morning_handover(
@@ -161,7 +183,7 @@ def seed_demo_data():
                     breakfast_eaten=True,
                     medication_given=False,
                     special_notes_for_day="A bit nervous about the whole-school assembly this morning. Please make sure noise defenders are accessible.",
-                )
+                ),
             )
 
         print("\n" + "=" * 60)
