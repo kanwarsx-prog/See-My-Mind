@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>See My Mind v9 — Phoenix Carter · Education Lifecycle</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --mint:#9ECFC4; --mint-l:#C9E4DE; --mint-p:#E8F4F1;
+  --teal:#2A6B62; --teal-m:#3D8C82;
+  --navy:#1A3A4A; --navy-l:#2D5A6E; --navy-ll:#3A6A80;
+  --coral:#F4A89A; --coral-d:#C5503E; --coral-l:#FCDCD6;
+  --amber:#F5C77E; --amber-d:#B87A2A; --amber-l:#FBE8C8;
+  --purple:#9B8DC2; --purple-d:#5E4D9A; --purple-l:#DDD8F0;
+  --green:#4CAF82; --green-l:#D4EDE0;
+  --gold:#E8B84B; --gold-l:#FDF3DC;
+  --white:#fff; --gray-50:#F7FAFB; --gray-100:#EDF2F4;
+  --gray-200:#DDE4E8; --gray-300:#B8C5CC; --gray-500:#627984;
+  --gray-700:#3D4F5A;
+  --s-sm:0 1px 3px rgba(26,58,74,.08);
+  --s-md:0 4px 14px rgba(26,58,74,.11);
+  --s-lg:0 10px 32px rgba(26,58,74,.16);
+  --r-s:8px; --r-m:12px; --r-l:16px; --r-xl:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--navy);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;}
+
+/* SIDEBAR */
+.sidebar{width:252px;background:var(--navy);position:fixed;height:100vh;display:flex;flex-direction:column;padding:0;z-index:100;overflow-y:auto;}
+.sb-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:11px;}
+.sb-orb{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 120deg,var(--coral),var(--amber),var(--mint),var(--purple),var(--coral));display:flex;align-items:center;justify-content:center;}
+.sb-orb::after{content:'';width:14px;height:14px;background:var(--navy);border-radius:50%;}
+.sb-brand{color:white;font-family:'Fraunces',serif;font-size:15px;font-weight:600;line-height:1.2;}
+.sb-brand span{display:block;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:400;color:rgba(255,255,255,.35);margin-top:2px;letter-spacing:.03em;}
+.sb-section{padding:12px 10px 4px;}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-m);color:rgba(255,255,255,.55);cursor:pointer;font-size:12px;font-weight:500;transition:all .18s;margin-bottom:1px;}
+.sb-item:hover{background:rgba(255,255,255,.07);color:white;}
+.sb-item.active{background:var(--mint);color:var(--navy);font-weight:600;}
+.sb-item svg{width:15px;height:15px;flex-shrink:0;}
+.sb-badge{margin-left:auto;background:var(--coral);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;}
+.sb-badge.new{background:var(--gold);}
+.sb-views{padding:8px 10px 4px;border-top:1px solid rgba(255,255,255,.08);margin-top:4px;}
+.vbtn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border-radius:var(--r-m);border:none;font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .18s;margin-bottom:3px;text-align:left;}
+.vbtn.t{background:rgba(155,141,194,.12);color:rgba(200,195,225,.85);}
+.vbtn.t:hover,.vbtn.t.on{background:var(--purple-d);color:white;}
+.vbtn.s{background:rgba(158,207,196,.12);color:rgba(180,220,210,.85);}
+.vbtn.s:hover,.vbtn.s.on{background:var(--teal);color:white;}
+.vbtn.p{background:rgba(245,199,126,.12);color:rgba(240,210,160,.85);}
+.vbtn.p:hover,.vbtn.p.on{background:var(--amber-d);color:white;}
+.vbtn.c{background:rgba(244,168,154,.12);color:rgba(244,190,180,.85);}
+.vbtn.c:hover,.vbtn.c.on{background:var(--coral-d);color:white;}
+.vbtn.ta{background:rgba(76,175,130,.12);color:rgba(160,220,190,.85);}
+.vbtn.ta:hover,.vbtn.ta.on{background:var(--green);color:white;}
+.vbtn.pp{background:rgba(232,184,75,.14);color:rgba(255,224,144,.85);}
+.vbtn.pp:hover,.vbtn.pp.on{background:var(--gold);color:var(--navy);}
+.vbtn-plus-tag{margin-left:auto;background:rgba(255,255,255,.2);color:inherit;font-size:8px;font-weight:700;padding:1px 5px;border-radius:8px;letter-spacing:.04em;}
+.sb-foot{margin-top:auto;padding:10px;border-top:1px solid rgba(255,255,255,.08);}
+.sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-m);background:rgba(255,255,255,.05);}
+.sb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.sb-uname{color:white;font-weight:600;font-size:12px;}
+.sb-urole{color:rgba(255,255,255,.35);font-size:10px;}
+
+/* MAIN */
+.main{margin-left:252px;min-height:100vh;}
+.view{display:none;}
+.view.on{display:block;animation:fadeUp .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* TOPBAR */
+.topbar{background:white;border-bottom:1px solid var(--gray-200);padding:12px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--s-sm);}
+.tb-title{font-size:13px;font-weight:600;color:var(--navy);}
+.tb-sub{font-size:10.5px;color:var(--gray-500);}
+.tb-right{display:flex;align-items:center;gap:7px;}
+.pill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.pill-red{background:var(--coral-l);color:var(--coral-d);}
+.pill-green{background:var(--green-l);color:#1f6040;}
+.pill-gray{background:var(--gray-100);color:var(--gray-500);}
+.pill-amber{background:var(--amber-l);color:var(--amber-d);}
+.pill-teal{background:var(--mint-p);color:var(--teal);}
+.pill-purple{background:var(--purple-l);color:var(--purple-d);}
+.pill-gold{background:var(--gold-l);color:#7A5A00;}
+
+/* LAYOUT */
+.content{padding:20px 26px 60px;}
+.row{display:flex;gap:14px;margin-bottom:14px;}
+.row>*{min-width:0;}
+.col-5{flex:5;} .col-4{flex:4;} .col-3{flex:3;} .col-7{flex:7;} .col-6{flex:6;} .col-8{flex:8;} .col-9{flex:9;}
+
+/* STAT STRIP */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.stat{background:white;border-radius:var(--r-l);padding:13px 16px;box-shadow:var(--s-sm);border-left:3px solid transparent;}
+.stat.red{border-color:var(--coral-d);} .stat.amber{border-color:var(--amber-d);} .stat.green{border-color:var(--green);} .stat.teal{border-color:var(--teal);} .stat.purple{border-color:var(--purple-d);} .stat.gold{border-color:var(--gold);}
+.stat-n{font-family:'Fraunces',serif;font-size:26px;font-weight:500;line-height:1.1;margin-bottom:2px;}
+.stat.red .stat-n{color:var(--coral-d);} .stat.amber .stat-n{color:var(--amber-d);} .stat.green .stat-n{color:#1f6040;} .stat.teal .stat-n{color:var(--teal);} .stat.purple .stat-n{color:var(--purple-d);} .stat.gold .stat-n{color:#7A5A00;}
+.stat-l{font-size:10.5px;color:var(--gray-500);line-height:1.4;}
+
+/* CARD */
+.card{background:white;border-radius:var(--r-l);box-shadow:var(--s-sm);overflow:hidden;}
+.ch{padding:14px 18px;border-bottom:1px solid transparent;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s;}
+.ch:hover{background:var(--gray-50);}
+.card.open .ch{border-bottom-color:var(--gray-100);}
+.ct{font-size:13px;font-weight:600;color:var(--navy);}
+.cs{font-size:10.5px;color:var(--gray-500);margin-top:1px;}
+.cb{padding:16px 18px;display:none;}
+.card.open .cb{display:block;animation:fadeUp .2s ease both;}
+.clabel{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px;}
+.ch-chev{width:16px;height:16px;color:var(--gray-300);transition:transform .25s;flex-shrink:0;margin-left:8px;}
+.card.open .ch-chev{transform:rotate(180deg);}
+
+/* PROFILE BANNER */
+.pbanner{background:linear-gradient(125deg,var(--navy) 0%,var(--navy-l) 50%,var(--navy-ll) 100%);border-radius:var(--r-l);padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:14px;box-shadow:var(--s-md);position:relative;overflow:hidden;}
+.pbanner::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(158,207,196,.06);pointer-events:none;}
+.pav{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--mint-l),var(--mint));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:2px solid rgba(255,255,255,.2);}
+.pname{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:white;margin-bottom:1px;}
+.pmeta{font-size:10.5px;color:rgba(255,255,255,.5);line-height:1.5;}
+.ptags{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto;}
+.ptag{font-size:9px;font-weight:600;padding:3px 9px;border-radius:14px;white-space:nowrap;}
+.ptag-c{background:rgba(244,168,154,.25);color:#FFD0C8;border:1px solid rgba(244,168,154,.3);}
+.ptag-a{background:rgba(245,199,126,.2);color:#FFE8A8;border:1px solid rgba(245,199,126,.25);}
+.ptag-p{background:rgba(155,141,194,.2);color:#D0C8F0;border:1px solid rgba(155,141,194,.25);}
+.ptag-m{background:rgba(158,207,196,.2);color:#B8EFE8;border:1px solid rgba(158,207,196,.25);}
+.ptag-g{background:rgba(232,184,75,.2);color:#FFE090;border:1px solid rgba(232,184,75,.25);}
+
+/* ALERTS */
+.alist{display:flex;flex-direction:column;gap:8px;}
+.aitem{display:flex;gap:10px;padding:11px 12px;border-radius:var(--r-m);border-left:3px solid transparent;cursor:pointer;transition:transform .15s;}
+.aitem:hover{transform:translateX(2px);}
+.aitem.high{background:var(--coral-l);border-color:var(--coral-d);}
+.aitem.med{background:var(--amber-l);border-color:var(--amber-d);}
+.aitem.low{background:var(--mint-p);border-color:var(--mint);}
+.aitem.pur{background:var(--purple-l);border-color:var(--purple-d);}
+.aitem.gold{background:var(--gold-l);border-color:var(--gold);}
+.aico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.high .aico{background:var(--coral);} .med .aico{background:var(--amber);} .low .aico{background:var(--mint);} .pur .aico{background:var(--purple);} .gold .aico{background:var(--gold);}
+.atitle{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.adesc{font-size:10.5px;color:var(--gray-500);line-height:1.45;}
+.atime{font-size:9px;color:var(--gray-300);margin-top:3px;font-weight:500;}
+
+/* STRATEGIES */
+.slist{display:flex;flex-direction:column;gap:7px;}
+.sitem{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--mint-p);border-radius:var(--r-m);border:1px solid var(--mint-l);}
+.sico{font-size:16px;flex-shrink:0;margin-top:1px;}
+.stitle{font-size:11.5px;font-weight:600;color:var(--navy);margin-bottom:1px;}
+.sdesc{font-size:10px;color:var(--gray-500);line-height:1.4;}
+.srate{margin-left:auto;font-size:10px;font-weight:700;color:#1f6040;background:var(--green-l);padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;align-self:flex-start;}
+
+/* SENSORY BARS */
+.sbar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.sbar-label{font-size:10.5px;color:var(--navy);width:120px;flex-shrink:0;}
+.sbar-track{flex:1;height:12px;background:var(--gray-100);border-radius:3px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:3px;}
+.sbar-val{font-size:10.5px;font-weight:700;color:var(--navy);width:18px;text-align:right;}
+
+/* TABS */
+.tab-strip{display:flex;gap:2px;background:var(--gray-100);padding:3px;border-radius:var(--r-m);margin-bottom:14px;}
+.tab{flex:1;padding:6px 10px;border:none;background:transparent;border-radius:var(--r-s);font-size:11px;font-weight:500;color:var(--gray-500);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif;}
+.tab:hover{color:var(--navy);}
+.tab.on{background:white;color:var(--navy);font-weight:600;box-shadow:var(--s-sm);}
+
+/* SPOTLIGHT */
+.spotlight{background:var(--mint-p);border-radius:var(--r-m);padding:13px 15px;margin-bottom:10px;}
+.insight-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;}
+.insight-txt{font-size:12px;color:var(--navy);line-height:1.55;}
+.noya-block{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-l) 100%);border-radius:var(--r-m);padding:13px 15px;margin-bottom:10px;}
+.noya-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.noya-txt{font-size:11.5px;color:rgba(255,255,255,.88);line-height:1.55;}
+.noya-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.noya-btn{font-size:10px;font-weight:600;padding:4px 10px;border-radius:10px;background:rgba(158,207,196,.2);color:var(--mint);border:1px solid rgba(158,207,196,.3);cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* LEARNING PATH */
+.lpath{display:flex;flex-direction:column;gap:0;}
+.lp-step{display:flex;gap:10px;padding-bottom:12px;position:relative;}
+.lp-step::after{content:'';position:absolute;left:14px;top:30px;width:2px;height:calc(100% - 18px);background:var(--gray-200);}
+.lp-step:last-child::after{display:none;}
+.lp-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:2px solid transparent;}
+.lp-dot.done{background:var(--green-l);border-color:var(--green);}
+.lp-dot.active{background:var(--amber-l);border-color:var(--amber-d);}
+.lp-dot.next{background:var(--gray-100);border-color:var(--gray-200);}
+.lp-dot.locked{background:var(--gray-50);border-color:var(--gray-200);opacity:.5;}
+.lp-content{flex:1;padding-top:4px;}
+.lp-title{font-size:12px;font-weight:600;color:var(--navy);}
+.lp-desc{font-size:10.5px;color:var(--gray-500);line-height:1.4;}
+.lp-badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;margin-top:3px;}
+.lp-badge.done{background:var(--green-l);color:#1f6040;}
+.lp-badge.active{background:var(--amber-l);color:var(--amber-d);}
+.lp-badge.next{background:var(--gray-100);color:var(--gray-500);}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:6px;}
+.cl-item{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:var(--r-s);background:var(--gray-50);border:1px solid var(--gray-100);}
+.cl-item.done{background:var(--green-l);border-color:rgba(76,175,130,.2);}
+.cl-item.active{background:var(--amber-l);border-color:rgba(245,199,126,.3);}
+.cl-check{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px;}
+.cl-item.done .cl-check{background:var(--green);color:white;}
+.cl-item.active .cl-check{background:var(--amber-d);color:white;}
+.cl-item:not(.done):not(.active) .cl-check{background:var(--gray-200);color:var(--gray-500);}
+.cl-text{font-size:11.5px;color:var(--navy);line-height:1.4;}
+.cl-sub{font-size:10px;color:var(--gray-500);}
+
+/* STRENGTH BARS */
+.strength-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.str-item{background:var(--gray-50);border-radius:var(--r-m);padding:11px 12px;}
+.str-icon{font-size:18px;margin-bottom:5px;}
+.str-label{font-size:11px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.str-bar{height:6px;background:var(--gray-200);border-radius:3px;overflow:hidden;margin-bottom:3px;}
+.str-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.str-val{font-size:10px;color:var(--gray-500);}
+
+/* CAREER PATH */
+.career-card{border-radius:var(--r-l);padding:14px 16px;border:2px solid transparent;cursor:pointer;transition:all .2s;margin-bottom:8px;}
+.career-card.active{border-color:var(--teal);background:var(--mint-p);}
+.career-card:not(.active){background:var(--gray-50);border-color:var(--gray-100);}
+.career-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+.career-match{font-size:10px;color:var(--teal);font-weight:600;margin-bottom:5px;}
+.career-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.career-tag{font-size:9px;padding:2px 7px;border-radius:8px;background:white;color:var(--gray-700);border:1px solid var(--gray-200);}
+
+/* PROGRESS RING */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ring-label{font-size:10px;color:var(--gray-500);text-align:center;}
+.ring-val{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--navy);}
+
+/* TABLE */
+.ptable{width:100%;border-collapse:collapse;}
+.ptable th{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);padding:6px 12px;text-align:left;border-bottom:2px solid var(--gray-100);}
+.ptable td{font-size:11.5px;padding:9px 12px;border-bottom:1px solid var(--gray-100);color:var(--navy);}
+.ptable tr:last-child td{border-bottom:none;}
+.ptable tr:hover td{background:var(--gray-50);}
+
+/* BUTTON */
+.btn{border:none;border-radius:var(--r-s);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-teal{background:var(--teal);color:white;padding:8px 16px;font-size:12px;}
+.btn-teal:hover{background:var(--teal-m);}
+.btn-sec{background:var(--gray-100);color:var(--navy);padding:8px 14px;font-size:12px;}
+.btn-sec:hover{background:var(--gray-200);}
+.btn-sm{padding:5px 11px;font-size:11px;}
+.btn-ghost{background:transparent;color:var(--teal);padding:5px 10px;font-size:11px;font-weight:600;border:1px solid var(--mint-l);}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column;}
+.tl-item{display:flex;gap:10px;padding-left:14px;position:relative;padding-bottom:10px;}
+.tl-item::before{content:'';position:absolute;left:0;top:4px;width:8px;height:8px;border-radius:50%;background:var(--mint);border:2px solid white;box-shadow:var(--s-sm);}
+.tl-item::after{content:'';position:absolute;left:3px;top:14px;width:2px;height:calc(100% - 10px);background:var(--gray-200);}
+.tl-item:last-child::after{display:none;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-time{font-size:9.5px;color:var(--gray-500);font-weight:600;width:36px;flex-shrink:0;padding-top:1px;}
+.tl-text{font-size:11.5px;color:var(--navy);line-height:1.45;flex:1;}
+
+/* CHILD VIEW SPECIAL */
+.child-hero{background:linear-gradient(135deg,var(--teal) 0%,var(--navy-l) 100%);border-radius:var(--r-xl);padding:22px 22px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.child-hero::before{content:'✦';position:absolute;right:20px;top:14px;font-size:60px;opacity:.07;color:white;}
+.child-greeting{font-family:'Fraunces',serif;font-size:22px;color:white;margin-bottom:4px;}
+.child-sub{font-size:12px;color:rgba(255,255,255,.6);}
+.emoji-row{display:flex;gap:10px;justify-content:center;margin:14px 0;}
+.emoji-btn{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border:3px solid transparent;transition:all .2s;background:rgba(255,255,255,.1);}
+.emoji-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.1);}
+.emoji-btn.sel{border-color:white;background:rgba(255,255,255,.25);}
+
+/* EMERGING NEEDS */
+.elist{display:flex;flex-direction:column;gap:8px;}
+.eitem{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--gray-50);border-radius:var(--r-m);cursor:pointer;border:1px solid transparent;transition:all .2s;}
+.eitem:hover{background:white;border-color:var(--mint-l);box-shadow:var(--s-sm);}
+.eav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0;}
+.ename{font-weight:600;font-size:12.5px;color:var(--navy);}
+.edetail{font-size:10.5px;color:var(--gray-500);}
+.ebadge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0;}
+.badge-new{background:var(--coral-l);color:var(--coral-d);}
+.badge-check{background:var(--amber-l);color:var(--amber-d);}
+.badge-ok{background:var(--green-l);color:#1f6040;}
+.badge-gold{background:var(--gold-l);color:#7A5A00;}
+
+/* SUBJECT CARD */
+.subject-card{border-radius:var(--r-m);padding:11px 13px;border:1px solid var(--gray-200);background:white;margin-bottom:8px;}
+.subj-header{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.subj-icon{width:30px;height:30px;border-radius:var(--r-s);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.subj-name{font-size:12px;font-weight:600;color:var(--navy);}
+.subj-topic{font-size:10px;color:var(--gray-500);}
+.subj-method{font-size:10px;color:var(--teal);font-weight:600;margin-left:auto;}
+.progress-bar{height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:var(--teal);}
+
+/* ASTAT STRIP */
+.astat-strip{display:flex;justify-content:space-around;padding:12px 0;border-bottom:1px solid var(--gray-100);margin-bottom:12px;}
+.astat-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:var(--navy);text-align:center;}
+.astat-l{font-size:10px;color:var(--gray-500);text-align:center;}
+
+/* OBS BUTTONS */
+.obsbtns{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
+.obsbtn{padding:5px 11px;border:1.5px solid var(--gray-200);border-radius:20px;background:white;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;color:var(--navy);}
+.obsbtn:hover,.obsbtn.sel{background:var(--navy);color:white;border-color:var(--navy);}
+.obs-ta{width:100%;min-height:70px;border:1.5px solid var(--gray-200);border-radius:var(--r-m);padding:10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--navy);resize:none;margin-bottom:8px;}
+.obs-ta:focus{outline:none;border-color:var(--mint);}
+
+/* UTIL */
+.divider{height:1px;background:var(--gray-100);margin:12px 0;}
+.gap-6{display:flex;gap:6px;}
+.gap-8{display:flex;flex-direction:column;gap:8px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.text-sm{font-size:11.5px;} .text-xs{font-size:10.5px;color:var(--gray-500);}
+.fw6{font-weight:600;} .mt10{margin-top:10px;} .mt14{margin-top:14px;} .mb10{margin-bottom:10px;} .mb14{margin-bottom:14px;}
+
+/* VERSION BADGE */
+.v-badge{position:fixed;bottom:14px;right:14px;background:var(--navy);color:rgba(255,255,255,.5);font-size:9px;font-weight:600;padding:4px 10px;border-radius:10px;letter-spacing:.06em;z-index:200;}
+
+/* WORKSHEET PANEL */
+.ws-tab-strip{display:flex;gap:3px;background:var(--gray-100);padding:3px;border-radius:var(--r-m);margin-bottom:12px;}
+.ws-tab{flex:1;padding:6px 8px;border:none;background:transparent;border-radius:var(--r-s);font-size:10.5px;font-weight:500;color:var(--gray-500);cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif;text-align:center;}
+.ws-tab:hover{color:var(--navy);}
+.ws-tab.on{background:white;color:var(--navy);font-weight:600;box-shadow:var(--s-sm);}
+.ws-panel{display:none;}
+.ws-panel.on{display:block;animation:fadeUp .2s ease both;}
+.ws-card{border-radius:var(--r-m);padding:11px 13px;border:1.5px solid var(--gray-200);background:white;margin-bottom:7px;transition:all .2s;}
+.ws-card:hover{border-color:var(--mint);box-shadow:var(--s-sm);}
+.ws-card.ws-active{border-color:var(--teal);background:var(--mint-p);}
+.ws-card.ws-complete{border-color:var(--green);background:var(--green-l);}
+.ws-card.ws-locked{opacity:.5;pointer-events:none;}
+.ws-header{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
+.ws-icon{width:34px;height:34px;border-radius:var(--r-s);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ws-title{font-size:12px;font-weight:600;color:var(--navy);}
+.ws-meta{font-size:10px;color:var(--gray-500);}
+.ws-status{margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0;white-space:nowrap;}
+.ws-status-active{background:var(--amber-l);color:var(--amber-d);}
+.ws-status-complete{background:var(--green-l);color:#1f6040;}
+.ws-status-new{background:var(--coral-l);color:var(--coral-d);}
+.ws-status-locked{background:var(--gray-100);color:var(--gray-500);}
+.ws-progress-bar{height:4px;background:var(--gray-100);border-radius:3px;overflow:hidden;margin-top:5px;}
+.ws-progress-fill{height:100%;border-radius:3px;background:var(--teal);}
+.ws-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+.ws-steps-label{font-size:9.5px;color:var(--gray-500);}
+.ws-actions{display:flex;gap:5px;}
+
+/* CHILD WORKSHEET CARDS */
+.cws-card{border-radius:var(--r-xl);padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.cws-card.maths-card{background:linear-gradient(135deg,var(--teal) 0%,var(--navy-l) 100%);}
+.cws-card.english-card{background:linear-gradient(135deg,var(--purple-d) 0%,var(--navy) 100%);}
+.cws-card.locked-card{background:var(--gray-100);}
+.cws-title{font-family:'Fraunces',serif;font-size:15px;color:white;margin-bottom:2px;}
+.cws-sub{font-size:10.5px;color:rgba(255,255,255,.6);margin-bottom:10px;}
+.cws-steps{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap;}
+.cws-step-done{padding:3px 8px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(255,255,255,.25);color:white;}
+.cws-step-active{padding:3px 8px;border-radius:8px;font-size:9px;font-weight:600;background:white;color:var(--teal);}
+.cws-step-todo{padding:3px 8px;border-radius:8px;font-size:9px;font-weight:600;background:rgba(255,255,255,.1);color:rgba(255,255,255,.45);}
+.cws-open-btn{background:white;color:var(--navy);border:none;border-radius:var(--r-m);padding:7px 14px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.cws-open-btn:hover{background:var(--mint-l);}
+
+/* MODAL */
+.ws-modal{display:none;position:fixed;inset:0;background:rgba(26,58,74,.75);z-index:500;align-items:center;justify-content:center;padding:16px;}
+.ws-modal.on{display:flex;}
+.ws-modal-inner{background:white;border-radius:var(--r-xl);width:100%;max-width:900px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--s-lg);}
+.ws-modal-head{background:var(--navy);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.ws-modal-title{font-family:'Fraunces',serif;font-size:15px;color:white;}
+.ws-modal-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;}
+.ws-modal-actions{display:flex;gap:8px;align-items:center;}
+.ws-modal-close{background:rgba(255,255,255,.1);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.ws-modal-close:hover{background:rgba(255,255,255,.2);}
+.ws-modal-body{flex:1;overflow-y:auto;}
+.ws-modal-body iframe{width:100%;height:680px;border:none;display:block;}
+</style>
+</head>
+<body>
+<div style="display:flex;">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-orb"></div>
+    <div class="sb-brand">SEE MY MIND<span>Education Lifecycle Intelligence</span></div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-label">Main</div>
+    <div class="sb-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Pupils <span class="sb-badge">24</span>
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Alerts <span class="sb-badge">3</span>
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Learning <span class="sb-badge new">NEW</span>
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Strengths <span class="sb-badge new">NEW</span>
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reports
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+  </div>
+  <div class="sb-views">
+    <div class="sb-label">View as</div>
+    <button class="vbtn t on" onclick="sw('teacher',this)">👩‍🏫  Teacher — Ms Johnson</button>
+    <button class="vbtn s" onclick="sw('senco',this)">🗂  SENCO — Ms Okafor</button>
+    <button class="vbtn p" onclick="sw('parent',this)">👩‍👦  Parent — Dana Carter</button>
+    <button class="vbtn c" onclick="sw('child',this)">⭐  Phoenix's View</button>
+    <button class="vbtn ta" onclick="sw('ta',this)">🧑‍🤝‍🧑  TA — Melissa Grant</button>
+    <button class="vbtn pp" onclick="sw('parentplus',this)">🎯  Parent Plus — Year 10 <span class="vbtn-plus-tag">PLUS</span></button>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user" id="sbuser">
+      <div class="sb-av" style="background:var(--purple-d);">MJ</div>
+      <div><div class="sb-uname">Ms Johnson</div><div class="sb-urole">Year 8 Teacher · Room 4</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════
+     TEACHER VIEW
+════════════════════════════════════════ -->
+<div class="main">
+<div class="view on" id="view-teacher">
+  <div class="topbar">
+    <div><div class="tb-title">Good morning, Ms Johnson 👋</div><div class="tb-sub">Wednesday 11 March 2026 · Year 8, Block C · 30 pupils</div></div>
+    <div class="tb-right">
+      <span class="pill pill-red">⚡ 3 alerts today</span>
+      <span class="pill pill-amber">⏰ Assembly 9:05am</span>
+      <span class="pill pill-gold">📚 Maths: Straight Lines — adapted paths active</span>
+      <button class="btn btn-teal btn-sm">+ Log observation</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="stats">
+      <div class="stat red"><div class="stat-n">2/5</div><div class="stat-l">Phoenix's check-in · skipped breakfast, medication taken</div></div>
+      <div class="stat amber"><div class="stat-n">3</div><div class="stat-l">Active alerts needing attention today</div></div>
+      <div class="stat green"><div class="stat-n">89%</div><div class="stat-l">Strategy effectiveness this week</div></div>
+      <div class="stat gold"><div class="stat-n">4</div><div class="stat-l">Adapted learning paths active this lesson</div></div>
+    </div>
+
+    <!-- PROFILE BANNER -->
+    <div class="pbanner">
+      <div class="pav">🧒</div>
+      <div>
+        <div class="pname">Phoenix Carter</div>
+        <div class="pmeta">Year 8 · Age 12 · ADHD · Methylphenidate 18mg (week 1) · Visual-spatial learner · Communication: Verbal<br>Emergency contact: Mum — Dana Carter · 07712 334 881</div>
+      </div>
+      <div class="ptags">
+        <span class="ptag ptag-c">⚡ High alert today</span>
+        <span class="ptag ptag-a">💊 Medication week 1</span>
+        <span class="ptag ptag-p">💧 Low hydration risk</span>
+        <span class="ptag ptag-m">🍽 Skipped breakfast</span>
+        <span class="ptag ptag-g">🎮 Goal: Game Designer</span>
+      </div>
+      <button class="btn btn-sec btn-sm" style="margin-left:10px;flex-shrink:0;">Full profile →</button>
+    </div>
+
+    <div class="row">
+      <!-- LEFT COL: SUPPORT + LEARNING -->
+      <div class="col-6">
+
+        <!-- NOYA TODAY -->
+        <div class="noya-block" style="margin-bottom:14px;">
+          <div class="noya-lbl">✦ Noya · Intelligence insight</div>
+          <div class="noya-txt">Phoenix skipped breakfast and took methylphenidate at 8:30am — nausea and restlessness likely 10–10:30am. Offer crackers and water before 10am. <strong style="color:var(--mint);">Also:</strong> today's maths topic is Straight Line Graphs. Phoenix's adapted pathway uses real-world visual anchors. His game design goal makes gradient highly relevant — frame it as "how fast does the character move?" He'll engage.</div>
+          <div class="noya-actions">
+            <button class="noya-btn">Water + snack reminder</button>
+            <button class="noya-btn">View learning path</button>
+            <button class="noya-btn">Log observation</button>
+          </div>
+        </div>
+
+        <!-- ALERTS -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Today's alerts</div><div class="cs">Patterns detected · updated live</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="alist">
+              <div class="aitem high"><div class="aico">😔</div><div><div class="atitle">Skipped breakfast — medication taken 8:30am</div><div class="adesc">Dana logged this morning: Phoenix skipped breakfast, took his 18mg methylphenidate. Week 1 of medication. Nausea and restlessness likely 10–10:30am.</div><div class="atime">📱 Parent check-in 8:47am · auto-shared to all staff</div></div></div>
+              <div class="aitem med"><div class="aico">🔔</div><div><div class="atitle">Dip window: 10–10:30am — prepare now</div><div class="adesc">Methylphenidate peaks then dips. Strategy: water + small snack before 10am. Do not read as defiance.</div><div class="atime">📅 Medication pattern · week 1 adjustment</div></div></div>
+              <div class="aitem low"><div class="aico">📊</div><div><div class="atitle">CAMHS Greenwich — review in 3 weeks</div><div class="adesc">Today's data feeds directly into prescriber report. Log all symptoms with timestamps.</div><div class="atime">🗂 CAMHS Greenwich · evidence building</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADAPTED LEARNING — THIS LESSON -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">📚 Adapted Learning — This Lesson</div><div class="cs">Maths · Straight Line Graphs · Phoenix's visual-spatial path</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="spotlight" style="margin-bottom:10px;">
+              <div class="insight-lbl">Phoenix's learning route today</div>
+              <div class="insight-txt">Phoenix is a <strong>visual-spatial learner</strong> with strong pattern recognition. Abstract notation shuts him down — real-world physical context unlocks him. Today: gradient is introduced as "how fast does the game character move up a hill?" before any algebra appears. Draw first, equation second.</div>
+            </div>
+            <div class="clabel">Lesson pathway — Straight Line Graphs</div>
+            <div class="lpath">
+              <div class="lp-step">
+                <div class="lp-dot done">✓</div>
+                <div class="lp-content">
+                  <div class="lp-title">1. Real-world hook — the game level</div>
+                  <div class="lp-desc">"A character moves up a slope. How steep is it?" Draw on paper first.</div>
+                  <span class="lp-badge done">✓ Completed</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot active">→</div>
+                <div class="lp-content">
+                  <div class="lp-title">2. Draw it — plot the slope visually</div>
+                  <div class="lp-desc">Plot points on graph paper. No equation yet. Just the visual shape.</div>
+                  <span class="lp-badge active">In progress now</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot next">3</div>
+                <div class="lp-content">
+                  <div class="lp-title">3. Name the pattern — rise ÷ run</div>
+                  <div class="lp-desc">Label the triangle. Rise = how high. Run = how far. Gradient = rise ÷ run.</div>
+                  <span class="lp-badge next">Up next</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot locked">4</div>
+                <div class="lp-content">
+                  <div class="lp-title">4. The equation emerges — y = mx + c</div>
+                  <div class="lp-desc">Only once gradient is felt intuitively. Algebra labels what he already knows.</div>
+                  <span class="lp-badge next">Unlocks after step 3</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray-100);">
+              <div class="clabel">Other pupils — adapted routes active</div>
+              <div class="subject-card" style="margin-bottom:6px;">
+                <div class="subj-header">
+                  <div class="subj-icon" style="background:var(--purple-l);">AW</div>
+                  <div><div class="subj-name">Archie Watson — Dyslexia + processing</div><div class="subj-topic">Route: step-by-step verbal walkthrough · no visual clutter</div></div>
+                  <div class="subj-method">Auditory</div>
+                </div>
+              </div>
+              <div class="subject-card" style="margin-bottom:6px;">
+                <div class="subj-header">
+                  <div class="subj-icon" style="background:var(--coral-l);">RP</div>
+                  <div><div class="subj-name">Riya Patel — ADHD + anxiety</div><div class="subj-topic">Route: short chunked tasks with movement breaks at step 2</div></div>
+                  <div class="subj-method">Kinesthetic</div>
+                </div>
+              </div>
+              <div class="subject-card">
+                <div class="subj-header">
+                  <div class="subj-icon" style="background:var(--amber-l);">AM</div>
+                  <div><div class="subj-name">Aisha Musa — Autism + selective mutism</div><div class="subj-topic">Route: written instructions only · partner work with Jake</div></div>
+                  <div class="subj-method">Written</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STRATEGIES -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Strategies for Phoenix today</div><div class="cs">Ranked by effectiveness for this child</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="slist">
+              <div class="sitem"><div class="sico">🎧</div><div><div class="stitle">Noise-cancelling headphones</div><div class="sdesc">Offer at classroom door before assembly — not after arriving in hall.</div></div><div class="srate">92%</div></div>
+              <div class="sitem"><div class="sico">💧</div><div><div class="stitle">Water bottle — always on desk</div><div class="sdesc">Methylphenidate increases fluid loss. Cold water works better. Target 3–4 drinks before lunch.</div></div><div class="srate">94%</div></div>
+              <div class="sitem"><div class="sico">🎮</div><div><div class="stitle">Connect learning to game design</div><div class="sdesc">Frame gradient as "slope of a game level" — Phoenix engages immediately when STEM connects to his goal.</div></div><div class="srate">88%</div></div>
+              <div class="sitem"><div class="sico">⏰</div><div><div class="stitle">5-min transition warning</div><div class="sdesc">Visual timer + quiet verbal warning before every activity change today.</div></div><div class="srate">85%</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COL: OBSERVATION + EMERGING -->
+      <div class="col-6">
+
+        <!-- EMERGING NEEDS -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Emerging needs</div><div class="cs">Other pupils showing signals</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="elist">
+              <div class="eitem"><div class="eav" style="background:var(--purple-d);">AW</div><div><div class="ename">Archie Watson</div><div class="edetail">Year 8 · Lower engagement 3 days · adapted path re-routed yesterday</div></div><span class="ebadge badge-check">Watch</span></div>
+              <div class="eitem"><div class="eav" style="background:var(--coral-d);">RP</div><div><div class="ename">Riya Patel</div><div class="edetail">Year 8 · Masking pattern — lunch incident 2nd time this week</div></div><span class="ebadge badge-new">Review</span></div>
+              <div class="eitem"><div class="eav" style="background:var(--green);">JO</div><div><div class="ename">Jake O'Brien</div><div class="edetail">Year 8 · Settled this week · adapted maths path showing 82% progress</div></div><span class="ebadge badge-ok">Stable</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOG OBSERVATION -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Quick observation — Phoenix</div><div class="cs">Saved to profile · feeds EHCP evidence + learning data</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="clabel">Wellbeing</div>
+            <div class="obsbtns">
+              <button class="obsbtn">😄 Great</button>
+              <button class="obsbtn sel">🙂 OK</button>
+              <button class="obsbtn">😐 Mixed</button>
+              <button class="obsbtn">😟 Struggling</button>
+              <button class="obsbtn">😰 Crisis</button>
+            </div>
+            <div class="clabel" style="margin-top:8px;">Learning engagement</div>
+            <div class="obsbtns">
+              <button class="obsbtn">🟢 Engaged</button>
+              <button class="obsbtn sel">🟡 Partial</button>
+              <button class="obsbtn">🔴 Disengaged</button>
+              <button class="obsbtn">⚡ Breakthrough</button>
+            </div>
+            <div class="clabel" style="margin-top:8px;">Subject: Maths — Straight Line Graphs</div>
+            <textarea class="obs-ta" placeholder="Phoenix offered crackers at 10:05am — settled within 8 mins. Engaged with gradient via game slope analogy. Drew the triangle independently. First time he's reached step 2 without prompting."></textarea>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-teal btn-sm">Log observation</button>
+              <button class="btn btn-sec btn-sm">Flag for SENCO</button>
+              <button class="btn btn-ghost btn-sm">Mark as learning breakthrough</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOWNLOADABLE RESOURCES -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">📚 Phoenix's Learning Worksheets</div><div class="cs">Adapted to his visual-spatial learning route · curriculum-aligned · this term</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="noya-block" style="margin-bottom:10px;">
+              <div class="noya-lbl">✦ Noya · About these worksheets</div>
+              <div class="noya-txt">Every worksheet here is adapted for Phoenix's visual-spatial learning profile. Same curriculum objectives as the class — different route to get there. Draw first, understand the concept visually, then the notation follows. Open any worksheet to view it in full, or download to print.</div>
+            </div>
+            <!-- SUBJECT TABS -->
+            <div class="ws-tab-strip">
+              <button class="ws-tab on" onclick="wsSw('t','maths',this)">📐 Maths</button>
+              <button class="ws-tab" onclick="wsSw('t','english',this)">📖 English</button>
+              <button class="ws-tab" onclick="wsSw('t','all',this)">All subjects</button>
+            </div>
+
+            <!-- MATHS PANEL -->
+            <div class="ws-panel on" id="t-maths">
+              <div class="ws-card ws-active">
+                <div class="ws-header">
+                  <div class="ws-icon" style="background:var(--mint-p);">📐</div>
+                  <div style="flex:1;">
+                    <div class="ws-title">Straight Line Graphs — Visual Route</div>
+                    <div class="ws-meta">Year 8 · This week's topic · Game design framing · 4-step visual pathway</div>
+                  </div>
+                  <span class="ws-status ws-status-active">In progress</span>
+                </div>
+                <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:50%;"></div></div>
+                <div class="ws-footer">
+                  <div class="ws-steps-label">Step 2 of 4 · Last worked: today 10:45am · breakthrough logged ⭐</div>
+                  <div class="ws-actions">
+                    <button class="btn btn-sec btn-sm" onclick="wsOpen('Straight Line Graphs','Year 8 · Visual-spatial route · Game design context','graphs')">👁 View</button>
+                    <button class="btn btn-teal btn-sm">↓ Print</button>
+                  </div>
+                </div>
+              </div>
+              <div class="ws-card">
+                <div class="ws-header">
+                  <div class="ws-icon" style="background:var(--amber-l);">📐</div>
+                  <div style="flex:1;">
+                    <div class="ws-title">Fractions — Visual Mastery</div>
+                    <div class="ws-meta">Year 4–5 foundations · Fraction bars · Bar models · 12 questions · Draw every step</div>
+                  </div>
+                  <span class="ws-status ws-status-new">New</span>
+                </div>
+                <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:0%;"></div></div>
+                <div class="ws-footer">
+                  <div class="ws-steps-label">Not started · Assigned for home practice this week</div>
+                  <div class="ws-actions">
+                    <button class="btn btn-sec btn-sm" onclick="wsOpen('Fractions — Visual Mastery','Primary Year 4–5 · Visual-spatial route · Bar models and fraction strips','fractions')">👁 View</button>
+                    <button class="btn btn-teal btn-sm">↓ Print</button>
+                  </div>
+                </div>
+              </div>
+              <div class="ws-card ws-complete">
+                <div class="ws-header">
+                  <div class="ws-icon" style="background:var(--green-l);">📐</div>
+                  <div style="flex:1;">
+                    <div class="ws-title">Direct Proportion — Real-world contexts</div>
+                    <div class="ws-meta">Completed last week · Score: 16/20 · Visual route confirmed effective</div>
+                  </div>
+                  <span class="ws-status ws-status-complete">✓ Complete</span>
+                </div>
+                <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:100%;background:var(--green);"></div></div>
+                <div class="ws-footer">
+                  <div class="ws-steps-label">Completed 5 Mar · 16/20 · Strength signal: spatial proportion reasoning</div>
+                  <div class="ws-actions">
+                    <button class="btn btn-sec btn-sm">👁 View results</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ENGLISH PANEL -->
+            <div class="ws-panel" id="t-english">
+              <div class="ws-card ws-active">
+                <div class="ws-header">
+                  <div class="ws-icon" style="background:var(--purple-l);">📖</div>
+                  <div style="flex:1;">
+                    <div class="ws-title">The Highwayman — Inference Detective</div>
+                    <div class="ws-meta">Year 5–6 · Alfred Noyes poem · Find clue → draw → infer → write · 12 questions</div>
+                  </div>
+                  <span class="ws-status ws-status-active">In progress</span>
+                </div>
+                <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:33%;background:var(--purple-d);"></div></div>
+                <div class="ws-footer">
+                  <div class="ws-steps-label">Section 2 of 6 · Drawing before writing approach confirmed effective for Phoenix</div>
+                  <div class="ws-actions">
+                    <button class="btn btn-sec btn-sm" onclick="wsOpen('The Highwayman — Inference Detective','Year 5–6 · Poetry inference · Visual-first comprehension','highwayman')">👁 View</button>
+                    <button class="btn btn-teal btn-sm">↓ Print</button>
+                  </div>
+                </div>
+              </div>
+              <div class="ws-card ws-locked">
+                <div class="ws-header">
+                  <div class="ws-icon" style="background:var(--gray-100);">📖</div>
+                  <div style="flex:1;">
+                    <div class="ws-title">Narrative Writing — Visual Story Planning</div>
+                    <div class="ws-meta">Unlocks after Highwayman inference unit complete</div>
+                  </div>
+                  <span class="ws-status ws-status-locked">🔒 Locked</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALL SUBJECTS PANEL -->
+            <div class="ws-panel" id="t-all">
+              <div style="font-size:10.5px;color:var(--gray-500);margin-bottom:8px;">All adapted worksheets assigned to Phoenix this term across all subjects.</div>
+              <div class="ws-card ws-active"><div class="ws-header"><div class="ws-icon" style="background:var(--mint-p);">📐</div><div style="flex:1;"><div class="ws-title">Straight Line Graphs</div><div class="ws-meta">Maths · In progress · Step 2/4</div></div><span class="ws-status ws-status-active">Active</span></div></div>
+              <div class="ws-card ws-active"><div class="ws-header"><div class="ws-icon" style="background:var(--purple-l);">📖</div><div style="flex:1;"><div class="ws-title">The Highwayman Inference</div><div class="ws-meta">English · In progress · Section 2/6</div></div><span class="ws-status ws-status-active">Active</span></div></div>
+              <div class="ws-card"><div class="ws-header"><div class="ws-icon" style="background:var(--amber-l);">📐</div><div style="flex:1;"><div class="ws-title">Fractions Visual Mastery</div><div class="ws-meta">Maths · Assigned · Not started</div></div><span class="ws-status ws-status-new">New</span></div></div>
+              <div class="ws-card ws-complete"><div class="ws-header"><div class="ws-icon" style="background:var(--green-l);">📐</div><div style="flex:1;"><div class="ws-title">Direct Proportion</div><div class="ws-meta">Maths · Complete · 16/20</div></div><span class="ws-status ws-status-complete">✓ Done</span></div></div>
+            </div>
+
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--gray-100);display:flex;align-items:center;gap:8px;">
+              <input style="flex:1;border:1.5px solid var(--gray-200);border-radius:var(--r-s);padding:5px 10px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--navy);" placeholder="✦ Ask Noya to generate a new worksheet e.g. 'Year 8 gradient visual worksheet'">
+              <button class="btn btn-teal btn-sm">Generate</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT OBSERVATIONS -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Recent observations</div><div class="cs">Last 5 logged entries</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="tl">
+              <div class="tl-item"><div class="tl-time">Today</div><div class="tl-text">Maths: engaged with gradient via game slope hook. Drew triangle step independently. 🟢 <strong>Learning breakthrough flagged.</strong></div></div>
+              <div class="tl-item"><div class="tl-time">Tue</div><div class="tl-text">Medication dip at 10:15 — sweating, restless. Water + cracker offered. Settled in 8 min. 🟡</div></div>
+              <div class="tl-item"><div class="tl-time">Mon</div><div class="tl-text">Assembly difficulty — covered ears, TA support. Calmed in quiet area after 10 mins. 🔴</div></div>
+              <div class="tl-item"><div class="tl-time">Fri</div><div class="tl-text">Headphones during reading — no incidents. Positive peer interaction with Jake. 🟢</div></div>
+              <div class="tl-item"><div class="tl-time">Thu</div><div class="tl-text">English: inference exercise — drew the scene before writing. Best written output this term. 🟢 <strong>Visual-spatial strength confirmed.</strong></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SENCO VIEW
+════════════════════════════════════════ -->
+<div class="view" id="view-senco">
+  <div class="topbar">
+    <div><div class="tb-title">SENCO Dashboard — Ms Okafor</div><div class="tb-sub">Week of 11 March 2026 · Years 7–9 · 28 pupils on SEND register</div></div>
+    <div class="tb-right">
+      <span class="pill pill-red">🚨 3 for review</span>
+      <span class="pill pill-green">✓ 89% strategy effectiveness</span>
+      <span class="pill pill-gold">📚 4 adapted paths active today</span>
+      <button class="btn btn-teal btn-sm">Generate weekly report</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats">
+      <div class="stat red"><div class="stat-n">3</div><div class="stat-l">Pupils flagged for SENCO review this week</div></div>
+      <div class="stat amber"><div class="stat-n">47</div><div class="stat-l">Evidence items auto-collected this week</div></div>
+      <div class="stat gold"><div class="stat-n">6</div><div class="stat-l">Adapted learning paths — breakthroughs this week</div></div>
+      <div class="stat teal"><div class="stat-n">2</div><div class="stat-l">EHCP reviews due in the next 30 days</div></div>
+    </div>
+
+    <div class="row">
+      <div class="col-7">
+
+        <!-- COHORT REGISTER -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Year 7–9 SEND register — live overview</div><div class="cs">Distress · Learning · EHCP status</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb" style="padding:0;">
+            <table class="ptable">
+              <thead><tr><th>Child / Year</th><th>Distress</th><th>Check-in</th><th>Learning today</th><th>EHCP</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Phoenix Carter</strong><br><span style="font-size:10px;color:var(--gray-500)">Y8 · ADHD · Visual-spatial</span></td><td><span class="pill pill-red">4/5</span></td><td><span class="pill pill-amber">2/5</span></td><td><span class="pill pill-gold">Breakthrough</span></td><td>Pending</td><td><button class="btn btn-sec btn-sm">🚨 Review</button></td></tr>
+                <tr><td><strong>Riya Patel</strong><br><span style="font-size:10px;color:var(--gray-500)">Y8 · ADHD + anxiety · Kinesthetic</span></td><td><span class="pill pill-amber">3/5</span></td><td><span class="pill pill-amber">3/5</span></td><td><span class="pill pill-amber">Partial</span></td><td>Active</td><td><button class="btn btn-sec btn-sm">⚠ Watch</button></td></tr>
+                <tr><td><strong>Archie Watson</strong><br><span style="font-size:10px;color:var(--gray-500)">Y8 · Dyslexia · Auditory</span></td><td><span class="pill pill-teal">2/5</span></td><td><span class="pill pill-amber">3/5</span></td><td><span class="pill pill-amber">Re-routed</span></td><td>Requested</td><td><button class="btn btn-sec btn-sm">⚠ Watch</button></td></tr>
+                <tr><td><strong>Aisha Musa</strong><br><span style="font-size:10px;color:var(--gray-500)">Y9 · Autism + SM · Written</span></td><td><span class="pill pill-green">1/5</span></td><td><span class="pill pill-green">4/5</span></td><td><span class="pill pill-green">Engaged</span></td><td>Review 25 Mar</td><td><button class="btn btn-sec btn-sm">📋 EHCP due</button></td></tr>
+                <tr><td><strong>Jake O'Brien</strong><br><span style="font-size:10px;color:var(--gray-500)">Y8 · Autism · Visual</span></td><td><span class="pill pill-green">1/5</span></td><td><span class="pill pill-green">5/5</span></td><td><span class="pill pill-green">82% progress</span></td><td>Active</td><td><button class="btn btn-sec btn-sm">✓ Stable</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LEARNING INTELLIGENCE -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">📚 Learning intelligence — this week</div><div class="cs">Adapted pathway outcomes · breakthroughs · re-routes</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="aitem gold" style="margin-bottom:8px;">
+              <div class="aico">🎮</div>
+              <div>
+                <div class="atitle">Phoenix — gradient concept landed via game design hook</div>
+                <div class="adesc">Ms Johnson framed gradient as "slope of a game level." Phoenix drew the triangle independently for the first time — 3 previous attempts with abstract notation had failed. Visual-spatial path confirmed effective for this concept type. Strategy effectiveness: 88%.</div>
+                <div class="atime">📊 Learning breakthrough · Maths · feeds strengths profile</div>
+              </div>
+            </div>
+            <div class="aitem low" style="margin-bottom:8px;">
+              <div class="aico">📖</div>
+              <div>
+                <div class="atitle">Aisha — inference via drawing approach working consistently</div>
+                <div class="adesc">Ghost Boy workbook: Aisha drew all scenes before writing. Output quality significantly above expected level. Written communication strategy confirmed for English. Masking pattern less visible when drawing-first method used.</div>
+                <div class="atime">📊 2-week dataset · Confirmed effective · Update learning profile</div>
+              </div>
+            </div>
+            <div class="aitem med" style="margin-bottom:0;">
+              <div class="aico">🔄</div>
+              <div>
+                <div class="atitle">Archie — auditory route re-routed mid-lesson yesterday</div>
+                <div class="adesc">Step-by-step verbal walkthrough wasn't holding attention. TA switched to paired verbal + written simultaneously. Engagement recovered. Recommend updating Archie's pathway to dual-channel for abstract topics.</div>
+                <div class="atime">📊 Pathway adjustment needed · Discuss with Ms Johnson</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTELLIGENCE PATTERNS -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Intelligence patterns — this week</div><div class="cs">Cross-pupil · temporal · environmental</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="spotlight" style="margin-bottom:10px;">
+              <div class="insight-lbl">Medication dip → symptoms: 4 of 5 days (Phoenix)</div>
+              <div class="insight-txt">Consistent symptom peak 90–120 mins after methylphenidate on days breakfast was skipped. Pattern confidence: high. Data being compiled for Greenwich CAMHS review.</div>
+            </div>
+            <div class="spotlight" style="margin-bottom:10px;background:var(--purple-l);">
+              <div class="insight-lbl" style="color:var(--purple-d);">Riya — masking at lunch rising</div>
+              <div class="insight-txt">3 incidents in 2 weeks at unstructured times. Class masking during lessons — distress only visible at lunch. Classic high-functioning masking. Recommend lunchtime check-in protocol.</div>
+            </div>
+            <div class="spotlight" style="background:var(--gold-l);">
+              <div class="insight-lbl" style="color:#7A5A00;">Cross-cohort: visual-spatial learners outperforming on adapted paths</div>
+              <div class="insight-txt">Phoenix, Jake and Aisha all show measurably better curriculum outcomes when their adapted learning path is active vs. standard delivery. Average improvement: +34% task completion, +2 steps further through pathway.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-5">
+        <!-- EHCP TRACKER -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">EHCP status tracker</div><div class="cs">Evidence auto-building daily</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="padding:10px;background:var(--coral-l);border-radius:var(--r-m);margin-bottom:8px;">
+              <div style="font-weight:600;font-size:12px;color:var(--coral-d);margin-bottom:2px;">Phoenix Carter — EHCP pending</div>
+              <div style="font-size:10.5px;color:var(--gray-700);">47 evidence items · 14 weeks in progress · 6 learning breakthroughs logged</div>
+              <div style="margin-top:6px;"><div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--coral-d);"></div></div></div>
+              <button class="btn btn-sec btn-sm" style="margin-top:6px;">View evidence pack</button>
+            </div>
+            <div style="padding:10px;background:var(--amber-l);border-radius:var(--r-m);margin-bottom:8px;">
+              <div style="font-weight:600;font-size:12px;color:var(--amber-d);margin-bottom:2px;">Aisha Musa — Annual review due 25 Mar</div>
+              <div style="font-size:10.5px;color:var(--gray-700);">12 observations · 3 learning path confirmations · drawing-first method documented</div>
+              <div style="margin-top:6px;"><div class="progress-bar"><div class="progress-fill" style="width:55%;background:var(--amber-d);"></div></div></div>
+              <button class="btn btn-sec btn-sm" style="margin-top:6px;">Generate pack</button>
+            </div>
+            <div style="padding:10px;background:var(--green-l);border-radius:var(--r-m);">
+              <div style="font-weight:600;font-size:12px;color:#1f6040;margin-bottom:2px;">Jake O'Brien — Active ✓</div>
+              <div style="font-size:10.5px;color:var(--gray-700);">All targets on track · adapted path 82% effective · next review September 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STRENGTHS EMERGING -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">⭐ Emerging strengths — cohort</div><div class="cs">Cognitive fingerprints building from learning data</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="font-size:10.5px;color:var(--gray-500);margin-bottom:10px;">Strengths profiles build automatically from adapted learning outcomes. These feed the vocational pathway layer.</div>
+            <div class="eitem" style="margin-bottom:6px;">
+              <div class="eav" style="background:var(--teal);">PC</div>
+              <div><div class="ename">Phoenix Carter</div><div class="edetail">Visual-spatial reasoning · Pattern recognition · Systems thinking · Goal: Game Designer</div></div>
+              <span class="ebadge badge-gold">Strong signal</span>
+            </div>
+            <div class="eitem" style="margin-bottom:6px;">
+              <div class="eav" style="background:var(--purple-d);">AM</div>
+              <div><div class="ename">Aisha Musa</div><div class="edetail">Narrative intelligence · Detail observation · Written expression emerging</div></div>
+              <span class="ebadge badge-check">Emerging</span>
+            </div>
+            <div class="eitem">
+              <div class="eav" style="background:var(--green);">JO</div>
+              <div><div class="ename">Jake O'Brien</div><div class="edetail">Sequential logic · Routine mastery · Consistent output quality</div></div>
+              <span class="ebadge badge-ok">Building</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PARENT VIEW
+════════════════════════════════════════ -->
+<div class="view" id="view-parent">
+  <div class="topbar">
+    <div><div class="tb-title">Phoenix's day — Dana Carter</div><div class="tb-sub">Wednesday 11 March 2026 · Leigh Academy · Last updated 3:28pm</div></div>
+    <div class="tb-right">
+      <span class="pill pill-green">A tricky start, a strong finish ✨</span>
+      <button class="btn btn-teal btn-sm">📱 Message school</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- MOOD ARC -->
+    <div style="background:linear-gradient(135deg,var(--navy) 0%,var(--navy-l) 100%);border-radius:var(--r-xl);padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden;">
+      <div style="position:absolute;right:20px;top:14px;font-size:50px;opacity:.06;color:white;">🧒</div>
+      <div style="font-family:'Fraunces',serif;font-size:18px;color:white;margin-bottom:4px;">Phoenix's day at a glance</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:14px;">Wednesday · Leigh Academy</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:rgba(244,168,154,.2);border-radius:var(--r-m);padding:10px;text-align:center;">
+          <div style="font-size:22px;margin-bottom:3px;">😐</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6);">Morning</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;">Tricky start</div>
+        </div>
+        <div style="flex:1;background:rgba(245,199,126,.2);border-radius:var(--r-m);padding:10px;text-align:center;">
+          <div style="font-size:22px;margin-bottom:3px;">🙂</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6);">Assembly</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;">Headphones helped</div>
+        </div>
+        <div style="flex:1;background:rgba(232,184,75,.25);border-radius:var(--r-m);padding:10px;text-align:center;">
+          <div style="font-size:22px;margin-bottom:3px;">⭐</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6);">Maths</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;">Breakthrough!</div>
+        </div>
+        <div style="flex:1;background:rgba(76,175,130,.2);border-radius:var(--r-m);padding:10px;text-align:center;">
+          <div style="font-size:22px;margin-bottom:3px;">😄</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6);">Afternoon</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;">Great finish</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <!-- WHAT HAPPENED TODAY -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">What happened today</div><div class="cs">From Ms Johnson and the team</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="noya-block" style="margin-bottom:10px;">
+              <div class="noya-lbl">✦ Noya · Today's summary</div>
+              <div class="noya-txt">Phoenix had a tough start — he skipped breakfast and his medication dip hit around 10am as expected. Ms Johnson offered crackers and water, he settled within 8 minutes. <strong style="color:var(--mint);">Then something really good happened:</strong> in maths, Phoenix drew a gradient triangle completely independently — this is the first time the concept has clicked for him. Ms Johnson connected it to game design, and he was away. This is a real milestone.</div>
+            </div>
+            <div class="tl">
+              <div class="tl-item"><div class="tl-time">8:47</div><div class="tl-text">Your morning log received — Ms Johnson and TA Melissa briefed before Phoenix arrived.</div></div>
+              <div class="tl-item"><div class="tl-time">9:05</div><div class="tl-text">Assembly — headphones offered at the door. Phoenix managed the full session. No incidents.</div></div>
+              <div class="tl-item"><div class="tl-time">10:05</div><div class="tl-text">Medication dip window — crackers and water offered. Settled within 8 mins. Tummy pain manageable.</div></div>
+              <div class="tl-item"><div class="tl-time">10:45</div><div class="tl-text">⭐ <strong>Maths breakthrough:</strong> drew gradient triangle independently. Ms Johnson flagged this as a learning milestone.</div></div>
+              <div class="tl-item"><div class="tl-time">3:20</div><div class="tl-text">Great afternoon. Phoenix rated his day 4/5 stars. "Maths was actually good today."</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TONIGHT'S TIPS -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Tonight's support tips</div><div class="cs">From today's observations</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="checklist">
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Breakfast tomorrow — even something small before medication</div><div class="cl-sub">Today's dip was manageable but breakfast made the difference last week</div></div></div>
+              <div class="cl-item active"><div class="cl-check">!</div><div><div class="cl-text">Ask him about maths today — he had a win</div><div class="cl-sub">He drew a gradient triangle independently. He might not realise how big that is. Tell him.</div></div></div>
+              <div class="cl-item"><div class="cl-check">→</div><div><div class="cl-text">Downtime before dinner — he's had a full sensory day</div><div class="cl-sub">Headphones or quiet time for 20 minutes after school helps him regulate</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <!-- PHOENIX'S GROWTH -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">⭐ Phoenix's growth — what he's building</div><div class="cs">Strengths emerging from learning data</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="noya-block" style="margin-bottom:10px;">
+              <div class="noya-lbl">✦ Noya · What we're seeing</div>
+              <div class="noya-txt">Phoenix is building something you might not be able to see yet from homework and grades alone. His spatial reasoning — the way he sees problems as shapes and movements before he understands the maths — is in the top range for his year. Today's gradient breakthrough is the third time this term that a visual approach has unlocked something that abstract instruction couldn't. <strong style="color:var(--mint);">This is a cognitive strength, not just a learning preference.</strong></div>
+            </div>
+            <div class="strength-grid">
+              <div class="str-item">
+                <div class="str-icon">🧩</div>
+                <div class="str-label">Spatial reasoning</div>
+                <div class="str-bar"><div class="str-fill" style="width:82%;background:var(--teal);"></div></div>
+                <div class="str-val">Building strongly · 82%</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">🔍</div>
+                <div class="str-label">Pattern recognition</div>
+                <div class="str-bar"><div class="str-fill" style="width:76%;background:var(--purple-d);"></div></div>
+                <div class="str-val">Emerging · 76%</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">🎮</div>
+                <div class="str-label">Systems thinking</div>
+                <div class="str-bar"><div class="str-fill" style="width:68%;background:var(--amber-d);"></div></div>
+                <div class="str-val">Early signal · 68%</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">⚡</div>
+                <div class="str-label">Hyperfocus capacity</div>
+                <div class="str-bar"><div class="str-fill" style="width:88%;background:var(--coral-d);"></div></div>
+                <div class="str-val">Very strong · 88%</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;padding:10px;background:var(--gold-l);border-radius:var(--r-m);">
+              <div style="font-size:10px;font-weight:700;color:#7A5A00;margin-bottom:3px;">🎮 Phoenix's goal: Game Designer</div>
+              <div style="font-size:10.5px;color:var(--gray-700);">The skills he's building now — spatial reasoning, pattern recognition, systems thinking — are exactly what game designers use. He's on the right path. He just doesn't know it yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHOENIX'S WORKSHEETS — PARENT VIEW -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">📚 Phoenix's learning worksheets</div><div class="cs">What he's working on · you can look through these with him at home</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="font-size:10.5px;color:var(--gray-500);margin-bottom:10px;">These worksheets are adapted to how Phoenix learns — visual, draw-first, real-world examples. You can open them to see exactly what he's working on, or sit with him and go through them together.</div>
+            <div class="ws-card ws-active" style="margin-bottom:7px;">
+              <div class="ws-header">
+                <div class="ws-icon" style="background:var(--mint-p);">📐</div>
+                <div style="flex:1;">
+                  <div class="ws-title">Maths — Straight Line Graphs</div>
+                  <div class="ws-meta">He draws slopes before writing equations · today he did step 2 independently ⭐</div>
+                </div>
+                <span class="ws-status ws-status-active">In progress</span>
+              </div>
+              <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:50%;"></div></div>
+              <div class="ws-footer">
+                <div class="ws-steps-label">Step 2 of 4 · Today's breakthrough was on this worksheet</div>
+                <div class="ws-actions">
+                  <button class="btn btn-sec btn-sm" onclick="wsOpen('Straight Line Graphs','Maths · Visual route · What Phoenix is working on this week','graphs')">👁 Look through it</button>
+                </div>
+              </div>
+            </div>
+            <div class="ws-card ws-active" style="margin-bottom:7px;">
+              <div class="ws-header">
+                <div class="ws-icon" style="background:var(--purple-l);">📖</div>
+                <div style="flex:1;">
+                  <div class="ws-title">English — The Highwayman poem</div>
+                  <div class="ws-meta">He draws each scene before writing about it · working well for him</div>
+                </div>
+                <span class="ws-status ws-status-active">In progress</span>
+              </div>
+              <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:33%;background:var(--purple-d);"></div></div>
+              <div class="ws-footer">
+                <div class="ws-steps-label">Section 2 of 6 · Drawing-first approach confirmed by teacher</div>
+                <div class="ws-actions">
+                  <button class="btn btn-sec btn-sm" onclick="wsOpen('The Highwayman — Inference Detective','English · Poetry inference · What Phoenix is studying','highwayman')">👁 Look through it</button>
+                </div>
+              </div>
+            </div>
+            <div class="ws-card" style="margin-bottom:0;">
+              <div class="ws-header">
+                <div class="ws-icon" style="background:var(--amber-l);">📐</div>
+                <div style="flex:1;">
+                  <div class="ws-title">Maths — Fractions (home practice)</div>
+                  <div class="ws-meta">Assigned for this week · great to do together at home · bar models and drawing</div>
+                </div>
+                <span class="ws-status ws-status-new">Home practice</span>
+              </div>
+              <div class="ws-progress-bar"><div class="ws-progress-fill" style="width:0%;"></div></div>
+              <div class="ws-footer">
+                <div class="ws-steps-label">Not started yet · 12 questions · 20–30 mins</div>
+                <div class="ws-actions">
+                  <button class="btn btn-sec btn-sm" onclick="wsOpen('Fractions — Visual Mastery','Maths home practice · Draw and solve · Year 4–5 level','fractions')">👁 Open worksheet</button>
+                  <button class="btn btn-teal btn-sm">↓ Print</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MESSAGE SCHOOL -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Send a message to school</div><div class="cs">Goes to Ms Johnson and Ms Okafor</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <textarea class="obs-ta" placeholder="e.g. Phoenix had a rough night — he's anxious about something but wouldn't say what. Keep an eye on him this morning."></textarea>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-teal btn-sm">Send to school</button>
+              <button class="btn btn-sec btn-sm">Log home observation</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CHILD VIEW
+════════════════════════════════════════ -->
+<div class="view" id="view-child">
+  <div class="topbar">
+    <div><div class="tb-title">Hi Phoenix 👋</div><div class="tb-sub">Wednesday 11 March 2026 · Leigh Academy</div></div>
+    <div class="tb-right">
+      <span class="pill pill-gold">⭐ You had a win today</span>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- CHILD HERO -->
+    <div class="child-hero">
+      <div class="child-greeting">How are you feeling right now?</div>
+      <div class="child-sub">Tap the face that feels right. Nobody judges — this is just for you.</div>
+      <div class="emoji-row">
+        <div class="emoji-btn">😄</div>
+        <div class="emoji-btn sel">🙂</div>
+        <div class="emoji-btn">😐</div>
+        <div class="emoji-btn">😟</div>
+        <div class="emoji-btn">😰</div>
+      </div>
+      <div style="text-align:center;font-size:11px;color:rgba(255,255,255,.5);">Your headphones are in your tray if you need them.</div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+
+        <!-- TODAY'S WINS -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">⭐ Today's wins</div><div class="cs">What you did well today</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="noya-block">
+              <div class="noya-lbl">✦ Noya</div>
+              <div class="noya-txt">You drew a gradient triangle in maths today — completely on your own. Ms Johnson noticed. That's a big deal. You know how a game character moves up a slope? That's literally what gradient means. You just did game design maths without knowing it. 🎮</div>
+            </div>
+            <div class="checklist" style="margin-top:10px;">
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Used headphones in assembly — and it worked</div></div></div>
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Stayed in class even when you felt wobbly at 10am</div></div></div>
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Drew the gradient triangle independently ⭐</div></div></div>
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Rated your day 4/5 — that's honest and good</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY TOOLKIT TODAY -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">My toolkit today</div><div class="cs">Things that help — ready when you need them</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="slist">
+              <div class="sitem"><div class="sico">🎧</div><div><div class="stitle">Headphones</div><div class="sdesc">In your tray. Use them whenever. No asking needed.</div></div></div>
+              <div class="sitem"><div class="sico">🧘</div><div><div class="stitle">Calm corner</div><div class="sdesc">Room 4, by the window. You can go there any time.</div></div></div>
+              <div class="sitem"><div class="sico">👫</div><div><div class="stitle">Buddy: Jake O'Brien</div><div class="sdesc">Sit with Jake in assembly. You two work well together.</div></div></div>
+              <div class="sitem"><div class="sico">💬</div><div><div class="stitle">Tell Noya how you feel</div><div class="sdesc">Type or tap. She'll let Ms Johnson know quietly if you need help.</div></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-6">
+
+        <!-- MY WORKSHEETS — CHILD VIEW -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">📚 My worksheets</div><div class="cs">Your work · your way · tap to open</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <!-- MATHS WORKSHEET CARD -->
+            <div class="cws-card maths-card" style="margin-bottom:10px;">
+              <div style="position:absolute;right:14px;top:12px;font-size:40px;opacity:.1;">📐</div>
+              <div class="cws-title">Maths — Straight Line Graphs</div>
+              <div class="cws-sub">Draw first. Understand second. The equation comes last.</div>
+              <div class="cws-steps">
+                <span class="cws-step-done">✓ Step 1 done</span>
+                <span class="cws-step-active">→ Step 2 now</span>
+                <span class="cws-step-todo">Step 3</span>
+                <span class="cws-step-todo">Step 4</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:10px;color:rgba(255,255,255,.55);">Today you drew the gradient triangle on your own ⭐</div>
+                <button class="cws-open-btn" onclick="wsOpen('Straight Line Graphs','Your maths worksheet · visual route · game design slopes','graphs')">Open →</button>
+              </div>
+            </div>
+            <!-- ENGLISH WORKSHEET CARD -->
+            <div class="cws-card english-card" style="margin-bottom:10px;">
+              <div style="position:absolute;right:14px;top:12px;font-size:40px;opacity:.1;">📖</div>
+              <div class="cws-title">English — The Highwayman</div>
+              <div class="cws-sub">Draw the scene. Then write what you see in your head.</div>
+              <div class="cws-steps">
+                <span class="cws-step-done">✓ Section 1</span>
+                <span class="cws-step-active">→ Section 2</span>
+                <span class="cws-step-todo">Section 3</span>
+                <span class="cws-step-todo">Section 4+</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:10px;color:rgba(255,255,255,.55);">The detective method — find the clue, draw it, write what it means</div>
+                <button class="cws-open-btn" style="color:var(--purple-d);" onclick="wsOpen('The Highwayman — Inference Detective','Your English worksheet · draw before you write','highwayman')">Open →</button>
+              </div>
+            </div>
+            <!-- FRACTIONS CARD -->
+            <div class="cws-card maths-card" style="background:linear-gradient(135deg,var(--amber-d) 0%,var(--navy-l) 100%);">
+              <div style="position:absolute;right:14px;top:12px;font-size:40px;opacity:.1;">🍕</div>
+              <div class="cws-title">Maths — Fractions</div>
+              <div class="cws-sub">For home this week. Pizzas, cakes, bars — draw every answer.</div>
+              <div class="cws-steps">
+                <span class="cws-step-todo">Not started yet</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:10px;color:rgba(255,255,255,.55);">12 questions · you can do this with Mum or Dad</div>
+                <button class="cws-open-btn" style="color:var(--amber-d);" onclick="wsOpen('Fractions — Visual Mastery','Home practice maths · draw and solve · bar models','fractions')">Open →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY PATH — GAME DESIGNER -->
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">🎮 My path — Game Designer</div><div class="cs">What you need · where you are · what's next</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="background:var(--gold-l);border-radius:var(--r-m);padding:11px 13px;margin-bottom:12px;">
+              <div style="font-size:10px;font-weight:700;color:#7A5A00;margin-bottom:3px;">✦ Noya says</div>
+              <div style="font-size:11.5px;color:var(--navy);">You want to make games. Game designers need spatial thinking, maths, code logic, and storytelling. You're already building 3 of those 4. You're closer than you think.</div>
+            </div>
+            <div class="clabel">Skills I'm building — game designer checklist</div>
+            <div class="checklist">
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Spatial reasoning — seeing shapes and movement</div><div class="cl-sub">You do this naturally. Today's maths proved it. ⭐</div></div></div>
+              <div class="cl-item done"><div class="cl-check">✓</div><div><div class="cl-text">Pattern recognition — spotting repeating rules</div><div class="cl-sub">Strong. Shows up in maths and how you play games.</div></div></div>
+              <div class="cl-item active"><div class="cl-check">→</div><div><div class="cl-text">Maths foundations — graphs, equations, logic</div><div class="cl-sub">Working on it now. Gradient today was step 2 of 4. ✓✓</div></div></div>
+              <div class="cl-item active"><div class="cl-check">→</div><div><div class="cl-text">Coding logic — how to give a computer instructions</div><div class="cl-sub">Starting next term. Scratch and then Python.</div></div></div>
+              <div class="cl-item"><div class="cl-check">→</div><div><div class="cl-text">Storytelling — how games create worlds and narrative</div><div class="cl-sub">English is building this. Ghost Boy inference work counts.</div></div></div>
+              <div class="cl-item locked" style="opacity:.5;"><div class="cl-check">🔒</div><div><div class="cl-text">Build your first game prototype</div><div class="cl-sub">Year 9 — unlocks when coding foundations are in place</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MY STRENGTHS -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">⚡ My strengths</div><div class="cs">What the data shows about how your brain works</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="strength-grid">
+              <div class="str-item">
+                <div class="str-icon">🧩</div>
+                <div class="str-label">Spatial thinking</div>
+                <div class="str-bar"><div class="str-fill" style="width:82%;background:var(--teal);"></div></div>
+                <div class="str-val">Really strong 🟢</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">⚡</div>
+                <div class="str-label">Focus when interested</div>
+                <div class="str-bar"><div class="str-fill" style="width:88%;background:var(--coral-d);"></div></div>
+                <div class="str-val">Very strong 🟢</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">🔍</div>
+                <div class="str-label">Spotting patterns</div>
+                <div class="str-bar"><div class="str-fill" style="width:76%;background:var(--purple-d);"></div></div>
+                <div class="str-val">Growing 🟡</div>
+              </div>
+              <div class="str-item">
+                <div class="str-icon">🎮</div>
+                <div class="str-label">Systems thinking</div>
+                <div class="str-bar"><div class="str-fill" style="width:68%;background:var(--amber-d);"></div></div>
+                <div class="str-val">Building 🟡</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:10.5px;color:var(--gray-500);text-align:center;">These are real. They come from what teachers and Noya see in how you work every day.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     TA VIEW
+════════════════════════════════════════ -->
+<div class="view" id="view-ta">
+  <div class="topbar">
+    <div><div class="tb-title">TA Briefing — Melissa Grant</div><div class="tb-sub">Wednesday 11 March 2026 · Years 7–9 · 3 assigned pupils</div></div>
+    <div class="tb-right">
+      <span class="pill pill-red">⚡ Phoenix: high priority today</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="noya-block" style="margin-bottom:14px;">
+      <div class="noya-lbl">✦ Noya · Your briefing for today</div>
+      <div class="noya-txt">Phoenix: skipped breakfast, medication taken at 8:30am. Position yourself near the classroom door for arrival. Offer headphones before he reaches the hall. Dip window is 10–10:30am — water and crackers need to be ready. <strong style="color:var(--mint);">Today's maths uses a game design hook for gradient</strong> — he should engage well once it clicks. Log any engagement moments as learning observations.</div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="card open" style="margin-bottom:14px;">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Today's assigned pupils</div><div class="cs">Priority order · with actions</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="elist">
+              <div class="eitem"><div class="eav" style="background:var(--coral-d);">PC</div><div><div class="ename">Phoenix Carter — High priority</div><div class="edetail">Skipped breakfast · medication dip 10–10:30am · headphones at door · game design learning today</div></div><span class="ebadge badge-new">Act now</span></div>
+              <div class="eitem"><div class="eav" style="background:var(--amber-d);">RP</div><div><div class="ename">Riya Patel — Watch</div><div class="edetail">Movement break at step 2 of maths pathway · monitor lunch transition</div></div><span class="ebadge badge-check">Watch</span></div>
+              <div class="eitem"><div class="eav" style="background:var(--green);">JO</div><div><div class="ename">Jake O'Brien — Stable</div><div class="edetail">Buddy pairing with Phoenix in assembly · settled this week</div></div><span class="ebadge badge-ok">Stable</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Quick log</div><div class="cs">Under 45 seconds · goes straight to teacher + SENCO</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="clabel">Pupil</div>
+            <div class="obsbtns"><button class="obsbtn sel">Phoenix</button><button class="obsbtn">Riya</button><button class="obsbtn">Jake</button></div>
+            <div class="clabel" style="margin-top:8px;">What happened</div>
+            <div class="obsbtns">
+              <button class="obsbtn">😄 Positive</button>
+              <button class="obsbtn">😐 Mixed</button>
+              <button class="obsbtn">😟 Struggling</button>
+              <button class="obsbtn sel">⭐ Learning win</button>
+              <button class="obsbtn">🔴 Incident</button>
+            </div>
+            <textarea class="obs-ta" style="margin-top:8px;" placeholder="e.g. Phoenix drew gradient triangle independently at 10:45 — unprompted. Game design framing worked."></textarea>
+            <button class="btn btn-teal btn-sm">Log now</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">Today's schedule — high-risk moments flagged</div><div class="cs">What to watch · when · what to do</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div class="tl">
+              <div class="tl-item"><div class="tl-time">8:55</div><div class="tl-text"><strong>⚡ Door arrival:</strong> Position at classroom door. Offer Phoenix headphones before he reaches the hall. Don't wait until he's in the noise.</div></div>
+              <div class="tl-item"><div class="tl-time">9:05</div><div class="tl-text"><strong>Assembly:</strong> Stay close to Phoenix. Watch for covering ears, rocking. Exit route: quiet corridor, chair outside room 4. Jake is his buddy — keep them together.</div></div>
+              <div class="tl-item"><div class="tl-time">9:45</div><div class="tl-text"><strong>Maths — adapted paths active:</strong> Phoenix doing visual-spatial gradient route (game design hook). Riya needs movement break at step 2. Archie needs verbal walkthrough support.</div></div>
+              <div class="tl-item"><div class="tl-time">10:00</div><div class="tl-text"><strong>⚡ Dip window:</strong> Have crackers and water ready for Phoenix before 10am. Do not wait for him to ask. Signs: sweating, fidgeting, tummy pain.</div></div>
+              <div class="tl-item"><div class="tl-time">12:00</div><div class="tl-text"><strong>Lunch:</strong> Monitor Riya at transition — 2 incidents at lunch this week. Watch for masking in classroom vs distress at unstructured time.</div></div>
+              <div class="tl-item"><div class="tl-time">3:20</div><div class="tl-text"><strong>Home time:</strong> Brief parent handover for Phoenix. Day summary auto-sent to Dana. Log anything noteworthy from afternoon.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PARENT PLUS VIEW — CAREER ADVISING (SECONDARY)
+════════════════════════════════════════ -->
+<div class="view" id="view-parentplus">
+  <div class="topbar">
+    <div><div class="tb-title">Phoenix's future — Parent Plus</div><div class="tb-sub">Year 10 · Leigh Academy · Career &amp; pathway insight</div></div>
+    <div class="tb-right">
+      <span class="pill pill-gold">PLUS</span>
+      <button class="btn btn-sec btn-sm">⚙️ Manage subscription</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- HERO -->
+    <div style="background:linear-gradient(125deg,var(--gold-l) 0%,#FBE8C8 50%,var(--mint-p) 100%);border-radius:var(--r-xl);padding:18px 22px;margin-bottom:14px;position:relative;overflow:hidden;border:1px solid rgba(232,184,75,.35);display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <div style="max-width:600px;">
+        <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--navy);margin-bottom:4px;">Five years of real data. One psychometric-grade picture.</div>
+        <div style="font-size:11.5px;color:var(--gray-700);line-height:1.5;">Parent Plus pairs Phoenix's actual learning history with the same interest-and-aptitude framework professional career services use — so this isn't a 20-minute quiz guess, it's five years of evidence plus a validated model.</div>
+      </div>
+      <div style="font-size:52px;opacity:.35;flex-shrink:0;">🎯</div>
+    </div>
+
+    <!-- LMI STAT STRIP — TOP MATCH -->
+    <div class="stats">
+      <div class="stat teal">
+        <div class="stat-n">92%</div>
+        <div class="stat-l">Match score · Game Designer, Phoenix's top pathway</div>
+      </div>
+      <div class="stat green">
+        <div class="stat-n">£38k</div>
+        <div class="stat-l">UK median salary, 5 years' experience (ONS/gov.uk data)</div>
+      </div>
+      <div class="stat amber">
+        <div class="stat-n">+12%</div>
+        <div class="stat-l">Projected UK sector growth to 2030</div>
+      </div>
+      <div class="stat purple">
+        <div class="stat-n">4</div>
+        <div class="stat-l">Entry routes — apprenticeship, BTEC, degree, portfolio</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+        <!-- RIASEC HEXAGON -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">🔷 Interest &amp; aptitude profile</div><div class="cs">Holland Code (RIASEC) framework — same model used across the careers guidance sector</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <svg viewBox="0 0 300 300" style="width:100%;max-width:300px;display:block;margin:0 auto;">
+              <polygon points="150,40 245.3,95 245.3,205 150,260 54.7,205 54.7,95" fill="none" stroke="var(--gray-200)" stroke-width="1"/>
+              <polygon points="150,77 213.2,113.5 213.2,186.5 150,223 86.8,186.5 86.8,113.5" fill="none" stroke="var(--gray-200)" stroke-width="1"/>
+              <polygon points="150,113 182,131.5 182,168.5 150,187 118,168.5 118,131.5" fill="none" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="150" y2="40" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="245.3" y2="95" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="245.3" y2="205" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="150" y2="260" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="54.7" y2="205" stroke="var(--gray-200)" stroke-width="1"/>
+              <line x1="150" y1="150" x2="54.7" y2="95" stroke="var(--gray-200)" stroke-width="1"/>
+              <polygon points="150,53.2 228.1,104.9 211.9,185.8 150,188.5 97.6,180.3 121.4,133.5" fill="rgba(42,107,98,.28)" stroke="var(--teal)" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="150" cy="53.2" r="3.5" fill="var(--teal)"/>
+              <circle cx="228.1" cy="104.9" r="3.5" fill="var(--teal)"/>
+              <circle cx="211.9" cy="185.8" r="3.5" fill="var(--teal)"/>
+              <circle cx="150" cy="188.5" r="3.5" fill="var(--teal)"/>
+              <circle cx="97.6" cy="180.3" r="3.5" fill="var(--teal)"/>
+              <circle cx="121.4" cy="133.5" r="3.5" fill="var(--teal)"/>
+              <text x="150" y="18" text-anchor="middle" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">REALISTIC · 88</text>
+              <text x="270" y="82" text-anchor="start" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">INVESTIGATIVE · 82</text>
+              <text x="270" y="222" text-anchor="start" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">ARTISTIC · 65</text>
+              <text x="150" y="292" text-anchor="middle" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">SOCIAL · 35</text>
+              <text x="30" y="222" text-anchor="end" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">ENTERPRISING · 55</text>
+              <text x="30" y="82" text-anchor="end" font-family="DM Sans" font-size="10" font-weight="700" fill="var(--navy)">CONVENTIONAL · 30</text>
+            </svg>
+            <div style="text-align:center;margin-top:6px;">
+              <span class="pill pill-teal">Code: R-I-A</span>
+            </div>
+            <div style="font-size:10.5px;color:var(--gray-500);line-height:1.5;margin-top:10px;">Built from five years of logged learning behaviour, not a single questionnaire sitting — the Realistic/Investigative/Artistic combination is strongly associated with design, engineering and applied technical fields.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-7">
+        <!-- TABS: MATCHES / PATHWAY / ASK NOYA -->
+        <div class="card open" style="padding:16px 18px 18px;">
+          <div class="tab-strip">
+            <button class="tab on" onclick="ppTab('matches',this)">Career matches</button>
+            <button class="tab" onclick="ppTab('pathway',this)">Pathway to get there</button>
+            <button class="tab" onclick="ppTab('noya',this)">Ask Noya</button>
+          </div>
+
+          <!-- MATCHES PANEL -->
+          <div id="pp-matches" class="pp-panel">
+            <div class="career-card active" onclick="careerOpen('gamedesign')">
+              <div class="career-title">🎮 Game Designer</div>
+              <div class="career-match">92% match · £38k median · Phoenix's own stated interest since Year 8</div>
+              <div class="career-tags"><span class="career-tag">Realistic</span><span class="career-tag">Investigative</span><span class="career-tag">Hyperfocus</span></div>
+            </div>
+            <div class="career-card" onclick="careerOpen('uxdesign')">
+              <div class="career-title">🖥️ UX / Product Designer</div>
+              <div class="career-match">81% match · £42k median · Newly surfaced this year</div>
+              <div class="career-tags"><span class="career-tag">Artistic</span><span class="career-tag">Investigative</span></div>
+            </div>
+            <div class="career-card" onclick="careerOpen('architecture')">
+              <div class="career-title">🏛️ Architecture &amp; Spatial Design</div>
+              <div class="career-match">77% match · £41k median</div>
+              <div class="career-tags"><span class="career-tag">Realistic</span><span class="career-tag">Artistic</span></div>
+            </div>
+            <div class="career-card" onclick="careerOpen('dataviz')">
+              <div class="career-title">📊 Data Visualisation</div>
+              <div class="career-match">74% match · £39k median</div>
+              <div class="career-tags"><span class="career-tag">Investigative</span><span class="career-tag">Conventional</span></div>
+            </div>
+            <div class="career-card" style="margin-bottom:0;" onclick="careerOpen('softeng')">
+              <div class="career-title">⚙️ Software Engineering</div>
+              <div class="career-match">70% match · £45k median</div>
+              <div class="career-tags"><span class="career-tag">Realistic</span><span class="career-tag">Investigative</span></div>
+            </div>
+            <div style="font-size:10px;color:var(--gray-300);text-align:center;margin-top:8px;">Tap a card for salary bands, entry routes and a day-in-the-life</div>
+          </div>
+
+          <!-- PATHWAY PANEL -->
+          <div id="pp-pathway" class="pp-panel" style="display:none;">
+            <div class="lpath">
+              <div class="lp-step">
+                <div class="lp-dot done">✓</div>
+                <div class="lp-content">
+                  <div class="lp-title">GCSE options (Y9, completed)</div>
+                  <div class="lp-desc">Art &amp; Design, Computer Science, Maths (Higher) — chosen to keep game-design-adjacent routes open</div>
+                  <span class="lp-badge done">Completed</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot active">●</div>
+                <div class="lp-content">
+                  <div class="lp-title">Post-16 (Y11 decision, this year)</div>
+                  <div class="lp-desc">Two live options: BTEC Level 3 Games Development, or A-levels in Maths, Art &amp; Computer Science</div>
+                  <span class="lp-badge active">Decision due Spring</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot next">→</div>
+                <div class="lp-content">
+                  <div class="lp-title">Post-18</div>
+                  <div class="lp-desc">Degree apprenticeship in games/software (paid, no fees) or a BA/BSc in Game Design or Computer Science</div>
+                  <span class="lp-badge next">2 years away</span>
+                </div>
+              </div>
+              <div class="lp-step">
+                <div class="lp-dot locked">🔒</div>
+                <div class="lp-content">
+                  <div class="lp-title">Entry role</div>
+                  <div class="lp-desc">Junior Game Designer or Technical Artist — median starting salary £26-30k</div>
+                  <span class="lp-badge next">Future</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ASK NOYA PANEL -->
+          <div id="pp-noya" class="pp-panel" style="display:none;">
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="align-self:flex-end;background:var(--gray-100);border-radius:14px 14px 3px 14px;padding:9px 13px;max-width:78%;font-size:11.5px;color:var(--navy);">Does he need A-level Art if he wants to do game design?</div>
+              <div class="noya-block" style="margin:0;max-width:82%;border-radius:14px 14px 14px 3px;">
+                <div class="noya-lbl">✦ Noya</div>
+                <div class="noya-txt">Not strictly — most game design degrees and apprenticeships accept Computer Science + Maths alone. But Phoenix's Artistic score (65) is genuinely strong, and Art would keep the technical-artist route open too, which suits his spatial reasoning well. Worth discussing with him rather than deciding for him.</div>
+              </div>
+              <div style="align-self:flex-end;background:var(--gray-100);border-radius:14px 14px 3px 14px;padding:9px 13px;max-width:78%;font-size:11.5px;color:var(--navy);">Are there any local apprenticeships in this field?</div>
+              <div class="noya-block" style="margin:0;max-width:82%;border-radius:14px 14px 14px 3px;">
+                <div class="noya-lbl">✦ Noya</div>
+                <div class="noya-txt">There are currently a handful of Level 3-4 digital/games apprenticeships within commuting distance of Leigh Academy — I can pull a live shortlist closer to his applications window, typically opening in the fteautumn of Year 12.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100);">
+              <input type="text" placeholder="Ask Noya anything about Phoenix's pathway…" disabled style="flex:1;border:1px solid var(--gray-200);border-radius:20px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:11.5px;color:var(--gray-500);background:var(--gray-50);">
+              <button class="btn btn-teal btn-sm" style="border-radius:20px;">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <!-- OPTIONAL ADD-ON -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">✨ Sharpen the picture (optional)</div><div class="cs">Extended aptitude questionnaire — not required</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="font-size:11.5px;color:var(--gray-700);line-height:1.55;margin-bottom:10px;">A 20-minute structured questionnaire Phoenix completes himself — <strong>not</strong> a genetic or medical test — refining the RIASEC profile above with his own stated interests and values. Entirely optional, separate from his core SEND support data.</div>
+            <button class="btn btn-teal btn-sm">Add for £X / term</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <!-- CONSENT NOTE -->
+        <div class="card open">
+          <div class="ch" onclick="tog(this)">
+            <div><div class="ct">🔒 How this is different from his school data</div><div class="cs">Separate consent, separate purpose</div></div>
+            <svg class="ch-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cb">
+            <div style="font-size:11.5px;color:var(--gray-700);line-height:1.55;">Parent Plus is opt-in and billed separately from Phoenix's core See My Mind support, which the school arranges to help him day-to-day. You gave separate consent for his learning history to be used this way, and can turn Parent Plus off at any time without affecting his core support at school. His careers lead can also be given read-only access, in line with the school's Gatsby Benchmark tracking.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+</div><!-- end flex wrapper -->
+
+<!-- CAREER DETAIL MODAL -->
+<div class="ws-modal" id="careerModal">
+  <div class="ws-modal-inner" style="max-width:640px;max-height:80vh;">
+    <div class="ws-modal-head">
+      <div>
+        <div class="ws-modal-title" id="careerModalTitle">Career</div>
+        <div class="ws-modal-sub" id="careerModalSub">Loading…</div>
+      </div>
+      <div class="ws-modal-actions">
+        <button class="ws-modal-close" onclick="careerClose()">✕</button>
+      </div>
+    </div>
+    <div class="ws-modal-body" id="careerModalBody" style="padding:20px 22px;"></div>
+  </div>
+</div>
+
+<!-- WORKSHEET MODAL -->
+<div class="ws-modal" id="wsModal">
+  <div class="ws-modal-inner">
+    <div class="ws-modal-head">
+      <div>
+        <div class="ws-modal-title" id="wsModalTitle">Worksheet</div>
+        <div class="ws-modal-sub" id="wsModalSub">Loading...</div>
+      </div>
+      <div class="ws-modal-actions">
+        <button class="btn btn-sec btn-sm" onclick="wsDownload()" style="color:white;background:rgba(255,255,255,.15);border:none;">↓ Download / Print</button>
+        <button class="ws-modal-close" onclick="wsClose()">✕</button>
+      </div>
+    </div>
+    <div class="ws-modal-body">
+      <iframe id="wsIframe" src="" title="Worksheet"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="v-badge">SEE MY MIND v9 · EDUCATION LIFECYCLE</div>
+
+<script>
+// View switcher
+function sw(view, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+  document.querySelectorAll('.vbtn').forEach(b => b.classList.remove('on'));
+  document.getElementById('view-' + view).classList.add('on');
+  btn.classList.add('on');
+  const users = {
+    teacher: {av:'MJ', name:'Ms Johnson', role:'Year 8 Teacher · Room 4', bg:'var(--purple-d)'},
+    senco:   {av:'MO', name:'Ms Okafor', role:'SENCO · Years 7–9', bg:'var(--teal)'},
+    parent:  {av:'DC', name:'Dana Carter', role:"Phoenix's Mum", bg:'var(--amber-d)'},
+    child:   {av:'🧒', name:'Phoenix Carter', role:'Year 8 · Leigh Academy', bg:'var(--coral-d)'},
+    ta:      {av:'MG', name:'Melissa Grant', role:'Teaching Assistant', bg:'var(--green)'},
+    parentplus: {av:'DC', name:'Dana Carter', role:"Phoenix's Mum · Parent Plus", bg:'var(--gold)'}
+  };
+  const u = users[view];
+  const el = document.getElementById('sbuser');
+  el.querySelector('.sb-av').textContent = u.av;
+  el.querySelector('.sb-av').style.background = u.bg;
+  el.querySelector('.sb-uname').textContent = u.name;
+  el.querySelector('.sb-urole').textContent = u.role;
+}
+
+// Card toggle
+function tog(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// Parent Plus tab switcher
+function ppTab(panel, btn) {
+  document.querySelectorAll('.pp-panel').forEach(p => p.style.display = 'none');
+  document.getElementById('pp-' + panel).style.display = 'block';
+  btn.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// Career detail data + modal
+const careerData = {
+  gamedesign: {
+    title: '🎮 Game Designer', sub: '92% match · R-I-A profile',
+    salary: '£24-30k entry · £38k median · £55k+ senior',
+    routes: 'Level 3 BTEC Games Development, degree apprenticeship (games/software), or BA/BSc Game Design',
+    day: 'Designing levels, mechanics and systems; prototyping in engines like Unity or Unreal; playtesting and iterating with a team of artists and engineers.',
+    fit: 'Draws directly on spatial reasoning, systems thinking and hyperfocus — the exact combination Phoenix has shown consistently since Year 8.'
+  },
+  uxdesign: {
+    title: '🖥️ UX / Product Designer', sub: '81% match · A-I profile',
+    salary: '£26-32k entry · £42k median · £60k+ senior',
+    routes: 'Level 4 UX apprenticeship, portfolio-based entry, or a degree in Design, HCI or Computer Science',
+    day: 'Researching how people use a product, sketching flows and interfaces, testing prototypes with real users, and refining based on feedback.',
+    fit: 'A newer signal this year — his pattern recognition and spatial reasoning both map well onto interface and flow design.'
+  },
+  architecture: {
+    title: '🏛️ Architecture & Spatial Design', sub: '77% match · R-A profile',
+    salary: '£24-28k entry (Part 1) · £41k median (qualified) · £65k+ senior',
+    routes: 'Architectural apprenticeship (Level 6/7), or a 5-7 year RIBA-accredited degree pathway',
+    day: 'Designing buildings and spaces, producing technical drawings and 3D models, balancing creative vision with structural and regulatory constraints.',
+    fit: 'Strong spatial reasoning fit, though the longer qualification pathway is worth discussing with him directly.'
+  },
+  dataviz: {
+    title: '📊 Data Visualisation', sub: '74% match · I-C profile',
+    salary: '£26-32k entry · £39k median · £52k+ senior',
+    routes: 'Data apprenticeship, degree in Computer Science/Statistics, or a strong self-taught portfolio',
+    day: 'Turning large datasets into clear, interactive visuals and dashboards that help people make decisions.',
+    fit: 'Leans on pattern recognition and hyperfocus; a strong option if his interest in systems continues to trend more analytical than creative.'
+  },
+  softeng: {
+    title: '⚙️ Software Engineering', sub: '70% match · R-I profile',
+    salary: '£28-34k entry · £45k median · £70k+ senior',
+    routes: 'Software degree apprenticeship, Computer Science degree, or bootcamp + portfolio for some entry-level roles',
+    day: 'Building and maintaining the systems behind apps, games or websites — writing, testing and debugging code as part of a team.',
+    fit: 'Broadest of the five options and the safest fallback — strong systems thinking fit, less dependent on the artistic side of his profile.'
+  }
+};
+
+function careerOpen(key) {
+  const c = careerData[key];
+  if (!c) return;
+  document.getElementById('careerModalTitle').textContent = c.title;
+  document.getElementById('careerModalSub').textContent = c.sub;
+  document.getElementById('careerModalBody').innerHTML = `
+    <div style="margin-bottom:14px;">
+      <div class="clabel">Salary bands (UK)</div>
+      <div style="font-size:13px;color:var(--navy);font-weight:600;">${c.salary}</div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="clabel">Entry routes</div>
+      <div style="font-size:12px;color:var(--gray-700);line-height:1.55;">${c.routes}</div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div class="clabel">A day in the role</div>
+      <div style="font-size:12px;color:var(--gray-700);line-height:1.55;">${c.day}</div>
+    </div>
+    <div class="noya-block" style="margin-bottom:0;">
+      <div class="noya-lbl">✦ Noya · Why this fits Phoenix</div>
+      <div class="noya-txt">${c.fit}</div>
+    </div>`;
+  document.getElementById('careerModal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function careerClose() {
+  document.getElementById('careerModal').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('careerModal').addEventListener('click', function(e) {
+  if (e.target === this) careerClose();
+});
+
+// Worksheet tab switcher
+function wsSw(prefix, panel, btn) {
+  // Hide all panels with this prefix
+  document.querySelectorAll('[id^="' + prefix + '-"]').forEach(p => p.classList.remove('on'));
+  // Deactivate sibling tabs
+  btn.parentElement.querySelectorAll('.ws-tab').forEach(t => t.classList.remove('on'));
+  // Show target panel and activate tab
+  const target = document.getElementById(prefix + '-' + panel);
+  if (target) target.classList.add('on');
+  btn.classList.add('on');
+}
+
+// Worksheet files map
+const wsFiles = {
+  fractions: 'SMM_Fractions_Primary_Workbook.html',
+  highwayman: 'SMM_Highwayman_Inference_Workbook.html',
+  graphs: 'SMM_Fractions_Primary_Workbook.html' // placeholder — would be graphs worksheet
+};
+
+// Open worksheet modal
+function wsOpen(title, sub, key) {
+  document.getElementById('wsModalTitle').textContent = title;
+  document.getElementById('wsModalSub').textContent = sub;
+  const file = wsFiles[key] || wsFiles['fractions'];
+  document.getElementById('wsIframe').src = file;
+  document.getElementById('wsModal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+// Close modal
+function wsClose() {
+  document.getElementById('wsModal').classList.remove('on');
+  document.getElementById('wsIframe').src = '';
+  document.body.style.overflow = '';
+}
+
+// Download from modal
+function wsDownload() {
+  const iframe = document.getElementById('wsIframe');
+  const a = document.createElement('a');
+  a.href = iframe.src;
+  a.download = iframe.src;
+  a.click();
+}
+
+// Close modal on backdrop click
+document.getElementById('wsModal').addEventListener('click', function(e) {
+  if (e.target === this) wsClose();
+});
+
+// Emoji selector
+document.querySelectorAll('.emoji-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.closest('.emoji-row').querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('sel'));
+    this.classList.add('sel');
+  });
+});
+
+// Open all cards by default
+document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
+</script>
+</body>
+</html>
