@@ -61,4 +61,22 @@ h1, h2, h3, h4 {
     box-shadow: 0 1px 3px rgba(26,58,74,0.08);
     border-left-width: 4px;
   }
+
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes pulseSubtle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.92; transform: scale(1.02); }
+  }
+
+  .animate-float {
+    animation: floatSlow 3.5s ease-in-out infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 2.5s ease-in-out infinite;
+  }
 }
