@@ -15,6 +15,11 @@ import {
   ClassroomMatrixData,
   AnnualReviewPackResponse,
   SchoolProvisionMatrixResponse,
+  DecompressionBridgeResponse,
+  EveningCheckInCreate,
+  EveningCheckInResponse,
+  MedicationCorrelationResponse,
+  ParentWinsGalleryItem,
 } from './types';
 
 const API_BASE =
@@ -269,6 +274,43 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to fetch latest handover');
+    return res.json();
+  },
+
+  async getDecompressionBridge(childId: string): Promise<DecompressionBridgeResponse> {
+    const res = await fetch(`${API_BASE}/transitions/children/${childId}/decompression-bridge`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch decompression bridge');
+    return res.json();
+  },
+
+  async submitEveningHandover(
+    childId: string,
+    data: EveningCheckInCreate
+  ): Promise<EveningCheckInResponse> {
+    const res = await fetch(`${API_BASE}/transitions/evening-handover/${childId}`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to submit evening handover');
+    return res.json();
+  },
+
+  async getMedicationCorrelation(childId: string): Promise<MedicationCorrelationResponse> {
+    const res = await fetch(`${API_BASE}/transitions/children/${childId}/correlation-digest`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch medication correlation digest');
+    return res.json();
+  },
+
+  async getWinsGallery(childId: string): Promise<ParentWinsGalleryItem[]> {
+    const res = await fetch(`${API_BASE}/transitions/children/${childId}/wins-gallery`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch wins gallery');
     return res.json();
   },
 

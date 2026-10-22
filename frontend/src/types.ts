@@ -382,3 +382,94 @@ export interface SchoolProvisionMatrixResponse {
   pupils: ProvisionMapPupil[];
 }
 
+// Parent Decompression & Masking Hub
+export interface AdultClue {
+  source: string;
+  role: string;
+  time: string;
+  observation: string;
+  significance: string;
+  marker_type: string;
+}
+
+export interface DecompressionStep {
+  step: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon_type: string;
+  tag: string;
+}
+
+export interface DecompressionBridgeResponse {
+  child_id: string;
+  child_name: string;
+  battery_percentage: number;
+  battery_status: string;
+  battery_color: string;
+  masking_level: string;
+  masking_explanation: string;
+  draining_factors: string[];
+  recharging_factors: string[];
+  adult_observation_clues: AdultClue[];
+  decompression_recipe: DecompressionStep[];
+  recommended_evening_activities: string[];
+  generated_at: string;
+}
+
+export interface EveningCheckInCreate {
+  child_id?: string;
+  parent_name?: string;
+  after_school_decompression: string;
+  evening_mood: string;
+  dinner_eaten: boolean;
+  screen_free_downtime_minutes: number;
+  notes_for_tomorrow?: string;
+}
+
+export interface EveningCheckInResponse {
+  id: string;
+  event_id: string;
+  child_id: string;
+  parent_name: string;
+  after_school_decompression: string;
+  evening_mood: string;
+  dinner_eaten: boolean;
+  screen_free_downtime_minutes: number;
+  notes_for_tomorrow?: string;
+  logged_at: string;
+}
+
+export interface CorrelationInsightItem {
+  factor: string;
+  incident_rate: string;
+  effect: string;
+  confidence: string;
+  status: 'positive' | 'warning' | 'neutral';
+}
+
+export interface MedicationCorrelationResponse {
+  child_id: string;
+  child_name: string;
+  medication_name: string;
+  morning_window: string;
+  dip_window: string;
+  total_days_analyzed: number;
+  optimal_conditions: string[];
+  correlation_insights: CorrelationInsightItem[];
+  pediatrician_summary: string;
+  generated_at: string;
+}
+
+export interface ParentWinsGalleryItem {
+  id: string;
+  child_id: string;
+  title: string;
+  date: string;
+  category: string;
+  description: string;
+  teacher_quote: string;
+  celebration_badge: string;
+  tags: string[];
+}
+
