@@ -334,7 +334,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
           ) : null}
 
           {/* 4-Stage Mood Arc */}
-          <div className="card p-5 bg-gradient-to-br from-navy via-navy-light to-navy text-white rounded-2xl overflow-hidden relative shadow-md">
+          <div className="p-5 bg-[#1A3A4A] bg-gradient-to-br from-[#1A3A4A] via-[#244b5f] to-[#1A3A4A] text-white rounded-2xl overflow-hidden relative shadow-lg border border-[#2D5A6E]">
             <div className="font-serif text-base font-bold text-white mb-1">{childName}'s Day at a Glance</div>
             <p className="text-[11px] text-white/60 mb-4">Adult-observed emotional progression · St. Jude's Academy</p>
 
@@ -524,7 +524,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
           ) : correlation ? (
             <div className="space-y-6">
               {/* Hero Medication Card */}
-              <div className="card p-6 bg-gradient-to-br from-navy via-navy-light to-navy text-white rounded-2xl shadow-md">
+              <div className="p-6 bg-[#1A3A4A] bg-gradient-to-br from-[#1A3A4A] via-[#244b5f] to-[#1A3A4A] text-white rounded-2xl shadow-lg border border-[#2D5A6E]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
                   <div>
                     <div className="flex items-center gap-2">

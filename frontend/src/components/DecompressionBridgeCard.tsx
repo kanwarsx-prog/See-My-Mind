@@ -67,7 +67,7 @@ export const DecompressionBridgeCard: React.FC<DecompressionBridgeCardProps> = (
   return (
     <div className="space-y-6">
       {/* 1. Sensory Battery & Masking Prediction Hero Banner */}
-      <div className="card p-6 bg-gradient-to-br from-navy via-navy-light to-navy text-white rounded-2xl shadow-lg relative overflow-hidden">
+      <div className="p-6 bg-[#1A3A4A] bg-gradient-to-br from-[#1A3A4A] via-[#244b5f] to-[#1A3A4A] text-white rounded-2xl shadow-xl relative overflow-hidden border border-[#2D5A6E]">
         {/* Soft decorative glow */}
         <div className="absolute -top-12 -right-12 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
         
