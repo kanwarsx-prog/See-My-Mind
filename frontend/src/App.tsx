@@ -49,6 +49,12 @@ export const App: React.FC = () => {
   const [isWorksheetModalOpen, setIsWorksheetModalOpen] = useState(false);
   const [activeWorksheet, setActiveWorksheet] = useState('graphs');
 
+  // Sub-Navigation state per persona
+  const [activeNavId, setActiveNavId] = useState<string>('');
+  const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('focused');
+  const [parentSubTab, setParentSubTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
+  const [sencoSubTab, setSencoSubTab] = useState<'review_pack' | 'provision_map' | 'assistant'>('provision_map');
+
   // Registration & Onboarding state
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isParentOnboardingOpen, setIsParentOnboardingOpen] = useState(false);
@@ -65,6 +71,7 @@ export const App: React.FC = () => {
           setCurrentUser(user);
           setActiveView(user.role as RoleView);
           setApiRole(user.role === 'parentplus' ? 'parent' : user.role);
+          initNavForRole(user.role as RoleView);
         }
       } catch (err) {
         console.error('Session check failed:', err);
@@ -75,11 +82,45 @@ export const App: React.FC = () => {
     checkSession();
   }, []);
 
+  const initNavForRole = (view: RoleView) => {
+    if (view === 'teacher') setActiveNavId('room4-matrix');
+    else if (view === 'senco') setActiveNavId('provision_map');
+    else if (view === 'parent') setActiveNavId('bridge');
+    else if (view === 'child') setActiveNavId('child-checkin');
+    else if (view === 'ta') setActiveNavId('ta-hub');
+  };
+
   // Sync API role when active view changes
   const handleViewChange = (view: RoleView) => {
     setActiveView(view);
     const backendRole = view === 'parentplus' ? 'parent' : view;
     setApiRole(backendRole);
+    initNavForRole(view);
+  };
+
+  const handleSelectNav = (navId: string) => {
+    setActiveNavId(navId);
+
+    if (activeView === 'teacher') {
+      if (navId === 'room4-matrix') {
+        setTeacherSubView('matrix');
+      } else {
+        setTeacherSubView('focused');
+      }
+    }
+
+    if (activeView === 'senco') {
+      if (navId === 'provision_map') setSencoSubTab('provision_map');
+      if (navId === 'review_pack') setSencoSubTab('review_pack');
+      if (navId === 'assistant') setSencoSubTab('assistant');
+    }
+
+    if (activeView === 'parent') {
+      if (navId === 'bridge') setParentSubTab('bridge');
+      if (navId === 'handover') setParentSubTab('handover');
+      if (navId === 'correlation') setParentSubTab('correlation');
+      if (navId === 'wins') setParentSubTab('wins');
+    }
   };
 
   // Switch active pupil
@@ -442,9 +483,13 @@ export const App: React.FC = () => {
       <Sidebar
         activeView={activeView}
         currentUser={currentUser}
+        activeNavId={activeNavId}
+        onSelectNav={handleSelectNav}
         onLogout={handleLogout}
         onSwitchPersona={handleLogout}
         onRegisterChild={() => setIsRegisterModalOpen(true)}
+        onOpenWorksheet={handleOpenWorksheet}
+        onOpenObservationModal={() => setIsObsModalOpen(true)}
         isMobileOpen={mobileMenuOpen}
         onCloseMobile={() => setMobileMenuOpen(false)}
       />
@@ -473,6 +518,11 @@ export const App: React.FC = () => {
               timeline={timeline}
               briefing={briefing}
               latestHandover={latestHandover}
+              activeSubView={teacherSubView}
+              onSubViewChange={(view) => {
+                setTeacherSubView(view);
+                setActiveNavId(view === 'matrix' ? 'room4-matrix' : 'preflight-handover');
+              }}
               onRefreshBriefing={handleRefreshBriefing}
               onAcknowledgeHandover={handleAcknowledgeHandover}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
@@ -488,6 +538,11 @@ export const App: React.FC = () => {
               child={child}
               timeline={timeline}
               latestHandover={latestHandover}
+              activeTab={parentSubTab}
+              onTabChange={(tab) => {
+                setParentSubTab(tab);
+                setActiveNavId(tab);
+              }}
               onSubmitHandover={handleSubmitHandover}
             />
           )}
@@ -496,6 +551,11 @@ export const App: React.FC = () => {
             <SencoView
               child={child}
               timeline={timeline}
+              activeTab={sencoSubTab}
+              onTabChange={(tab) => {
+                setSencoSubTab(tab);
+                setActiveNavId(tab);
+              }}
               onOpenDocModal={() => setIsDocModalOpen(true)}
               onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
               onRegisterChild={() => setIsRegisterModalOpen(true)}

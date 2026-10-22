@@ -32,6 +32,8 @@ interface ParentViewProps {
   timeline: ChildEvent[];
   latestHandover?: TransitionLogDetail | null;
   onSubmitHandover: (data: any) => Promise<void>;
+  activeTab?: 'bridge' | 'handover' | 'correlation' | 'wins';
+  onTabChange?: (tab: 'bridge' | 'handover' | 'correlation' | 'wins') => void;
 }
 
 export const ParentView: React.FC<ParentViewProps> = ({
@@ -39,8 +41,23 @@ export const ParentView: React.FC<ParentViewProps> = ({
   timeline,
   latestHandover,
   onSubmitHandover,
+  activeTab: propActiveTab,
+  onTabChange,
 }) => {
-  const [activeTab, setActiveTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
+  const [activeTab, setActiveTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>(
+    propActiveTab || 'bridge'
+  );
+
+  useEffect(() => {
+    if (propActiveTab && propActiveTab !== activeTab) {
+      setActiveTab(propActiveTab);
+    }
+  }, [propActiveTab]);
+
+  const handleTabSelect = (tab: 'bridge' | 'handover' | 'correlation' | 'wins') => {
+    setActiveTab(tab);
+    onTabChange?.(tab);
+  };
 
   // Decompression bridge data
   const [bridge, setBridge] = useState<DecompressionBridgeResponse | null>(null);
@@ -183,7 +200,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
       {/* 2. 4-Pillar Tab Navigation (Mobile Responsive) */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-gray-200 scrollbar-none">
         <button
-          onClick={() => setActiveTab('bridge')}
+          onClick={() => handleTabSelect('bridge')}
           className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'bridge'
               ? 'bg-navy text-white shadow-sm'
@@ -202,7 +219,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
         </button>
 
         <button
-          onClick={() => setActiveTab('handover')}
+          onClick={() => handleTabSelect('handover')}
           className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'handover'
               ? 'bg-navy text-white shadow-sm'
@@ -217,7 +234,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
         </button>
 
         <button
-          onClick={() => setActiveTab('correlation')}
+          onClick={() => handleTabSelect('correlation')}
           className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'correlation'
               ? 'bg-navy text-white shadow-sm'
@@ -229,7 +246,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
         </button>
 
         <button
-          onClick={() => setActiveTab('wins')}
+          onClick={() => handleTabSelect('wins')}
           className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'wins'
               ? 'bg-navy text-white shadow-sm'

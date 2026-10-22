@@ -28,6 +28,8 @@ import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
 interface SencoViewProps {
   child: Child;
   timeline: ChildEvent[];
+  activeTab?: 'review_pack' | 'provision_map' | 'assistant';
+  onTabChange?: (tab: 'review_pack' | 'provision_map' | 'assistant') => void;
   onOpenDocModal?: () => void;
   onOpenIncidentModal?: () => void;
   onRegisterChild?: () => void;
@@ -36,11 +38,26 @@ interface SencoViewProps {
 export const SencoView: React.FC<SencoViewProps> = ({
   child,
   timeline,
+  activeTab: propActiveTab,
+  onTabChange,
   onOpenDocModal,
   onOpenIncidentModal,
   onRegisterChild,
 }) => {
-  const [activeTab, setActiveTab] = useState<'review_pack' | 'provision_map' | 'assistant'>('review_pack');
+  const [activeTab, setActiveTab] = useState<'review_pack' | 'provision_map' | 'assistant'>(
+    propActiveTab || 'review_pack'
+  );
+
+  useEffect(() => {
+    if (propActiveTab && propActiveTab !== activeTab) {
+      setActiveTab(propActiveTab);
+    }
+  }, [propActiveTab]);
+
+  const handleTabSelect = (tab: 'review_pack' | 'provision_map' | 'assistant') => {
+    setActiveTab(tab);
+    onTabChange?.(tab);
+  };
 
   // AI & Overview state
   const [query, setQuery] = useState('What sensory calming strategies have proven most effective this month?');
@@ -146,7 +163,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
       {/* 3-Sub-Tab Navigation Bar */}
       <div className="bg-white p-1.5 rounded-2xl border border-gray-200/80 flex items-center gap-1.5 overflow-x-auto shadow-2xs">
         <button
-          onClick={() => setActiveTab('review_pack')}
+          onClick={() => handleTabSelect('review_pack')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'review_pack'
               ? 'bg-purple-dark text-white shadow-xs'
@@ -161,7 +178,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
         </button>
 
         <button
-          onClick={() => setActiveTab('provision_map')}
+          onClick={() => handleTabSelect('provision_map')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'provision_map'
               ? 'bg-teal text-white shadow-xs'
@@ -176,7 +193,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
         </button>
 
         <button
-          onClick={() => setActiveTab('assistant')}
+          onClick={() => handleTabSelect('assistant')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'assistant'
               ? 'bg-navy text-white shadow-xs'

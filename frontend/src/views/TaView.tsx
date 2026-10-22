@@ -53,7 +53,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
   return (
     <div className="space-y-6">
       {/* TA Header */}
-      <div className="card p-5 border-l-4 border-l-green bg-white">
+      <div id="ta-support-hub" className="card p-5 border-l-4 border-l-green bg-white scroll-mt-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-green-light flex items-center justify-center font-bold text-green text-base shadow-xs">
@@ -162,7 +162,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
           </div>
 
           {/* Quick Log (<45 seconds) */}
-          <div className="card p-5 space-y-3.5">
+          <div id="ta-quick-log" className="card p-5 space-y-3.5 scroll-mt-6">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
               <div>
                 <h3 className="text-sm font-bold text-navy">Fast Micro-Log (&lt; 45s)</h3>
@@ -273,7 +273,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
         {/* Right Column: High-Risk Schedule Flagged */}
         <div className="lg:col-span-6 space-y-5">
           {/* Today's Schedule — High-Risk Moments Flagged (Prototype v2) */}
-          <div className="card p-5 space-y-3">
+          <div id="ta-high-risk-schedule" className="card p-5 space-y-3 scroll-mt-6">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-coral-dark" />

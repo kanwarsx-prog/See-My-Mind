@@ -10,6 +10,8 @@ interface TeacherViewProps {
   timeline: ChildEvent[];
   briefing: MorningBriefing | null;
   latestHandover?: TransitionLogDetail | null;
+  activeSubView?: 'focused' | 'matrix';
+  onSubViewChange?: (view: 'focused' | 'matrix') => void;
   onRefreshBriefing: () => Promise<void>;
   onAcknowledgeHandover?: (transitionId: string) => Promise<void>;
   onOpenObservationModal: () => void;
@@ -29,6 +31,8 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   timeline,
   briefing,
   latestHandover,
+  activeSubView,
+  onSubViewChange,
   onRefreshBriefing,
   onAcknowledgeHandover,
   onOpenObservationModal,
@@ -37,10 +41,21 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   onLogMilestone,
   onLogDeEscalation,
 }) => {
-  const [activeTab, setActiveTab] = useState<'focused' | 'matrix'>('focused');
+  const [activeTab, setActiveTab] = useState<'focused' | 'matrix'>(activeSubView || 'focused');
   const [refreshing, setRefreshing] = useState(false);
   const [acknowledging, setAcknowledging] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(true);
+
+  React.useEffect(() => {
+    if (activeSubView && activeSubView !== activeTab) {
+      setActiveTab(activeSubView);
+    }
+  }, [activeSubView]);
+
+  const handleTabChange = (tab: 'focused' | 'matrix') => {
+    setActiveTab(tab);
+    onSubViewChange?.(tab);
+  };
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -87,7 +102,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-xs">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <button
-            onClick={() => setActiveTab('focused')}
+            onClick={() => handleTabChange('focused')}
             className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'focused'
                 ? 'bg-teal text-white shadow-xs'
@@ -99,7 +114,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           </button>
 
           <button
-            onClick={() => setActiveTab('matrix')}
+            onClick={() => handleTabChange('matrix')}
             className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'matrix'
                 ? 'bg-navy text-white shadow-xs'
@@ -117,7 +132,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
       </div>
 
       {activeTab === 'matrix' ? (
-        <ClassSendMatrix onSelectPupil={() => setActiveTab('focused')} />
+        <ClassSendMatrix onSelectPupil={() => handleTabChange('focused')} />
       ) : (
         <>
           {/* KPI Stats Strip */}
@@ -206,7 +221,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
       </div>
 
       {/* ⭐ PRE-FLIGHT MORNING HANDOVER & OPERATIONAL RISK CARD */}
-      <div className={`card p-5 border-l-4 transition-all ${
+      <div id="preflight-handover" className={`card p-5 border-l-4 transition-all scroll-mt-6 ${
         effectiveHandover?.acknowledged_by_staff
           ? 'border-l-emerald-600 bg-white'
           : 'border-l-amber-dark bg-amber-50/25 border-amber-200'
@@ -391,15 +406,17 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           />
 
           {/* Adapted Learning Pathway — This Lesson */}
-          <AdaptedPathwayCard
-            onOpenWorksheet={onOpenWorksheet}
-            onLogMilestone={onLogMilestone}
-          />
+          <div id="adapted-pathway" className="scroll-mt-6">
+            <AdaptedPathwayCard
+              onOpenWorksheet={onOpenWorksheet}
+              onLogMilestone={onLogMilestone}
+            />
+          </div>
         </div>
 
         {/* Right Column: Live Timeline of Events */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="card p-4">
+          <div id="daily-evidence-timeline" className="card p-4 scroll-mt-6">
             <div className="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
               <h3 className="text-xs font-bold text-navy uppercase tracking-wider">Live Pupil Timeline</h3>
               <div className="flex items-center gap-2">

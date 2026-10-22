@@ -51,7 +51,7 @@ export const ChildView: React.FC<ChildViewProps> = ({ child, onCheckIn, onOpenWo
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* CHILD HERO GREETING & EMOJI CHECK-IN */}
-      <div className="card p-4 sm:p-6 bg-gradient-to-br from-[#1A3A4A] via-[#2D5A6E] to-[#1A3A4A] text-white rounded-3xl text-center shadow-lg relative overflow-hidden">
+      <div id="child-mood-checkin" className="card p-4 sm:p-6 bg-gradient-to-br from-[#1A3A4A] via-[#2D5A6E] to-[#1A3A4A] text-white rounded-3xl text-center shadow-lg relative overflow-hidden scroll-mt-6">
         <div className="absolute right-4 top-2 text-7xl opacity-5 select-none pointer-events-none">⭐</div>
         <div className="font-serif text-xl sm:text-2xl font-bold mb-1">
           How are you feeling right now, {child.preferred_name || 'Phoenix'}?
@@ -133,7 +133,7 @@ export const ChildView: React.FC<ChildViewProps> = ({ child, onCheckIn, onOpenWo
         {/* Left Column: Today's Wins & Toolkit */}
         <div className="lg:col-span-6 space-y-5">
           {/* Today's Wins Card */}
-          <div className="card p-5 space-y-3">
+          <div id="child-star-wins" className="card p-5 space-y-3 scroll-mt-6">
             <div className="flex items-center justify-between border-b border-gray-100 pb-2">
               <div className="flex items-center gap-2">
                 <span className="text-base">⭐</span>

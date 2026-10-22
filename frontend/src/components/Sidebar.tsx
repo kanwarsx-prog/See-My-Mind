@@ -15,13 +15,15 @@ import {
   Award,
   Sun,
   Layers,
+  BatteryCharging,
+  Pill,
   X,
 } from 'lucide-react';
 
-interface NavItem {
+export interface NavItem {
+  id: string;
   label: string;
   icon: any;
-  active: boolean;
   action?: () => void;
 }
 
@@ -38,9 +40,13 @@ interface PersonaInfo {
 interface SidebarProps {
   activeView: RoleView;
   currentUser?: UserProfile | null;
+  activeNavId?: string;
+  onSelectNav?: (navId: string) => void;
   onLogout: () => void;
   onSwitchPersona: () => void;
   onRegisterChild?: () => void;
+  onOpenWorksheet?: (key: string) => void;
+  onOpenObservationModal?: () => void;
   isMobileOpen?: boolean;
   onCloseMobile?: () => void;
 }
@@ -48,39 +54,120 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeView,
   currentUser,
+  activeNavId,
+  onSelectNav,
   onLogout,
   onSwitchPersona,
   onRegisterChild,
+  onOpenWorksheet,
+  onOpenObservationModal,
   isMobileOpen = false,
   onCloseMobile,
 }) => {
+  const scrollTo = (id: string) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
   const personaDict: Record<RoleView, PersonaInfo> = {
     teacher: {
       av: 'MJ',
-      name: currentUser?.full_name || 'Ms Johnson',
+      name: currentUser?.full_name || 'Ms Clara Johnson',
       roleTitle: 'Classroom Teacher',
       sub: 'Year 5 · Room 4',
       bg: '#5E4D9A',
       icon: GraduationCap,
       navItems: [
-        { label: 'Room 4 Classroom Hub', icon: Layers, active: true },
-        { label: 'Pre-Flight Handovers', icon: Sun, active: false },
-        { label: 'Adapted Lesson Pathways', icon: BookOpen, active: false },
-        { label: 'Daily Evidence Logs', icon: FileText, active: false },
+        {
+          id: 'room4-matrix',
+          label: 'Room 4 Classroom Hub',
+          icon: Layers,
+          action: () => {
+            onSelectNav?.('room4-matrix');
+          },
+        },
+        {
+          id: 'preflight-handover',
+          label: 'Pre-Flight Handovers',
+          icon: Sun,
+          action: () => {
+            onSelectNav?.('preflight-handover');
+            scrollTo('preflight-handover');
+          },
+        },
+        {
+          id: 'lesson-pathways',
+          label: 'Adapted Lesson Pathways',
+          icon: BookOpen,
+          action: () => {
+            onSelectNav?.('lesson-pathways');
+            if (onOpenWorksheet) {
+              onOpenWorksheet('graphs');
+            } else {
+              scrollTo('adapted-pathway');
+            }
+          },
+        },
+        {
+          id: 'evidence-logs',
+          label: 'Daily Evidence Logs',
+          icon: FileText,
+          action: () => {
+            onSelectNav?.('evidence-logs');
+            if (onOpenObservationModal) {
+              onOpenObservationModal();
+            } else {
+              scrollTo('daily-evidence-timeline');
+            }
+          },
+        },
       ],
     },
     senco: {
       av: 'MO',
-      name: currentUser?.full_name || 'Ms Okafor',
+      name: currentUser?.full_name || 'Amara Okafor',
       roleTitle: 'SENCO & Inclusion Lead',
-      sub: "Whole School SEND",
+      sub: 'Whole School SEND',
       bg: '#2A6B62',
       icon: ShieldCheck,
       navItems: [
-        { label: 'Inclusion & Caseload', icon: Layers, active: true },
-        { label: '+ Register SEND Pupil', icon: FileText, active: false, action: onRegisterChild },
-        { label: 'Statutory EHCP Plans', icon: BookOpen, active: false },
-        { label: 'NOYA longitudinal Query', icon: Sparkles, active: false },
+        {
+          id: 'provision_map',
+          label: 'Inclusion & Caseload',
+          icon: Layers,
+          action: () => {
+            onSelectNav?.('provision_map');
+          },
+        },
+        {
+          id: 'register_pupil',
+          label: '+ Register SEND Pupil',
+          icon: FileText,
+          action: () => {
+            onSelectNav?.('register_pupil');
+            onRegisterChild?.();
+          },
+        },
+        {
+          id: 'review_pack',
+          label: 'Statutory EHCP Plans',
+          icon: BookOpen,
+          action: () => {
+            onSelectNav?.('review_pack');
+          },
+        },
+        {
+          id: 'assistant',
+          label: 'NOYA Longitudinal Query',
+          icon: Sparkles,
+          action: () => {
+            onSelectNav?.('assistant');
+          },
+        },
       ],
     },
     parent: {
@@ -91,10 +178,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
       bg: '#B87A2A',
       icon: HeartHandshake,
       navItems: [
-        { label: 'Home-School Hub', icon: Layers, active: true },
-        { label: 'Morning Handover', icon: Sun, active: false },
-        { label: "Today's Milestones", icon: Award, active: false },
-        { label: 'Tonight Support Tips', icon: Clock, active: false },
+        {
+          id: 'bridge',
+          label: '3:15 PM Decompression Bridge',
+          icon: BatteryCharging,
+          action: () => {
+            onSelectNav?.('bridge');
+          },
+        },
+        {
+          id: 'handover',
+          label: '24-Hour Handover Loop',
+          icon: Clock,
+          action: () => {
+            onSelectNav?.('handover');
+          },
+        },
+        {
+          id: 'correlation',
+          label: 'Medication & Routine Digest',
+          icon: Pill,
+          action: () => {
+            onSelectNav?.('correlation');
+          },
+        },
+        {
+          id: 'wins',
+          label: 'Wins & Strengths Space',
+          icon: Award,
+          action: () => {
+            onSelectNav?.('wins');
+          },
+        },
       ],
     },
     child: {
@@ -105,9 +220,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
       bg: '#C5503E',
       icon: User,
       navItems: [
-        { label: 'My Mood Check-In', icon: Sun, active: true },
-        { label: 'My Star Wins', icon: Award, active: false },
-        { label: 'Interactive Worksheets', icon: BookOpen, active: false },
+        {
+          id: 'child-checkin',
+          label: 'My Mood Check-In',
+          icon: Sun,
+          action: () => {
+            onSelectNav?.('child-checkin');
+            scrollTo('child-mood-checkin');
+          },
+        },
+        {
+          id: 'child-wins',
+          label: 'My Star Wins',
+          icon: Award,
+          action: () => {
+            onSelectNav?.('child-wins');
+            scrollTo('child-star-wins');
+          },
+        },
+        {
+          id: 'child-worksheets',
+          label: 'Interactive Worksheets',
+          icon: BookOpen,
+          action: () => {
+            onSelectNav?.('child-worksheets');
+            onOpenWorksheet?.('graphs');
+          },
+        },
       ],
     },
     ta: {
@@ -118,9 +257,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
       bg: '#4CAF82',
       icon: Users,
       navItems: [
-        { label: '1-to-1 Support Hub', icon: Layers, active: true },
-        { label: 'High-Risk Schedule', icon: Clock, active: false },
-        { label: 'Rapid Micro-Logs', icon: FileText, active: false },
+        {
+          id: 'ta-hub',
+          label: '1-to-1 Support Hub',
+          icon: Layers,
+          action: () => {
+            onSelectNav?.('ta-hub');
+            scrollTo('ta-support-hub');
+          },
+        },
+        {
+          id: 'ta-schedule',
+          label: 'High-Risk Schedule',
+          icon: Clock,
+          action: () => {
+            onSelectNav?.('ta-schedule');
+            scrollTo('ta-high-risk-schedule');
+          },
+        },
+        {
+          id: 'ta-micrologs',
+          label: 'Rapid Micro-Logs',
+          icon: FileText,
+          action: () => {
+            onSelectNav?.('ta-micrologs');
+            if (onOpenObservationModal) {
+              onOpenObservationModal();
+            } else {
+              scrollTo('ta-quick-log');
+            }
+          },
+        },
       ],
     },
     parentplus: {
@@ -131,13 +298,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
       bg: '#E8B84B',
       icon: Award,
       navItems: [
-        { label: 'Post-16 Careers Hub', icon: Layers, active: true },
+        {
+          id: 'post16-hub',
+          label: 'Post-16 Careers Hub',
+          icon: Layers,
+          action: () => {
+            onSelectNav?.('post16-hub');
+          },
+        },
       ],
     },
   };
 
   const personaMeta = personaDict[activeView] || personaDict.teacher;
   const RoleIcon = personaMeta.icon;
+
+  // Active check helper
+  const isItemActive = (item: NavItem, idx: number) => {
+    if (activeNavId) {
+      return activeNavId === item.id;
+    }
+    return idx === 0;
+  };
 
   return (
     <>
@@ -228,20 +410,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="space-y-1">
               {personaMeta.navItems.map((item, idx) => {
                 const ItemIcon = item.icon;
+                const active = isItemActive(item, idx);
                 return (
                   <button
-                    key={idx}
+                    key={item.id}
                     onClick={() => {
                       item.action?.();
                       onCloseMobile?.();
                     }}
                     className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
-                      item.active
+                      active
                         ? 'bg-teal text-white shadow-sm font-bold'
                         : 'text-white/60 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    <ItemIcon className="w-4 h-4 text-mint/80 flex-shrink-0" />
+                    <ItemIcon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-mint/80'}`} />
                     <span>{item.label}</span>
                   </button>
                 );
