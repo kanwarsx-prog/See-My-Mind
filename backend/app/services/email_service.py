@@ -1,13 +1,90 @@
+import logging
+import smtplib
 import uuid
 from datetime import UTC, datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
+import httpx
+
+from app.core.config import settings
 from app.schemas.registration import DispatchedEmailPreview
+
+logger = logging.getLogger(__name__)
 
 # In-memory store of recent dispatched emails for developer/staging preview
 _RECENT_DISPATCHED_EMAILS: list[DispatchedEmailPreview] = []
 
 
 class EmailService:
+    @staticmethod
+    def _dispatch_via_resend(
+        to_email: str, subject: str, html_content: str
+    ) -> tuple[bool, str | None, str | None]:
+        """Dispatch email using Resend REST API (HTTPS port 443)."""
+        api_key = settings.RESEND_API_KEY.strip()
+        if not api_key:
+            return False, None, None
+
+        url = "https://api.resend.com/emails"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "from": settings.FROM_EMAIL,
+            "to": [to_email],
+            "subject": subject,
+            "html": html_content,
+        }
+
+        try:
+            with httpx.Client(timeout=10.0) as client:
+                resp = client.post(url, headers=headers, json=payload)
+                if resp.status_code in (200, 201):
+                    res_data = resp.json()
+                    external_id = res_data.get("id")
+                    logger.info("Resend email dispatched successfully: %s to %s", external_id, to_email)
+                    return True, external_id, None
+                else:
+                    err_detail = f"Resend API error {resp.status_code}: {resp.text}"
+                    logger.warning(err_detail)
+                    return False, None, err_detail
+        except Exception as e:
+            err_detail = f"Resend request exception: {e!s}"
+            logger.error(err_detail)
+            return False, None, err_detail
+
+    @staticmethod
+    def _dispatch_via_smtp(
+        to_email: str, subject: str, html_content: str
+    ) -> tuple[bool, str | None, str | None]:
+        """Dispatch email using standard SMTP with STARTTLS."""
+        if not settings.SMTP_HOST.strip() or not settings.SMTP_USER.strip():
+            return False, None, None
+
+        try:
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = subject
+            msg["From"] = settings.FROM_EMAIL
+            msg["To"] = to_email
+
+            part = MIMEText(html_content, "html")
+            msg.attach(part)
+
+            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10.0) as server:
+                server.starttls()
+                if settings.SMTP_PASSWORD:
+                    server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.sendmail(settings.FROM_EMAIL, [to_email], msg.as_string())
+
+            logger.info("SMTP email dispatched successfully to %s", to_email)
+            return True, f"smtp-{uuid.uuid4().hex[:8]}", None
+        except Exception as e:
+            err_detail = f"SMTP error: {e!s}"
+            logger.error(err_detail)
+            return False, None, err_detail
+
     @staticmethod
     def send_parent_invitation(
         to_email: str,
@@ -18,7 +95,7 @@ class EmailService:
         base_url: str = "https://see-my-mind.onrender.com",
     ) -> DispatchedEmailPreview:
         """Render and dispatch parent onboarding invitation email.
-        In dev/staging, registers in the preview queue for immediate verification.
+        Delivers via Resend REST API if configured, SMTP if set, or saves to in-app preview queue.
         """
         activation_url = f"{base_url}/onboard?token={token}&role=parent"
         email_id = str(uuid.uuid4())
@@ -90,6 +167,31 @@ class EmailService:
 </html>
         """
 
+        delivery_channel = "preview"
+        external_id = None
+        delivery_error = None
+
+        # 1. Attempt Resend REST API delivery
+        if settings.RESEND_API_KEY.strip():
+            success, ext_id, err = EmailService._dispatch_via_resend(
+                to_email=to_email, subject=subject, html_content=html_content
+            )
+            if success:
+                delivery_channel = "resend"
+                external_id = ext_id
+            else:
+                delivery_error = err
+        # 2. Fallback to standard SMTP
+        elif settings.SMTP_HOST.strip() and settings.SMTP_USER.strip():
+            success, ext_id, err = EmailService._dispatch_via_smtp(
+                to_email=to_email, subject=subject, html_content=html_content
+            )
+            if success:
+                delivery_channel = "smtp"
+                external_id = ext_id
+            else:
+                delivery_error = err
+
         preview = DispatchedEmailPreview(
             id=email_id,
             to_email=to_email,
@@ -98,6 +200,9 @@ class EmailService:
             html_content=html_content,
             sent_at=datetime.now(UTC),
             activation_url=activation_url,
+            delivery_channel=delivery_channel,
+            external_id=external_id,
+            delivery_error=delivery_error,
         )
 
         _RECENT_DISPATCHED_EMAILS.insert(0, preview)

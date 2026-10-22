@@ -42,6 +42,9 @@ class DispatchedEmailPreview(BaseModel):
     html_content: str
     sent_at: datetime
     activation_url: str
+    delivery_channel: str = "preview"  # "resend", "smtp", "preview"
+    external_id: str | None = None
+    delivery_error: str | None = None
 
 
 class ChildRegistrationResponse(BaseModel):

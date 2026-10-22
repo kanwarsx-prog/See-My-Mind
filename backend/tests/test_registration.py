@@ -115,3 +115,72 @@ def test_rbac_child_registration_forbidden_for_non_senco(client):
     )
     assert resp.status_code == 403
     assert "Access denied" in resp.json()["detail"]
+
+
+def test_resend_email_dispatch_and_fallback(client, monkeypatch):
+    from unittest.mock import MagicMock
+
+    from app.core.config import settings
+
+    # Ensure school exists
+    school_resp = client.post(
+        "/api/v1/schools/",
+        json={
+            "school_name": "St. Jude's Inclusive Academy",
+            "school_reference": "SCH-RESEND-TEST",
+            "town_city": "London",
+            "postcode": "SE1 7PB",
+        },
+    )
+    school_id = school_resp.json()["id"]
+
+    # 1. Mock Resend HTTP POST response
+    mock_post = MagicMock()
+    mock_post.return_value.status_code = 200
+    mock_post.return_value.json.return_value = {"id": "resend_test_msg_888"}
+
+    monkeypatch.setattr(settings, "RESEND_API_KEY", "re_test_dummy_key_123")
+    monkeypatch.setattr("httpx.Client.post", mock_post)
+
+    resp = client.post(
+        "/api/v1/registration/children",
+        json={
+            "first_name": "Leo",
+            "last_name": "Davies",
+            "date_of_birth": "2016-03-12",
+            "school_id": school_id,
+            "guardian_first_name": "Mark",
+            "guardian_last_name": "Davies",
+            "guardian_email": "mark.davies@example.com",
+            "send_invitation_immediately": True,
+        },
+        headers={"X-User-Role": "senco"},
+    )
+
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["email_preview"] is not None
+    assert data["email_preview"]["delivery_channel"] == "resend"
+    assert data["email_preview"]["external_id"] == "resend_test_msg_888"
+
+    # 2. Test fallback when no Resend key is set
+    monkeypatch.setattr(settings, "RESEND_API_KEY", "")
+    resp2 = client.post(
+        "/api/v1/registration/children",
+        json={
+            "first_name": "Maya",
+            "last_name": "Lin",
+            "date_of_birth": "2016-07-22",
+            "school_id": school_id,
+            "guardian_first_name": "Lin",
+            "guardian_last_name": "Wei",
+            "guardian_email": "lin.wei@example.com",
+            "send_invitation_immediately": True,
+        },
+        headers={"X-User-Role": "senco"},
+    )
+    assert resp2.status_code == 201
+    data2 = resp2.json()
+    assert data2["email_preview"]["delivery_channel"] == "preview"
+    assert data2["email_preview"]["external_id"] is None
+

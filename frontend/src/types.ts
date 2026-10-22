@@ -169,9 +169,12 @@ export interface EmailPreview {
   to_email: string;
   subject: string;
   html_content: string;
-  preview_text: string;
+  preview_text?: string;
   activation_url: string;
   sent_at: string;
+  delivery_channel?: 'resend' | 'smtp' | 'preview';
+  external_id?: string;
+  delivery_error?: string;
 }
 
 export interface ChildRegistrationRequest {

@@ -561,7 +561,20 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
                     className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-850 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between transition-colors"
                   >
                     <span className="flex items-center gap-2">
-                      <span>📧</span> Dispatched Transactional Email Preview
+                      <span>📧</span> Dispatched Transactional Email
+                      {registrationResult.email_preview.delivery_channel === 'resend' ? (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-700">
+                          Live Resend Delivered 🚀
+                        </span>
+                      ) : registrationResult.email_preview.delivery_channel === 'smtp' ? (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold border border-blue-300 dark:border-blue-700">
+                          Live SMTP Delivered 📬
+                        </span>
+                      ) : (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold border border-amber-300 dark:border-amber-700">
+                          In-App Preview Mode 🧪
+                        </span>
+                      )}
                     </span>
                     <span>{showEmailPreview ? '▲ Hide' : '▼ Expand'}</span>
                   </button>

@@ -24,6 +24,14 @@ class Settings(BaseSettings):
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     EMBEDDING_DIMENSION: int = 1536
 
+    # Transactional Email (Resend & SMTP)
+    RESEND_API_KEY: str = ""
+    FROM_EMAIL: str = "See My Mind <onboarding@resend.dev>"
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+
     # CORS configuration
     BACKEND_CORS_ORIGINS: list[str] = [
         "http://localhost:3000",
