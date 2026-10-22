@@ -553,6 +553,19 @@ export const RegisterChildModal: React.FC<RegisterChildModalProps> = ({
                 </div>
               )}
 
+              {/* Delivery Warning / Error notice */}
+              {registrationResult.email_preview?.delivery_error && (
+                <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 text-xs space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-amber-800 dark:text-amber-300">
+                    <span>⚠️</span>
+                    <span>Email Delivery Notice:</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-amber-700 dark:text-amber-300/90 font-mono">
+                    {registrationResult.email_preview.delivery_error}
+                  </p>
+                </div>
+              )}
+
               {/* Transactional Email Preview Toggle */}
               {registrationResult.email_preview && (
                 <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
