@@ -6,6 +6,7 @@ from app.models.ai_noya import (
     RAGChunkIndex,
     RAGSourceDocument,
 )
+from app.models.auth import ChildAccount, Invitation, User
 from app.models.base import TimestampedUUIDModel
 from app.models.organisation import AcademicYear, School, StaffMember, StaffSchoolAssignment
 from app.models.pupil import Child, ChildGuardianLink, ChildSchoolEnrolment, Guardian
@@ -33,6 +34,7 @@ __all__ = [
     "Base",
     "BehaviouralIncident",
     "Child",
+    "ChildAccount",
     "ChildCheckIn",
     "ChildDistressIndicator",
     "ChildEvent",
@@ -43,6 +45,7 @@ __all__ = [
     "ChildTrigger",
     "FollowUpAction",
     "Guardian",
+    "Invitation",
     "Observation",
     "RAGChunkIndex",
     "RAGSourceDocument",
@@ -52,4 +55,5 @@ __all__ = [
     "SupportStrategy",
     "TimestampedUUIDModel",
     "TransitionLog",
+    "User",
 ]

@@ -1,4 +1,18 @@
-import { Child, ChildEvent, MorningBriefing, AskNoyaResponse, TransitionLogDetail } from './types';
+import {
+  Child,
+  ChildEvent,
+  MorningBriefing,
+  AskNoyaResponse,
+  TransitionLogDetail,
+  ChildRegistrationRequest,
+  ChildRegistrationResponse,
+  InvitationValidationResponse,
+  AcceptInvitationRequest,
+  ChildAccountSetupRequest,
+  ChildAccountResponse,
+  EmailPreview,
+  UserProfile,
+} from './types';
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -6,23 +20,133 @@ const API_BASE =
     ? '/api/v1'
     : 'https://see-my-mind.onrender.com/api/v1');
 
+let activeRole = 'senco';
+let activeToken: string | null = typeof window !== 'undefined' ? localStorage.getItem('smm_auth_token') : null;
+
+export const setApiRole = (role: string) => {
+  activeRole = role;
+};
+
+export const setAuthToken = (token: string | null) => {
+  activeToken = token;
+  if (typeof window !== 'undefined') {
+    if (token) {
+      localStorage.setItem('smm_auth_token', token);
+    } else {
+      localStorage.removeItem('smm_auth_token');
+    }
+  }
+};
+
+const getHeaders = (extra: Record<string, string> = {}) => {
+  const h: Record<string, string> = {
+    'X-User-Role': activeRole,
+    ...extra,
+  };
+  if (activeToken) {
+    h['Authorization'] = `Bearer ${activeToken}`;
+  }
+  return h;
+};
+
 export const api = {
   // Pupils
   async getPupils(): Promise<Child[]> {
-    const res = await fetch(`${API_BASE}/pupils/`);
+    const res = await fetch(`${API_BASE}/pupils/`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Failed to fetch pupils');
     return res.json();
   },
 
   async getChild(childId: string): Promise<Child> {
-    const res = await fetch(`${API_BASE}/pupils/${childId}`);
+    const res = await fetch(`${API_BASE}/pupils/${childId}`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Failed to fetch child details');
+    return res.json();
+  },
+
+  // Registration & Onboarding
+  async registerChild(payload: ChildRegistrationRequest): Promise<ChildRegistrationResponse> {
+    const res = await fetch(`${API_BASE}/registration/children`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to register pupil');
+    }
+    return res.json();
+  },
+
+  async validateInvitation(token: string): Promise<InvitationValidationResponse> {
+    const res = await fetch(`${API_BASE}/registration/invitations/${encodeURIComponent(token)}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to validate invitation');
+    }
+    return res.json();
+  },
+
+  async acceptInvitation(payload: AcceptInvitationRequest): Promise<{
+    message: string;
+    access_token: string;
+    token_type: string;
+    user: UserProfile;
+  }> {
+    const res = await fetch(`${API_BASE}/registration/accept-invitation`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to accept invitation');
+    }
+    const data = await res.json();
+    if (data.access_token) {
+      setAuthToken(data.access_token);
+    }
+    return data;
+  },
+
+  async setupChildAccount(
+    childId: string,
+    payload: ChildAccountSetupRequest
+  ): Promise<ChildAccountResponse> {
+    const res = await fetch(`${API_BASE}/registration/children/${childId}/setup-child-account`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to set up child voice account');
+    }
+    return res.json();
+  },
+
+  async getRecentInvitations(): Promise<EmailPreview[]> {
+    const res = await fetch(`${API_BASE}/registration/recent-invitations`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) return [];
+    return res.json();
+  },
+
+  async getCurrentUser(): Promise<UserProfile | null> {
+    const res = await fetch(`${API_BASE}/registration/current-user`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) return null;
     return res.json();
   },
 
   // Timeline / Events
   async getTimeline(childId: string): Promise<ChildEvent[]> {
-    const res = await fetch(`${API_BASE}/timeline/children/${childId}/events`);
+    const res = await fetch(`${API_BASE}/timeline/children/${childId}/events`, {
+      headers: getHeaders(),
+    });
     if (!res.ok) throw new Error('Failed to fetch timeline');
     return res.json();
   },
@@ -30,7 +154,7 @@ export const api = {
   async logEvent(eventData: any): Promise<ChildEvent> {
     const res = await fetch(`${API_BASE}/timeline/events`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(eventData),
     });
     if (!res.ok) throw new Error('Failed to log event');
@@ -53,7 +177,7 @@ export const api = {
       `${API_BASE}/transitions/morning-handover/${childId}?parent_name=${encodeURIComponent(parentName)}`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(handoverData),
       }
     );
@@ -64,13 +188,16 @@ export const api = {
   async acknowledgeTransition(transitionId: string): Promise<any> {
     const res = await fetch(`${API_BASE}/transitions/transitions/${transitionId}/acknowledge`, {
       method: 'PATCH',
+      headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to acknowledge transition');
     return res.json();
   },
 
   async getLatestHandover(childId: string): Promise<TransitionLogDetail | null> {
-    const res = await fetch(`${API_BASE}/transitions/children/${childId}/latest`);
+    const res = await fetch(`${API_BASE}/transitions/children/${childId}/latest`, {
+      headers: getHeaders(),
+    });
     if (!res.ok) throw new Error('Failed to fetch latest handover');
     return res.json();
   },
@@ -79,6 +206,7 @@ export const api = {
   async getMorningBriefing(childId: string): Promise<MorningBriefing> {
     const res = await fetch(`${API_BASE}/noya/morning-briefing/${childId}`, {
       method: 'POST',
+      headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to generate NOYA briefing');
     return res.json();
@@ -87,7 +215,7 @@ export const api = {
   async askNoya(childId: string, question: string): Promise<AskNoyaResponse> {
     const res = await fetch(`${API_BASE}/noya/ask`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ child_id: childId, question }),
     });
     if (!res.ok) throw new Error('Failed to query NOYA');
@@ -101,7 +229,7 @@ export const api = {
   ): Promise<ChildEvent> {
     const res = await fetch(`${API_BASE}/timeline/children/${childId}/check-in`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(checkIn),
     });
     if (!res.ok) throw new Error('Failed to submit pupil check-in');
@@ -112,7 +240,7 @@ export const api = {
   async logIncident(incident: any): Promise<any> {
     const res = await fetch(`${API_BASE}/incidents/`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(incident),
     });
     if (!res.ok) throw new Error('Failed to submit ABC incident');
@@ -120,7 +248,9 @@ export const api = {
   },
 
   async getIncidents(childId: string): Promise<any[]> {
-    const res = await fetch(`${API_BASE}/incidents/children/${childId}`);
+    const res = await fetch(`${API_BASE}/incidents/children/${childId}`, {
+      headers: getHeaders(),
+    });
     if (!res.ok) throw new Error('Failed to fetch incidents');
     return res.json();
   },
@@ -138,8 +268,12 @@ export const api = {
     formData.append('document_type', documentType);
     formData.append('file', file);
 
+    const headers = getHeaders();
+    delete headers['Content-Type']; // let browser set multipart boundary
+
     const res = await fetch(`${API_BASE}/documents/upload`, {
       method: 'POST',
+      headers,
       body: formData,
     });
     if (!res.ok) throw new Error('Failed to upload document');
@@ -147,7 +281,9 @@ export const api = {
   },
 
   async getDocuments(childId: string): Promise<any[]> {
-    const res = await fetch(`${API_BASE}/documents/children/${childId}`);
+    const res = await fetch(`${API_BASE}/documents/children/${childId}`, {
+      headers: getHeaders(),
+    });
     if (!res.ok) throw new Error('Failed to fetch documents');
     return res.json();
   },

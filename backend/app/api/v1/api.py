@@ -6,6 +6,7 @@ from app.api.v1.endpoints import (
     incidents,
     noya,
     pupils,
+    registration,
     schools,
     timeline,
     transitions,
@@ -25,3 +26,6 @@ api_router.include_router(
 )
 api_router.include_router(documents.router, prefix="/documents", tags=["EHCP & Document Storage"])
 api_router.include_router(noya.router, prefix="/noya", tags=["NOYA AI & RAG Engine"])
+api_router.include_router(
+    registration.router, prefix="/registration", tags=["Child Registration & Onboarding"]
+)

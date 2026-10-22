@@ -8,6 +8,7 @@ interface SencoViewProps {
   timeline: ChildEvent[];
   onOpenDocModal?: () => void;
   onOpenIncidentModal?: () => void;
+  onRegisterChild?: () => void;
 }
 
 export const SencoView: React.FC<SencoViewProps> = ({
@@ -15,6 +16,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
   timeline,
   onOpenDocModal,
   onOpenIncidentModal,
+  onRegisterChild,
 }) => {
   const [query, setQuery] = useState('What sensory calming strategies have proven most effective this month?');
   const [loading, setLoading] = useState(false);
@@ -46,6 +48,28 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* SENCO Header Bar & Quick Register Action */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-xs">
+        <div>
+          <h2 className="text-base font-bold text-navy flex items-center gap-2">
+            <span>SEND Coordination & Caseload Management</span>
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-teal/10 text-teal font-semibold">St. Jude&apos;s Academy</span>
+          </h2>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Manage statutory EHCP provisions, register new SEND pupils, and link parent onboarding credentials.
+          </p>
+        </div>
+        {onRegisterChild && (
+          <button
+            onClick={onRegisterChild}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal to-teal-dark hover:from-teal-dark hover:to-teal text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer flex-shrink-0"
+          >
+            <span>📋</span>
+            <span>+ Register SEND Pupil</span>
+          </button>
+        )}
+      </div>
+
       {/* SENCO Header Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <div className="stat-card border-teal">

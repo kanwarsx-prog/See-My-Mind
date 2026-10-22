@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { RoleView, Child, ChildEvent, MorningBriefing, IncidentSubmission, TransitionLogDetail } from './types';
-import { api } from './api';
+import {
+  RoleView,
+  Child,
+  ChildEvent,
+  MorningBriefing,
+  IncidentSubmission,
+  TransitionLogDetail,
+  EmailPreview,
+} from './types';
+import { api, setApiRole } from './api';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { ObservationModal } from './components/ObservationModal';
 import { IncidentModal } from './components/IncidentModal';
 import { DocumentUploadModal } from './components/DocumentUploadModal';
 import { WorksheetModal } from './components/WorksheetModal';
+import { RegisterChildModal } from './components/RegisterChildModal';
+import { ParentOnboardingModal } from './components/ParentOnboardingModal';
+import { InvitationNotificationBanner } from './components/InvitationNotificationBanner';
 import { TeacherView } from './views/TeacherView';
 import { ParentView } from './views/ParentView';
 import { SencoView } from './views/SencoView';
@@ -17,6 +28,7 @@ import { Plus } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeView, setActiveView] = useState<RoleView>('teacher');
+  const [pupils, setPupils] = useState<Child[]>([]);
   const [child, setChild] = useState<Child | null>(null);
   const [timeline, setTimeline] = useState<ChildEvent[]>([]);
   const [briefing, setBriefing] = useState<MorningBriefing | null>(null);
@@ -28,24 +40,61 @@ export const App: React.FC = () => {
   const [isWorksheetModalOpen, setIsWorksheetModalOpen] = useState(false);
   const [activeWorksheet, setActiveWorksheet] = useState('graphs');
 
+  // Registration & Onboarding state
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isParentOnboardingOpen, setIsParentOnboardingOpen] = useState(false);
+  const [onboardingToken, setOnboardingToken] = useState<string | null>(null);
+  const [latestInvitation, setLatestInvitation] = useState<EmailPreview | null>(null);
+
+  // Sync API role when active view changes
+  const handleViewChange = (view: RoleView) => {
+    setActiveView(view);
+    const backendRole = view === 'parentplus' ? 'parent' : view;
+    setApiRole(backendRole);
+  };
+
+  // Switch active pupil
+  const handleChildSelect = async (childId: string) => {
+    const selected = pupils.find((p) => p.id === childId);
+    if (!selected) return;
+    setChild(selected);
+    try {
+      const [events, brief, handover] = await Promise.all([
+        api.getTimeline(selected.id),
+        api.getMorningBriefing(selected.id).catch(() => null),
+        api.getLatestHandover(selected.id).catch(() => null),
+      ]);
+      setTimeline(events);
+      setBriefing(brief);
+      setLatestHandover(handover);
+    } catch (err) {
+      console.error('Error fetching child data:', err);
+    }
+  };
+
   // Load pupil, timeline, and morning handover from live backend
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
-        const pupils = await api.getPupils();
-        if (pupils.length > 0) {
-          const selected = pupils[0]; // Phoenix Carter
+        const pupilList = await api.getPupils();
+        setPupils(pupilList);
+        if (pupilList.length > 0) {
+          const selected = pupilList[0]; // Primary pupil
           setChild(selected);
 
-          const [events, brief, handover] = await Promise.all([
+          const [events, brief, handover, recentInvites] = await Promise.all([
             api.getTimeline(selected.id),
             api.getMorningBriefing(selected.id).catch(() => null),
             api.getLatestHandover(selected.id).catch(() => null),
+            api.getRecentInvitations().catch(() => []),
           ]);
           setTimeline(events);
           setBriefing(brief);
           setLatestHandover(handover);
+          if (recentInvites && recentInvites.length > 0) {
+            setLatestInvitation(recentInvites[0]);
+          }
         }
       } catch (err) {
         console.error('Error connecting to backend:', err);
@@ -55,6 +104,36 @@ export const App: React.FC = () => {
     }
     loadData();
   }, []);
+
+  const handleChildRegistered = async (newChildId: string) => {
+    try {
+      const pupilList = await api.getPupils();
+      setPupils(pupilList);
+      const recentInvites = await api.getRecentInvitations().catch(() => []);
+      if (recentInvites && recentInvites.length > 0) {
+        setLatestInvitation(recentInvites[0]);
+      }
+      if (newChildId) {
+        await handleChildSelect(newChildId);
+      }
+    } catch (err) {
+      console.error('Error refreshing after registration:', err);
+    }
+  };
+
+  const handleOpenParentOnboarding = (token: string) => {
+    setOnboardingToken(token);
+    setIsParentOnboardingOpen(true);
+  };
+
+  const handleOnboardingCompleted = async (childId?: string, activatedRole?: string) => {
+    if (childId) {
+      await handleChildSelect(childId);
+    }
+    if (activatedRole) {
+      handleViewChange(activatedRole as RoleView);
+    }
+  };
 
   const handleRefreshBriefing = async () => {
     if (!child) return;
@@ -211,13 +290,18 @@ export const App: React.FC = () => {
       title: 'Inclusion & SEND Dashboard · Ms Okafor',
       subtitle: 'St. Jude’s Inclusive Academy · Autumn Term 2026',
       pills: [
-        { label: '34 Pupils on Caseload', color: 'teal' as const },
+        { label: `${pupils.length} Pupils on Caseload`, color: 'teal' as const },
         { label: '12 Active EHCPs', color: 'purple' as const },
       ],
+      actionButton: {
+        label: '+ Register SEND Pupil',
+        onClick: () => setIsRegisterModalOpen(true),
+        icon: <Plus className="w-4 h-4" />,
+      },
     },
     parent: {
-      title: 'Phoenix Carter · Parent Hub',
-      subtitle: 'Dana Carter · Year 5 St. Jude’s Inclusive Academy',
+      title: `${child.preferred_name || child.first_name} ${child.last_name} · Parent Hub`,
+      subtitle: 'Parent & Home-School Communication · St. Jude’s Inclusive Academy',
       pills: [
         isHandoverAcknowledged
           ? { label: '✓ Read by Ms Johnson', color: 'green' as const }
@@ -226,15 +310,15 @@ export const App: React.FC = () => {
       ],
     },
     child: {
-      title: 'My Day · Phoenix Carter ⭐',
-      subtitle: 'St. Jude’s Inclusive Academy · Year 5',
+      title: `My Day · ${child.preferred_name || child.first_name} ⭐`,
+      subtitle: 'St. Jude’s Inclusive Academy · Pupil Voice',
       pills: [{ label: '😊 Feeling Great', color: 'green' as const }],
     },
     ta: {
       title: 'Teaching Assistant View · Melissa Grant',
-      subtitle: '1-to-1 Support Focus · Phoenix Carter',
+      subtitle: `1-to-1 Support Focus · ${child.preferred_name || child.first_name}`,
       pills: [
-        { label: '⚡ Phoenix: High Priority', color: 'red' as const },
+        { label: `⚡ ${child.preferred_name || child.first_name}: High Priority`, color: 'red' as const },
         { label: '🎧 Headphones at Door (8:55am)', color: 'amber' as const },
       ],
       actionButton: {
@@ -252,14 +336,22 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F7FAFB] text-[#1A3A4A] flex font-sans">
-      <Sidebar activeView={activeView} onViewChange={setActiveView} />
+      <Sidebar activeView={activeView} onViewChange={handleViewChange} />
 
-      <main className="ml-64 min-h-screen flex flex-col">
+      <main className="ml-64 min-h-screen flex flex-col flex-1">
+        <InvitationNotificationBanner
+          onOpenInvitation={handleOpenParentOnboarding}
+          latestInvitation={latestInvitation}
+        />
+
         <TopBar
           title={topBarConfig.title}
           subtitle={topBarConfig.subtitle}
           pills={topBarConfig.pills}
           actionButton={topBarConfig.actionButton}
+          pupils={pupils}
+          selectedChildId={child.id}
+          onSelectChild={handleChildSelect}
         />
 
         <div className="p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
@@ -293,6 +385,7 @@ export const App: React.FC = () => {
               timeline={timeline}
               onOpenDocModal={() => setIsDocModalOpen(true)}
               onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
+              onRegisterChild={() => setIsRegisterModalOpen(true)}
             />
           )}
 
@@ -345,6 +438,20 @@ export const App: React.FC = () => {
         onClose={() => setIsWorksheetModalOpen(false)}
         initialWorksheet={activeWorksheet}
         onCompleteStep={handleLogMilestone}
+      />
+
+      <RegisterChildModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)}
+        onRegistered={handleChildRegistered}
+        onOpenParentOnboarding={handleOpenParentOnboarding}
+      />
+
+      <ParentOnboardingModal
+        isOpen={isParentOnboardingOpen}
+        token={onboardingToken}
+        onClose={() => setIsParentOnboardingOpen(false)}
+        onCompleted={handleOnboardingCompleted}
       />
     </div>
   );

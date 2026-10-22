@@ -1,5 +1,6 @@
 import React from 'react';
-import { Database } from 'lucide-react';
+import { Database, UserCheck } from 'lucide-react';
+import { Child } from '../types';
 
 interface TopBarProps {
   title: string;
@@ -10,9 +11,20 @@ interface TopBarProps {
     onClick: () => void;
     icon?: React.ReactNode;
   };
+  pupils?: Child[];
+  selectedChildId?: string;
+  onSelectChild?: (childId: string) => void;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ title, subtitle, pills = [], actionButton }) => {
+export const TopBar: React.FC<TopBarProps> = ({
+  title,
+  subtitle,
+  pills = [],
+  actionButton,
+  pupils,
+  selectedChildId,
+  onSelectChild,
+}) => {
   const pillColors = {
     red: 'bg-coral-light text-coral-dark',
     amber: 'bg-amber-light text-amber-dark',
@@ -23,10 +35,29 @@ export const TopBar: React.FC<TopBarProps> = ({ title, subtitle, pills = [], act
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-white border-b border-[#EDF2F4] px-7 py-3.5 flex items-center justify-between shadow-sm">
-      <div>
-        <h1 className="text-base font-semibold text-navy tracking-tight">{title}</h1>
-        <p className="text-xs text-gray-500 font-normal">{subtitle}</p>
+    <header className="sticky top-0 z-20 bg-white border-b border-[#EDF2F4] px-7 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+      <div className="flex items-center gap-4">
+        <div>
+          <h1 className="text-base font-semibold text-navy tracking-tight">{title}</h1>
+          <p className="text-xs text-gray-500 font-normal">{subtitle}</p>
+        </div>
+
+        {pupils && pupils.length > 1 && onSelectChild && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200">
+            <UserCheck className="w-3.5 h-3.5 text-teal" />
+            <select
+              value={selectedChildId}
+              onChange={(e) => onSelectChild(e.target.value)}
+              className="text-xs font-semibold text-navy bg-transparent border-none focus:outline-none cursor-pointer"
+            >
+              {pupils.map((p) => (
+                <option key={p.id} value={p.id}>
+                  Pupil: {p.full_name || `${p.first_name} ${p.last_name}`} ({p.year_group || 'SEND'})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-2.5">
