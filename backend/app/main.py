@@ -1,12 +1,17 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 import app.models  # registers all models
 from app.api.v1.api import api_router
 from app.core.config import settings
 from app.core.database import Base, engine
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 
 @asynccontextmanager
@@ -42,11 +47,58 @@ app.add_middleware(
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/", tags=["Root"])
-def root():
+@app.get(f"{settings.API_V1_STR}", tags=["Root"])
+def api_root():
     return {
-        "message": "Welcome to See My Mind & NOYA AI Core API",
+        "message": f"Welcome to {settings.PROJECT_NAME} Core API",
         "docs": "/docs",
         "health": f"{settings.API_V1_STR}/health",
         "version": "0.1.0",
     }
+
+
+# Static frontend hosting & SPA fallback
+if STATIC_DIR.exists() and (STATIC_DIR / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+
+@app.get("/", tags=["Root"])
+def root(request: Request):
+    accept = request.headers.get("accept", "")
+    index_file = STATIC_DIR / "index.html"
+
+    # Explicit JSON request (e.g. API clients, testing)
+    if "application/json" in accept and "text/html" not in accept:
+        return {
+            "message": f"Welcome to {settings.PROJECT_NAME} Core API",
+            "docs": "/docs",
+            "health": f"{settings.API_V1_STR}/health",
+            "version": "0.1.0",
+        }
+
+    # Serve compiled React frontend
+    if index_file.exists():
+        return FileResponse(index_file)
+
+    return {
+        "message": f"Welcome to {settings.PROJECT_NAME} Core API",
+        "docs": "/docs",
+        "health": f"{settings.API_V1_STR}/health",
+        "version": "0.1.0",
+    }
+
+
+@app.get("/{full_path:path}", tags=["Frontend"])
+def serve_frontend_spa(full_path: str):
+    if full_path.startswith(("api", "docs", "redoc", "openapi.json")):
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    file_path = STATIC_DIR / full_path
+    if file_path.is_file():
+        return FileResponse(file_path)
+
+    index_file = STATIC_DIR / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+
+    raise HTTPException(status_code=404, detail="Not Found")
