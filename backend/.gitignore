@@ -47,6 +47,9 @@ htmlcov/
 *.db
 *.sqlite3
 
+# Uploads
+app/uploads/
+
 # IDE / Editors
 .vscode/
 .idea/

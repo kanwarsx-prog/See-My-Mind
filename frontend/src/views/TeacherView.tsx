@@ -8,6 +8,7 @@ interface TeacherViewProps {
   briefing: MorningBriefing | null;
   onRefreshBriefing: () => Promise<void>;
   onOpenObservationModal: () => void;
+  onOpenIncidentModal?: () => void;
 }
 
 export const TeacherView: React.FC<TeacherViewProps> = ({
@@ -16,6 +17,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   briefing,
   onRefreshBriefing,
   onOpenObservationModal,
+  onOpenIncidentModal,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(true);
@@ -192,7 +194,17 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           <div className="card p-4">
             <div className="flex items-center justify-between mb-3 border-b border-gray-100 pb-2">
               <h3 className="text-xs font-bold text-navy uppercase tracking-wider">Live Pupil Timeline</h3>
-              <span className="text-[10px] text-gray-400">Synced to Supabase</span>
+              <div className="flex items-center gap-2">
+                {onOpenIncidentModal && (
+                  <button
+                    onClick={onOpenIncidentModal}
+                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-coral-light text-coral-dark rounded-lg hover:bg-coral-200 cursor-pointer transition-all"
+                  >
+                    <span>+ Log ABC</span>
+                  </button>
+                )}
+                <span className="text-[10px] text-gray-400">Synced to Supabase</span>
+              </div>
             </div>
 
             <div className="space-y-3.5 max-h-[500px] overflow-y-auto pr-1">

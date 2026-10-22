@@ -100,4 +100,50 @@ export interface AskNoyaResponse {
   latency_ms: number;
 }
 
+export interface IncidentDetail {
+  id: string;
+  event_id: string;
+  child_id: string;
+  event_time: string;
+  reporter_name?: string;
+  reporter_type: string;
+  location?: string;
+  severity: string;
+  antecedent: string;
+  behaviour: string;
+  consequence: string;
+  de_escalation_strategy_used?: string;
+  recovery_time_minutes?: number;
+  parent_notified: boolean;
+  status: string;
+}
+
+export interface IncidentSubmission {
+  child_id: string;
+  reporter_name?: string;
+  reporter_type?: string;
+  location?: string;
+  severity: string;
+  antecedent: string;
+  behaviour: string;
+  consequence: string;
+  de_escalation_strategy_used?: string;
+  recovery_time_minutes?: number;
+  parent_notified?: boolean;
+  follow_up_action?: string;
+}
+
+export interface DocumentItem {
+  id: string;
+  child_id: string;
+  school_id?: string;
+  title: string;
+  document_type: string;
+  storage_path: string;
+  file_size_bytes?: number;
+  mime_type?: string;
+  is_indexed: boolean;
+  created_at: string;
+}
+
 export type RoleView = 'teacher' | 'senco' | 'parent' | 'child' | 'ta' | 'parentplus';

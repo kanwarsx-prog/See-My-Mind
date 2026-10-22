@@ -87,4 +87,62 @@ export const api = {
     if (!res.ok) throw new Error('Failed to query NOYA');
     return res.json();
   },
+
+  // Pupil Voice Check-In
+  async logCheckIn(
+    childId: string,
+    checkIn: { mood_emoji: string; mood_label: string; energy_level?: number; self_regulation_need?: string }
+  ): Promise<ChildEvent> {
+    const res = await fetch(`${API_BASE}/timeline/children/${childId}/check-in`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(checkIn),
+    });
+    if (!res.ok) throw new Error('Failed to submit pupil check-in');
+    return res.json();
+  },
+
+  // ABC Incidents & Safeguarding
+  async logIncident(incident: any): Promise<any> {
+    const res = await fetch(`${API_BASE}/incidents/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(incident),
+    });
+    if (!res.ok) throw new Error('Failed to submit ABC incident');
+    return res.json();
+  },
+
+  async getIncidents(childId: string): Promise<any[]> {
+    const res = await fetch(`${API_BASE}/incidents/children/${childId}`);
+    if (!res.ok) throw new Error('Failed to fetch incidents');
+    return res.json();
+  },
+
+  // EHCP Documents & Storage
+  async uploadDocument(
+    childId: string,
+    title: string,
+    documentType: string,
+    file: File
+  ): Promise<any> {
+    const formData = new FormData();
+    formData.append('child_id', childId);
+    formData.append('title', title);
+    formData.append('document_type', documentType);
+    formData.append('file', file);
+
+    const res = await fetch(`${API_BASE}/documents/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) throw new Error('Failed to upload document');
+    return res.json();
+  },
+
+  async getDocuments(childId: string): Promise<any[]> {
+    const res = await fetch(`${API_BASE}/documents/children/${childId}`);
+    if (!res.ok) throw new Error('Failed to fetch documents');
+    return res.json();
+  },
 };

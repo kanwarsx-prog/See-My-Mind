@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { RoleView, Child, ChildEvent, MorningBriefing } from './types';
+import { RoleView, Child, ChildEvent, MorningBriefing, IncidentSubmission } from './types';
 import { api } from './api';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
 import { ObservationModal } from './components/ObservationModal';
+import { IncidentModal } from './components/IncidentModal';
+import { DocumentUploadModal } from './components/DocumentUploadModal';
 import { TeacherView } from './views/TeacherView';
 import { ParentView } from './views/ParentView';
 import { SencoView } from './views/SencoView';
@@ -19,6 +21,8 @@ export const App: React.FC = () => {
   const [briefing, setBriefing] = useState<MorningBriefing | null>(null);
   const [loading, setLoading] = useState(true);
   const [isObsModalOpen, setIsObsModalOpen] = useState(false);
+  const [isIncidentModalOpen, setIsIncidentModalOpen] = useState(false);
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   // Load pupil and timeline from live backend
   useEffect(() => {
@@ -73,6 +77,24 @@ export const App: React.FC = () => {
     await handleRefreshBriefing();
   };
 
+  const handleChildCheckIn = async (checkInData: any) => {
+    if (!child) return;
+    const newEvent = await api.logCheckIn(child.id, checkInData);
+    setTimeline([newEvent, ...timeline]);
+  };
+
+  const handleLogIncident = async (incident: IncidentSubmission) => {
+    if (!child) return;
+    await api.logIncident(incident);
+    const refreshed = await api.getTimeline(child.id);
+    setTimeline(refreshed);
+  };
+
+  const handleUploadDocument = async (title: string, docType: string, file: File) => {
+    if (!child) return;
+    await api.uploadDocument(child.id, title, docType, file);
+  };
+
   if (loading || !child) {
     return (
       <div className="min-h-screen bg-[#F7FAFB] flex flex-col items-center justify-center space-y-3">
@@ -108,33 +130,36 @@ export const App: React.FC = () => {
     },
     parent: {
       title: 'Phoenix Carter · Parent Hub',
-      subtitle: 'Connected with St. Jude’s Academy',
-      pills: [{ label: 'Year 5 · Class 4', color: 'amber' as const }],
+      subtitle: 'Dana Carter · Year 5 St. Jude’s Inclusive Academy',
+      pills: [
+        { label: '✓ Handover Sent (7:45am)', color: 'green' as const },
+        { label: 'Noise Defenders in Bag', color: 'teal' as const },
+      ],
     },
     child: {
-      title: "Phoenix's Space ⭐",
-      subtitle: 'St. Jude’s Academy · Today',
-      pills: [{ label: 'Ready for learning', color: 'green' as const }],
+      title: 'My Day · Phoenix Carter ⭐',
+      subtitle: 'St. Jude’s Inclusive Academy · Year 5',
+      pills: [{ label: '😊 Feeling Great', color: 'green' as const }],
     },
     ta: {
-      title: 'Teaching Assistant Support · Melissa Grant',
-      subtitle: 'Focus: Phoenix Carter',
-      pills: [{ label: 'Visual Prompts Active', color: 'green' as const }],
+      title: 'Teaching Assistant View · Melissa Grant',
+      subtitle: '1-to-1 Support Focus · Phoenix Carter',
+      pills: [{ label: 'Noise Defenders Prepared', color: 'amber' as const }],
       actionButton: {
-        label: '+ Log TA Note',
+        label: '+ Log Note',
         onClick: () => setIsObsModalOpen(true),
         icon: <Plus className="w-4 h-4" />,
       },
     },
     parentplus: {
-      title: 'Parent Plus · Post-16 Pathways & Strengths',
-      subtitle: 'Longitudinal Career & Skill Matching',
-      pills: [{ label: '92% Game Design Match', color: 'gold' as const }],
+      title: 'Parent Plus · Post-16 Pathways',
+      subtitle: 'Longitudinal Strengths & Careers · Year 10+',
+      pills: [{ label: 'Top Match: Game Design (92%)', color: 'gold' as const }],
     },
   }[activeView];
 
   return (
-    <div className="min-h-screen bg-[#F7FAFB]">
+    <div className="min-h-screen bg-[#F7FAFB] text-[#1A3A4A] flex font-sans">
       <Sidebar activeView={activeView} onViewChange={setActiveView} />
 
       <main className="ml-64 min-h-screen flex flex-col">
@@ -153,6 +178,7 @@ export const App: React.FC = () => {
               briefing={briefing}
               onRefreshBriefing={handleRefreshBriefing}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
+              onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
             />
           )}
 
@@ -164,9 +190,21 @@ export const App: React.FC = () => {
             />
           )}
 
-          {activeView === 'senco' && <SencoView child={child} timeline={timeline} />}
+          {activeView === 'senco' && (
+            <SencoView
+              child={child}
+              timeline={timeline}
+              onOpenDocModal={() => setIsDocModalOpen(true)}
+              onOpenIncidentModal={() => setIsIncidentModalOpen(true)}
+            />
+          )}
 
-          {activeView === 'child' && <ChildView child={child} />}
+          {activeView === 'child' && (
+            <ChildView
+              child={child}
+              onCheckIn={handleChildCheckIn}
+            />
+          )}
 
           {activeView === 'ta' && (
             <TaView
@@ -184,6 +222,21 @@ export const App: React.FC = () => {
         isOpen={isObsModalOpen}
         onClose={() => setIsObsModalOpen(false)}
         onSubmit={handleLogObservation}
+        childName={child.preferred_name || child.first_name}
+      />
+
+      <IncidentModal
+        isOpen={isIncidentModalOpen}
+        onClose={() => setIsIncidentModalOpen(false)}
+        onSubmit={handleLogIncident}
+        childName={child.preferred_name || child.first_name}
+        childId={child.id}
+      />
+
+      <DocumentUploadModal
+        isOpen={isDocModalOpen}
+        onClose={() => setIsDocModalOpen(false)}
+        onSubmit={handleUploadDocument}
         childName={child.preferred_name || child.first_name}
       />
     </div>

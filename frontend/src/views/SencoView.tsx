@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
-import { Child, ChildEvent, AskNoyaResponse } from '../types';
-import { ShieldCheck, Sparkles, Search, FileText, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Child, ChildEvent, AskNoyaResponse, DocumentItem, IncidentDetail } from '../types';
+import { ShieldCheck, Sparkles, Search, FileText, CheckCircle2, Upload, AlertTriangle } from 'lucide-react';
 import { api } from '../api';
 
 interface SencoViewProps {
   child: Child;
   timeline: ChildEvent[];
+  onOpenDocModal?: () => void;
+  onOpenIncidentModal?: () => void;
 }
 
-export const SencoView: React.FC<SencoViewProps> = ({ child, timeline }) => {
+export const SencoView: React.FC<SencoViewProps> = ({
+  child,
+  timeline,
+  onOpenDocModal,
+  onOpenIncidentModal,
+}) => {
   const [query, setQuery] = useState('What sensory calming strategies have proven most effective this month?');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AskNoyaResponse | null>(null);
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const [incidents, setIncidents] = useState<IncidentDetail[]>([]);
+
+  useEffect(() => {
+    if (child?.id) {
+      api.getDocuments(child.id).then(setDocuments).catch(console.error);
+      api.getIncidents(child.id).then(setIncidents).catch(console.error);
+    }
+  }, [child?.id]);
 
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,8 +67,9 @@ export const SencoView: React.FC<SencoViewProps> = ({ child, timeline }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Ask NOYA RAG & Evidence Tool */}
+        {/* Left Column: Ask NOYA & EHCP Outcomes */}
         <div className="lg:col-span-7 space-y-4">
+          {/* Ask NOYA RAG & Evidence Tool */}
           <div className="card p-5 border-l-4 border-l-teal">
             <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
               <Sparkles className="w-4 h-4 text-teal" />
@@ -133,8 +150,87 @@ export const SencoView: React.FC<SencoViewProps> = ({ child, timeline }) => {
           </div>
         </div>
 
-        {/* Right Column: Caseload & Audit */}
+        {/* Right Column: Documents, Incidents & Caseload */}
         <div className="lg:col-span-5 space-y-4">
+          {/* Statutory Documents Section */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-purple-dark" />
+                <h3 className="text-sm font-bold text-navy">Statutory Documents ({documents.length})</h3>
+              </div>
+              {onOpenDocModal && (
+                <button
+                  onClick={onOpenDocModal}
+                  className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-purple-light text-purple-dark rounded-lg hover:bg-purple-200 cursor-pointer"
+                >
+                  <Upload className="w-3 h-3" />
+                  <span>+ Upload</span>
+                </button>
+              )}
+            </div>
+
+            {documents.length === 0 ? (
+              <p className="text-xs text-gray-400 italic">No statutory documents uploaded yet.</p>
+            ) : (
+              <div className="space-y-2">
+                {documents.map((doc) => (
+                  <div key={doc.id} className="p-2.5 rounded-xl border border-gray-100 bg-gray-50 text-xs flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-navy">{doc.title}</div>
+                      <div className="text-[10px] text-gray-400">{doc.document_type} · {(doc.file_size_bytes ? doc.file_size_bytes / 1024 : 0).toFixed(1)} KB</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Stored</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ABC Incident Triage */}
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-coral" />
+                <h3 className="text-sm font-bold text-navy">ABC Incidents ({incidents.length})</h3>
+              </div>
+              {onOpenIncidentModal && (
+                <button
+                  onClick={onOpenIncidentModal}
+                  className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-coral-light text-coral-dark rounded-lg hover:bg-coral-200 cursor-pointer"
+                >
+                  <span>+ Report ABC</span>
+                </button>
+              )}
+            </div>
+
+            {incidents.length === 0 ? (
+              <div className="p-3 rounded-xl border border-emerald-100 bg-emerald-50 text-xs text-emerald-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Zero major incidents recorded this term.</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {incidents.map((inc) => (
+                  <div key={inc.id} className="p-3 rounded-xl border border-gray-100 bg-gray-50 text-xs space-y-1">
+                    <div className="flex justify-between font-bold text-navy">
+                      <span>{inc.location || 'Classroom'}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                        inc.severity === 'Safeguarding Incident' ? 'bg-red-100 text-red-800' : 'bg-coral-100 text-coral-800'
+                      }`}>
+                        {inc.severity}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-600"><strong>A:</strong> {inc.antecedent}</p>
+                    <p className="text-[11px] text-gray-600"><strong>B:</strong> {inc.behaviour}</p>
+                    <p className="text-[11px] text-emerald-700"><strong>C:</strong> {inc.consequence}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Inclusion Triage & Reviews */}
           <div className="card p-5">
             <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
               <ShieldCheck className="w-4 h-4 text-teal" />

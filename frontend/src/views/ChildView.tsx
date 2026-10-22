@@ -4,9 +4,15 @@ import { VolumeX, Coffee, Compass, CheckCircle2 } from 'lucide-react';
 
 interface ChildViewProps {
   child: Child;
+  onCheckIn?: (checkIn: {
+    mood_emoji: string;
+    mood_label: string;
+    energy_level?: number;
+    self_regulation_need?: string;
+  }) => Promise<void>;
 }
 
-export const ChildView: React.FC<ChildViewProps> = ({ child }) => {
+export const ChildView: React.FC<ChildViewProps> = ({ child, onCheckIn }) => {
   const [selectedMood, setSelectedMood] = useState<string | null>('😊');
   const [breakRequested, setBreakRequested] = useState<string | null>(null);
 
@@ -17,8 +23,26 @@ export const ChildView: React.FC<ChildViewProps> = ({ child }) => {
     { emoji: '😴', label: 'Tired', bg: 'bg-purple-100 hover:bg-purple-200 text-purple-800' },
   ];
 
-  const handleSupportClick = (item: string) => {
+  const handleMoodSelect = async (m: { emoji: string; label: string }) => {
+    setSelectedMood(m.emoji);
+    if (onCheckIn) {
+      await onCheckIn({
+        mood_emoji: m.emoji,
+        mood_label: m.label,
+        energy_level: m.label === 'Great' ? 4 : m.label === 'Tired' ? 1 : 3,
+      });
+    }
+  };
+
+  const handleSupportClick = async (item: string) => {
     setBreakRequested(item);
+    if (onCheckIn) {
+      await onCheckIn({
+        mood_emoji: '✋',
+        mood_label: 'Break Requested',
+        self_regulation_need: item,
+      });
+    }
     setTimeout(() => setBreakRequested(null), 4000);
   };
 
@@ -38,7 +62,7 @@ export const ChildView: React.FC<ChildViewProps> = ({ child }) => {
           {moods.map((m) => (
             <button
               key={m.label}
-              onClick={() => setSelectedMood(m.emoji)}
+              onClick={() => handleMoodSelect(m)}
               className={`p-4 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer ${
                 m.bg
               } ${selectedMood === m.emoji ? 'ring-4 ring-navy ring-offset-2 scale-105 shadow-md' : 'opacity-80'}`}

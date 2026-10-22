@@ -1,6 +1,15 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import health, noya, pupils, schools, timeline, transitions
+from app.api.v1.endpoints import (
+    documents,
+    health,
+    incidents,
+    noya,
+    pupils,
+    schools,
+    timeline,
+    transitions,
+)
 
 api_router = APIRouter()
 
@@ -11,4 +20,8 @@ api_router.include_router(timeline.router, prefix="/timeline", tags=["Transactio
 api_router.include_router(
     transitions.router, prefix="/transitions", tags=["Transitions & Handovers"]
 )
+api_router.include_router(
+    incidents.router, prefix="/incidents", tags=["ABC Incidents & Safeguarding"]
+)
+api_router.include_router(documents.router, prefix="/documents", tags=["EHCP & Document Storage"])
 api_router.include_router(noya.router, prefix="/noya", tags=["NOYA AI & RAG Engine"])

@@ -24,6 +24,10 @@ node_modules/
 htmlcov/
 .ruff_cache/
 
+# Uploads & Storage
+backend/app/uploads/
+uploads/
+
 # Environment files
 .env
 *.env.local
