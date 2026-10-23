@@ -22,6 +22,11 @@ import {
   UserPlus,
   RefreshCw,
   AlertTriangle,
+  Edit3,
+  Trash2,
+  X,
+  Check,
+  AlertCircle,
 } from 'lucide-react';
 
 interface AdminViewProps {
@@ -152,6 +157,66 @@ export const AdminView: React.FC<AdminViewProps> = ({
       loadData();
     } catch (err: any) {
       alert(err.message || 'Failed to provision staff account');
+    }
+  };
+
+  // Edit & Delete staff state for Admin
+  const [editingStaff, setEditingStaff] = useState<AdminUserItem | null>(null);
+  const [editFirstName, setEditFirstName] = useState('');
+  const [editLastName, setEditLastName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
+  const [editRole, setEditRole] = useState('teacher');
+  const [editJobTitle, setEditJobTitle] = useState('');
+  const [editIsActive, setEditIsActive] = useState(true);
+  const [savingEdit, setSavingEdit] = useState(false);
+
+  const [deletingUser, setDeletingUser] = useState<AdminUserItem | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+
+  const handleOpenEditStaff = (u: AdminUserItem) => {
+    const parts = u.full_name.split(' ');
+    setEditingStaff(u);
+    setEditFirstName(parts[0] || '');
+    setEditLastName(parts.slice(1).join(' ') || '');
+    setEditEmail(u.email);
+    setEditRole(u.role);
+    setEditJobTitle(u.role === 'teacher' ? 'Classroom Teacher' : u.role === 'ta' ? '1:1 TA' : u.role.toUpperCase());
+    setEditIsActive(u.is_active);
+  };
+
+  const handleSaveStaffEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStaff) return;
+    try {
+      setSavingEdit(true);
+      await api.updateStaff(editingStaff.id, {
+        first_name: editFirstName.trim(),
+        last_name: editLastName.trim(),
+        email: editEmail.trim(),
+        role: editRole,
+        job_title: editJobTitle.trim() || undefined,
+        is_active: editIsActive,
+      });
+      setEditingStaff(null);
+      loadData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to update user account');
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const handleConfirmDeleteUser = async () => {
+    if (!deletingUser) return;
+    try {
+      setConfirmingDelete(true);
+      await api.deleteStaff(deletingUser.id);
+      setDeletingUser(null);
+      loadData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete user account');
+    } finally {
+      setConfirmingDelete(false);
     }
   };
 
@@ -585,9 +650,24 @@ export const AdminView: React.FC<AdminViewProps> = ({
                           </span>
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <span className="text-xs text-slate-400 font-mono">
-                            ID: {u.id.slice(0, 8)}
-                          </span>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => handleOpenEditStaff(u)}
+                              className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                              title="Edit user profile"
+                            >
+                              <Edit3 className="w-3 h-3 text-slate-500" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              onClick={() => setDeletingUser(u)}
+                              className="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                              title="Delete user account"
+                            >
+                              <Trash2 className="w-3 h-3 text-rose-500" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -1043,6 +1123,198 @@ export const AdminView: React.FC<AdminViewProps> = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Edit Staff Member (Admin) */}
+      {editingStaff && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 text-xs sm:text-sm animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <Edit3 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-base">Edit Staff Member Profile</h3>
+                  <p className="text-xs text-gray-500">{editingStaff.full_name} &bull; {editingStaff.school_name}</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setEditingStaff(null)}
+                className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveStaffEdit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1">First Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editFirstName}
+                    onChange={(e) => setEditFirstName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1">Last Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editLastName}
+                    onChange={(e) => setEditLastName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-gray-700 mb-1">Email Address *</label>
+                <input
+                  type="email"
+                  required
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1">Role *</label>
+                  <select
+                    value={editRole}
+                    onChange={(e) => setEditRole(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-semibold text-gray-800"
+                  >
+                    <option value="senco">🛡️ Lead SENCO</option>
+                    <option value="teacher">👩‍🏫 Classroom Teacher</option>
+                    <option value="ta">🤝 1:1 TA</option>
+                    <option value="specialist">🩺 Specialist / Therapist</option>
+                    <option value="admin">🏛️ Admin</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-1">Job Title</label>
+                  <input
+                    type="text"
+                    value={editJobTitle}
+                    onChange={(e) => setEditJobTitle(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="admin-edit-active"
+                  checked={editIsActive}
+                  onChange={(e) => setEditIsActive(e.target.checked)}
+                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                />
+                <label htmlFor="admin-edit-active" className="text-xs font-semibold text-gray-700 cursor-pointer">
+                  Active Account (uncheck to suspend system access)
+                </label>
+              </div>
+
+              <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setEditingStaff(null)}
+                  className="px-4 py-2 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingEdit}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                >
+                  {savingEdit ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Save Changes</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Delete Staff Member Confirmation (Admin) */}
+      {deletingUser && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-100 text-xs sm:text-sm animate-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3.5 mb-4 text-rose-600">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-rose-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 text-base leading-tight">Delete Staff Account?</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Revoke credentials and permanently delete account.</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100 text-xs space-y-1.5 mb-4">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Name:</span>
+                <span className="font-bold text-gray-900">{deletingUser.full_name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Email:</span>
+                <span className="font-semibold text-gray-700">{deletingUser.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Role:</span>
+                <span className="font-bold text-indigo-700 uppercase">{deletingUser.role}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">School:</span>
+                <span className="font-medium text-gray-600">{deletingUser.school_name}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setDeletingUser(null)}
+                disabled={confirmingDelete}
+                className="px-4 py-2 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 font-medium cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteUser}
+                disabled={confirmingDelete}
+                className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+              >
+                {confirmingDelete ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Confirm Delete</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

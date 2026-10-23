@@ -61,6 +61,15 @@ class StaffProvisionResponse(BaseModel):
     message: str
 
 
+class StaffUpdateRequest(BaseModel):
+    first_name: str | None = Field(default=None, min_length=1, max_length=140)
+    last_name: str | None = Field(default=None, min_length=1, max_length=140)
+    email: EmailStr | None = None
+    role: str | None = None
+    job_title: str | None = None
+    is_active: bool | None = None
+
+
 class AuditLogResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

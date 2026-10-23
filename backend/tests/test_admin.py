@@ -205,3 +205,106 @@ def test_senco_cannot_provision_admin_or_cross_school(client):
     resp_cross = client.post("/api/v1/admin/users", json=cross_school_payload, headers=senco_headers)
     assert resp_cross.status_code == 403
     assert "only provision staff for their assigned school" in resp_cross.json()["detail"]
+
+
+def test_senco_can_update_staff_profile(client):
+    """Test that SENCO can update a staff member's profile and active status."""
+    senco_login = client.post("/api/v1/auth/demo-login", json={"role": "senco"})
+    assert senco_login.status_code == 200
+    senco_token = senco_login.json()["access_token"]
+    senco_headers = {"Authorization": f"Bearer {senco_token}", "X-User-Role": "senco"}
+
+    # Provision staff to update
+    staff_payload = {
+        "first_name": "Oliver",
+        "last_name": "Twist",
+        "email": "oliver.twist@stjudes.sch.uk",
+        "role": "teacher",
+        "job_title": "Junior Class Teacher",
+    }
+    create_resp = client.post("/api/v1/admin/users", json=staff_payload, headers=senco_headers)
+    assert create_resp.status_code == 201
+    user_id = create_resp.json()["user_id"]
+
+    # Update job title and name
+    update_payload = {
+        "first_name": "Oliver",
+        "last_name": "Twist-Smith",
+        "job_title": "Senior Year 5 Lead Teacher",
+        "is_active": True,
+    }
+    put_resp = client.put(f"/api/v1/admin/users/{user_id}", json=update_payload, headers=senco_headers)
+    assert put_resp.status_code == 200
+    updated_data = put_resp.json()
+    assert updated_data["full_name"] == "Oliver Twist-Smith"
+
+    # Verify audit trail captured update
+    admin_login = client.post("/api/v1/auth/demo-login", json={"role": "admin"})
+    admin_token = admin_login.json()["access_token"]
+    admin_headers = {"Authorization": f"Bearer {admin_token}", "X-User-Role": "admin"}
+    audit_resp = client.get("/api/v1/admin/audit-logs", headers=admin_headers)
+    assert audit_resp.status_code == 200
+    logs = audit_resp.json()
+    assert any(log["action"] == "SENCO_UPDATE_STAFF" and "Oliver Twist-Smith" in log["details"] for log in logs)
+
+
+def test_senco_cannot_elevate_to_admin(client):
+    """Test that SENCO cannot elevate a staff member to admin."""
+    senco_login = client.post("/api/v1/auth/demo-login", json={"role": "senco"})
+    assert senco_login.status_code == 200
+    senco_token = senco_login.json()["access_token"]
+    senco_headers = {"Authorization": f"Bearer {senco_token}", "X-User-Role": "senco"}
+
+    # Provision staff
+    staff_payload = {
+        "first_name": "Jack",
+        "last_name": "Dawkins",
+        "email": "jack.dawkins@stjudes.sch.uk",
+        "role": "ta",
+        "job_title": "Support TA",
+    }
+    create_resp = client.post("/api/v1/admin/users", json=staff_payload, headers=senco_headers)
+    assert create_resp.status_code == 201
+    user_id = create_resp.json()["user_id"]
+
+    # Attempt to elevate to admin -> 403 Forbidden
+    resp = client.put(f"/api/v1/admin/users/{user_id}", json={"role": "admin"}, headers=senco_headers)
+    assert resp.status_code == 403
+    assert "cannot elevate accounts to Admin" in resp.json()["detail"]
+
+
+def test_senco_can_delete_staff_and_prevent_self_delete(client):
+    """Test that SENCO can delete a staff account and cannot delete themselves."""
+    senco_login = client.post("/api/v1/auth/demo-login", json={"role": "senco"})
+    assert senco_login.status_code == 200
+    senco_user = senco_login.json()["user"]
+    senco_token = senco_login.json()["access_token"]
+    senco_headers = {"Authorization": f"Bearer {senco_token}", "X-User-Role": "senco"}
+
+    # 1. Attempt self-deletion -> 400 Bad Request
+    self_delete_resp = client.delete(f"/api/v1/admin/users/{senco_user['id']}", headers=senco_headers)
+    assert self_delete_resp.status_code == 400
+    assert "cannot delete your own active account" in self_delete_resp.json()["detail"]
+
+    # 2. Provision temporary staff member
+    temp_staff = {
+        "first_name": "Temp",
+        "last_name": "Employee",
+        "email": "temp.employee@stjudes.sch.uk",
+        "role": "ta",
+        "job_title": "Temporary TA",
+    }
+    create_resp = client.post("/api/v1/admin/users", json=temp_staff, headers=senco_headers)
+    assert create_resp.status_code == 201
+    temp_user_id = create_resp.json()["user_id"]
+
+    # 3. Delete temporary staff member
+    del_resp = client.delete(f"/api/v1/admin/users/{temp_user_id}", headers=senco_headers)
+    assert del_resp.status_code == 200
+    assert "deleted successfully" in del_resp.json()["message"]
+
+    # 4. Verify user no longer exists
+    get_resp = client.get(f"/api/v1/admin/users", headers=senco_headers)
+    assert get_resp.status_code == 200
+    users = get_resp.json()
+    assert not any(u["id"] == str(temp_user_id) for u in users)

@@ -13,6 +13,7 @@ from app.schemas.admin import (
     DelegationMatrixItem,
     StaffProvisionRequest,
     StaffProvisionResponse,
+    StaffUpdateRequest,
     TrustGovernanceStats,
 )
 
@@ -368,6 +369,218 @@ def provision_staff_persona(
         invitation_token=f"INV-{str(user.id)[:8].upper()}",
         message=f"Successfully provisioned {role.upper()} account for {full_name} at {school.school_name}.",
     )
+
+
+@router.put(
+    "/users/{user_id}",
+    summary="Update staff member profile, role, or active status",
+)
+def update_staff_persona(
+    user_id: UUID,
+    payload: StaffUpdateRequest,
+    current_user: models.User = Depends(require_roles(["admin", "senco"])),
+    db: Session = Depends(get_db),
+):
+    """Admin or SENCO updates a staff account within authorized boundaries.
+    - Admins can update staff across any school.
+    - SENCOs can only update staff within their own assigned school tenant.
+    - SENCOs cannot edit an Admin account or elevate any account to Admin.
+    """
+    target_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Target user with ID '{user_id}' was not found.",
+        )
+
+    # Tenant boundary enforcement for SENCO
+    if current_user.role == "senco":
+        if target_user.school_id != current_user.school_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs can only update staff for their assigned school.",
+            )
+        if target_user.role == "admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs are not authorized to edit Admin accounts.",
+            )
+        if payload.role and payload.role.lower().strip() == "admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs cannot elevate accounts to Admin.",
+            )
+
+    # Check email conflict if changing email
+    if payload.email:
+        new_email = str(payload.email).lower().strip()
+        if new_email != target_user.email:
+            existing = db.query(models.User).filter(models.User.email == new_email).first()
+            if existing:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"An account with email '{new_email}' already exists.",
+                )
+            target_user.email = new_email
+            if target_user.staff_member:
+                target_user.staff_member.email = new_email
+
+    # Update names
+    if payload.first_name or payload.last_name:
+        first_name = payload.first_name.strip() if payload.first_name else (target_user.staff_member.first_name if target_user.staff_member else "")
+        last_name = payload.last_name.strip() if payload.last_name else (target_user.staff_member.last_name if target_user.staff_member else "")
+        if target_user.staff_member:
+            if payload.first_name:
+                target_user.staff_member.first_name = payload.first_name.strip()
+            if payload.last_name:
+                target_user.staff_member.last_name = payload.last_name.strip()
+        target_user.full_name = f"{first_name} {last_name}".strip() or target_user.full_name
+
+    # Update role
+    if payload.role:
+        new_role = payload.role.lower().strip()
+        if current_user.role == "senco" and new_role not in ["teacher", "ta", "specialist", "senco"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid persona role '{new_role}'. Allowed: teacher, ta, specialist, senco.",
+            )
+        target_user.role = new_role
+
+    # Update active status
+    if payload.is_active is not None:
+        target_user.is_active = payload.is_active
+        if target_user.staff_member:
+            target_user.staff_member.active = payload.is_active
+
+    # Update job title on StaffSchoolAssignment
+    if payload.job_title is not None and target_user.staff_id:
+        assignment = (
+            db.query(models.StaffSchoolAssignment)
+            .filter(models.StaffSchoolAssignment.staff_id == target_user.staff_id)
+            .first()
+        )
+        if assignment:
+            assignment.job_title = payload.job_title
+            if payload.role:
+                assignment.role = payload.role.capitalize()
+            if payload.is_active is not None:
+                assignment.active = payload.is_active
+
+    action_type = "SENCO_UPDATE_STAFF" if current_user.role == "senco" else "UPDATE_STAFF"
+    actor_label = "Admin" if current_user.role == "admin" else "SENCO"
+    audit = models.AuditLog(
+        actor_id=current_user.id,
+        actor_name=current_user.full_name or actor_label,
+        actor_role=current_user.role,
+        school_id=target_user.school_id,
+        action=action_type,
+        target_type="user",
+        target_id=target_user.id,
+        target_name=target_user.full_name,
+        details=f"{actor_label} {current_user.full_name or ''} updated staff profile for {target_user.full_name} ({target_user.role}).",
+    )
+    db.add(audit)
+    db.commit()
+    db.refresh(target_user)
+
+    school = db.query(models.School).filter(models.School.id == target_user.school_id).first() if target_user.school_id else None
+    return {
+        "id": str(target_user.id),
+        "email": target_user.email,
+        "full_name": target_user.full_name,
+        "role": target_user.role,
+        "school_id": str(target_user.school_id) if target_user.school_id else None,
+        "school_name": school.school_name if school else "Platform Governance",
+        "is_active": target_user.is_active,
+        "is_verified": target_user.is_verified,
+        "created_at": target_user.created_at.isoformat() if target_user.created_at else None,
+    }
+
+
+@router.delete(
+    "/users/{user_id}",
+    summary="Delete a staff member and revoke access",
+)
+def delete_staff_persona(
+    user_id: UUID,
+    current_user: models.User = Depends(require_roles(["admin", "senco"])),
+    db: Session = Depends(get_db),
+):
+    """Admin or SENCO deletes a staff account.
+    - Cannot delete oneself.
+    - SENCOs can only delete staff within their own assigned school tenant.
+    - SENCOs cannot delete Admin accounts.
+    """
+    if user_id == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You cannot delete your own active account.",
+        )
+
+    target_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not target_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Target user with ID '{user_id}' was not found.",
+        )
+
+    # Tenant and role boundary enforcement for SENCO
+    if current_user.role == "senco":
+        if target_user.school_id != current_user.school_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs can only delete staff for their assigned school.",
+            )
+        if target_user.role == "admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs are not authorized to delete Admin accounts.",
+            )
+
+    full_name = target_user.full_name
+    email = target_user.email
+    target_role = target_user.role
+    school_id = target_user.school_id
+    staff_id = target_user.staff_id
+
+    # If this was the school's appointed lead senco, clear it
+    if target_role == "senco" and school_id:
+        school = db.query(models.School).filter(models.School.id == school_id).first()
+        if school and school.lead_senco_name == full_name:
+            school.lead_senco_name = None
+            db.flush()
+
+    # Delete User first
+    db.delete(target_user)
+    db.flush()
+
+    # Delete StaffMember & assignments if present
+    if staff_id:
+        staff = db.query(models.StaffMember).filter(models.StaffMember.id == staff_id).first()
+        if staff:
+            db.delete(staff)
+            db.flush()
+
+    action_type = "SENCO_DELETE_STAFF" if current_user.role == "senco" else "DELETE_STAFF"
+    actor_label = "Admin" if current_user.role == "admin" else "SENCO"
+    audit = models.AuditLog(
+        actor_id=current_user.id,
+        actor_name=current_user.full_name or actor_label,
+        actor_role=current_user.role,
+        school_id=school_id,
+        action=action_type,
+        target_type="user",
+        target_id=user_id,
+        target_name=full_name,
+        details=f"{actor_label} {current_user.full_name or ''} deleted {target_role.upper()} ({full_name}, {email}).",
+    )
+    db.add(audit)
+    db.commit()
+
+    return {
+        "message": f"Staff member '{full_name}' was deleted successfully.",
+        "deleted_id": str(user_id),
+    }
 
 
 @router.get(

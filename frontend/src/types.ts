@@ -527,6 +527,15 @@ export interface StaffProvisionRequest {
   password?: string;
 }
 
+export interface StaffUpdateRequest {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  role?: string;
+  job_title?: string;
+  is_active?: boolean;
+}
+
 export interface StaffProvisionResponse {
   user_id: string;
   staff_id?: string;

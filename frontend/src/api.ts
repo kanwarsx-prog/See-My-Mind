@@ -25,6 +25,7 @@ import {
   AdminUserItem,
   StaffProvisionRequest,
   StaffProvisionResponse,
+  StaffUpdateRequest,
   AuditLogEntry,
   TrustGovernanceStats,
   DelegationMatrixItem,
@@ -483,6 +484,31 @@ export const api = {
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.detail || 'Failed to provision staff account');
+    }
+    return res.json();
+  },
+
+  async updateStaff(userId: string, payload: StaffUpdateRequest): Promise<AdminUserItem> {
+    const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
+      method: 'PUT',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to update staff account');
+    }
+    return res.json();
+  },
+
+  async deleteStaff(userId: string): Promise<{ message: string; deleted_id: string }> {
+    const res = await fetch(`${API_BASE}/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to delete staff account');
     }
     return res.json();
   },
