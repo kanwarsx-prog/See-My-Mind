@@ -437,10 +437,10 @@ const AppContent: React.FC = () => {
   // 3. Authenticated: Render Single-Persona View
   if (loading || !child) {
     return (
-      <div className="min-h-screen bg-[#F7FAFB] flex flex-col items-center justify-center space-y-3">
+      <div className="min-h-screen bg-canvas text-textMain flex flex-col items-center justify-center space-y-3">
         <div className="w-12 h-12 rounded-full border-4 border-teal border-t-transparent animate-spin" />
-        <div className="text-sm font-bold text-navy font-serif">Connecting to See My Mind & NOYA AI...</div>
-        <div className="text-xs text-gray-400">Loading {currentUser.full_name}&apos;s Workspace</div>
+        <div className="text-sm font-bold text-textHead font-serif">Connecting to See My Mind & NOYA AI...</div>
+        <div className="text-xs text-textDim">Loading {currentUser.full_name}&apos;s Workspace</div>
       </div>
     );
   }
@@ -541,7 +541,7 @@ const AppContent: React.FC = () => {
         onOpenTour={() => setIsTourModalOpen(true)}
       />
 
-      <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden bg-[#F7FAFB] dark:bg-[#0B132B] transition-colors duration-200">
+      <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden bg-canvas text-textMain transition-colors duration-200">
         <InvitationNotificationBanner
           onOpenInvitation={handleOpenParentOnboarding}
           latestInvitation={latestInvitation}

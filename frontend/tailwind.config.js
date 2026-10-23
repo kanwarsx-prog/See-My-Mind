@@ -8,16 +8,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkbg: '#0B132B',
-        darksurface: '#162436',
-        darkborder: '#24384E',
+        canvas: 'var(--bg-canvas)',
+        topbar: 'var(--bg-topbar)',
+        borderMain: 'var(--border-main)',
+        borderStrong: 'var(--border-strong)',
+        cardBg: 'var(--card-bg)',
+        cardSubtle: 'var(--card-bg-subtle)',
+        textMain: 'var(--text-primary)',
+        textSub: 'var(--text-secondary)',
+        textDim: 'var(--text-muted)',
+        textHead: 'var(--text-heading)',
+        sidebarBg: 'var(--sidebar-bg)',
+        sidebarBorder: 'var(--sidebar-border)',
+        sidebarPrimary: 'var(--sidebar-text-primary)',
+        sidebarSecondary: 'var(--sidebar-text-secondary)',
+        sidebarMuted: 'var(--sidebar-text-muted)',
+        sidebarHover: 'var(--sidebar-hover-bg)',
+        sidebarBadge: 'var(--sidebar-badge-bg)',
+        sidebarActive: 'var(--sidebar-active-bg)',
+        sidebarActiveText: 'var(--sidebar-active-text)',
         mint: {
-          DEFAULT: '#9ECFC4',
+          DEFAULT: 'var(--color-mint)',
           light: '#C9E4DE',
           pale: '#E8F4F1',
         },
         teal: {
-          DEFAULT: '#2A6B62',
+          DEFAULT: 'var(--color-teal)',
+          dark: 'var(--color-teal-dark)',
           medium: '#3D8C82',
         },
         navy: {
@@ -26,23 +43,26 @@ export default {
           lighter: '#3A6A80',
         },
         coral: {
-          DEFAULT: '#F4A89A',
-          dark: '#C5503E',
+          DEFAULT: 'var(--color-coral)',
+          dark: 'var(--color-coral-dark)',
           light: '#FCDCD6',
         },
         amber: {
-          DEFAULT: '#F5C77E',
-          dark: '#B87A2A',
+          DEFAULT: 'var(--color-amber)',
+          dark: 'var(--color-amber-dark)',
           light: '#FBE8C8',
         },
         purple: {
-          DEFAULT: '#9B8DC2',
-          dark: '#5E4D9A',
+          DEFAULT: 'var(--color-purple)',
+          dark: 'var(--color-purple-dark)',
           light: '#DDD8F0',
         },
         green: {
           DEFAULT: '#4CAF82',
           light: '#D4EDE0',
+        },
+        emerald: {
+          DEFAULT: 'var(--color-emerald)',
         },
         gold: {
           DEFAULT: '#E8B84B',
@@ -50,8 +70,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'sans-serif'],
-        serif: ['"Fraunces"', 'serif'],
+        sans: ['var(--font-sans)'],
+        serif: ['var(--font-serif)'],
       },
     },
   },

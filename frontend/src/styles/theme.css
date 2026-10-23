@@ -1,0 +1,141 @@
+/* =========================================================================
+   See My Mind — Master Theme Design System (Single Source of Truth)
+   =========================================================================
+   Modify visual settings for the entire application in this single file.
+   Both Light Mode (:root) and Dark Mode (html.dark) are centrally defined here.
+   ========================================================================= */
+
+:root {
+  /* -----------------------------------------------------------------------
+     1. Typography & Fonts
+     ----------------------------------------------------------------------- */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+
+  /* -----------------------------------------------------------------------
+     2. Page Canvas & Layout Headers (Light Mode)
+     ----------------------------------------------------------------------- */
+  --bg-canvas: #F8FAFC;                 /* Main page viewport background */
+  --bg-topbar: #FFFFFF;                 /* TopBar sticky navigation header */
+  --border-main: #EDF2F7;               /* Structural dividers and borders */
+  --border-strong: #CBD5E1;             /* Emphasized component borders */
+
+  /* -----------------------------------------------------------------------
+     3. Left Navigation Sidebar (Light Mode)
+     ----------------------------------------------------------------------- */
+  --sidebar-bg: #112533;                /* Rich deep navy anchor */
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-text-primary: #FFFFFF;      /* Main headings and titles */
+  --sidebar-text-secondary: rgba(255, 255, 255, 0.75); /* Inactive nav links */
+  --sidebar-text-muted: rgba(255, 255, 255, 0.55);     /* Sub-headers and section labels */
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);       /* Hover highlight */
+  --sidebar-badge-bg: rgba(255, 255, 255, 0.05);       /* Profile badge card */
+  --sidebar-active-bg: #2A6B62;         /* Active tab highlight (Teal) */
+  --sidebar-active-text: #FFFFFF;       /* Active tab text */
+
+  /* -----------------------------------------------------------------------
+     4. Cards & Content Surfaces (Light Mode)
+     ----------------------------------------------------------------------- */
+  --card-bg: #FFFFFF;                   /* Standard card surface */
+  --card-bg-subtle: #F1F5F9;            /* Nested boxes, table rows, and filters */
+  --card-border: #EDF2F7;               /* Subtle card border */
+  --card-shadow: 0 1px 3px rgba(26, 58, 74, 0.06);
+  --card-shadow-hover: 0 4px 14px rgba(26, 58, 74, 0.1);
+
+  /* -----------------------------------------------------------------------
+     5. Typography & Text Colors (Light Mode)
+     ----------------------------------------------------------------------- */
+  --text-primary: #1A3A4A;              /* Primary text / Navy */
+  --text-secondary: #334155;            /* Body copy / Slate-700 */
+  --text-muted: #64748B;                /* Secondary sub-copy / Slate-500 */
+  --text-heading: #1A3A4A;              /* Heading serif titles */
+
+  /* -----------------------------------------------------------------------
+     6. Form Controls & Inputs (Light Mode)
+     ----------------------------------------------------------------------- */
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --input-text: #1A3A4A;
+  --input-placeholder: #94A3B8;
+
+  /* -----------------------------------------------------------------------
+     7. Brand Accents & SEND Emotion Indicators
+     ----------------------------------------------------------------------- */
+  --color-mint: #9ECFC4;
+  --color-teal: #2A6B62;
+  --color-teal-dark: #1E4F48;
+  --color-coral: #F4A89A;
+  --color-coral-dark: #C5503E;
+  --color-amber: #F5C77E;
+  --color-amber-dark: #B87A2A;
+  --color-purple: #9B8DC2;
+  --color-purple-dark: #5E4D9A;
+  --color-emerald: #10B981;
+}
+
+/* =========================================================================
+   DARK MODE OVERRIDES (Neuro-Inclusive Twilight Navy & Calm Slate)
+   ========================================================================= */
+html.dark {
+  color-scheme: dark;
+
+  /* -----------------------------------------------------------------------
+     2. Page Canvas & Layout Headers (Dark Mode)
+     ----------------------------------------------------------------------- */
+  --bg-canvas: #0B132B;                 /* Deep twilight canvas */
+  --bg-topbar: #0E1A29;                 /* Harmonized top navigation header */
+  --border-main: #22374E;               /* Low-glare slate border */
+  --border-strong: #2F4966;
+
+  /* -----------------------------------------------------------------------
+     3. Left Navigation Sidebar (Dark Mode)
+     ----------------------------------------------------------------------- */
+  --sidebar-bg: #070D1E;                /* Deepest midnight structural anchor */
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --sidebar-text-primary: #F8FAFC;
+  --sidebar-text-secondary: rgba(255, 255, 255, 0.75);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.5);
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-badge-bg: rgba(255, 255, 255, 0.04);
+  --sidebar-active-bg: #2A6B62;
+  --sidebar-active-text: #FFFFFF;
+
+  /* -----------------------------------------------------------------------
+     4. Cards & Content Surfaces (Dark Mode)
+     ----------------------------------------------------------------------- */
+  --card-bg: #142234;                   /* Elevated calm slate cards */
+  --card-bg-subtle: #0F1A2A;            /* Recessed dark nested areas */
+  --card-border: #22374E;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --card-shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.45);
+
+  /* -----------------------------------------------------------------------
+     5. Typography & Text Colors (Dark Mode)
+     ----------------------------------------------------------------------- */
+  --text-primary: #F8FAFC;              /* High-readability off-white */
+  --text-secondary: #CBD5E1;            /* Slate-300 body copy */
+  --text-muted: #94A3B8;                /* Slate-400 secondary metadata */
+  --text-heading: #F8FAFC;              /* Headings & bold titles */
+
+  /* -----------------------------------------------------------------------
+     6. Form Controls & Inputs (Dark Mode)
+     ----------------------------------------------------------------------- */
+  --input-bg: #0F1A2A;
+  --input-border: #22374E;
+  --input-text: #F8FAFC;
+  --input-placeholder: #64748B;
+
+  /* -----------------------------------------------------------------------
+     7. Brand Accents (Luminescent in Dark Mode)
+     ----------------------------------------------------------------------- */
+  --color-mint: #99F6E4;
+  --color-teal: #2DD4BF;
+  --color-teal-dark: #14B8A6;
+  --color-coral: #FDA4AF;
+  --color-coral-dark: #FB7185;
+  --color-amber: #FCD34D;
+  --color-amber-dark: #F59E0B;
+  --color-purple: #DDD8F0;
+  --color-purple-dark: #C4B5FD;
+  --color-emerald: #6EE7B7;
+}
