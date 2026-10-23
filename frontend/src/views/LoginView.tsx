@@ -90,11 +90,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
     {
       role: 'admin',
       name: 'Dr. Alistair Vance',
-      subtitle: 'MAT Governance Lead',
+      subtitle: 'Platform Governance Lead',
       icon: Building2,
       color: 'from-indigo-600 to-slate-800',
       textColor: 'text-indigo-400',
-      badge: '🏛️ Trust Admin Hub',
+      badge: '🏛️ Admin Hub',
       desc: 'Multi-school onboarding, persona provisioning & GDPR audit logs',
     },
     {

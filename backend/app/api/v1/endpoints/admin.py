@@ -223,20 +223,64 @@ def list_admin_users(
     "/users",
     response_model=StaffProvisionResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Provision a staff persona (SENCO, Teacher, TA, Admin)",
+    summary="Provision a staff persona (SENCO, Teacher, TA, Specialist, Admin)",
 )
 def provision_staff_persona(
     payload: StaffProvisionRequest,
-    current_user: models.User = Depends(require_roles(["admin"])),
+    current_user: models.User = Depends(require_roles(["admin", "senco"])),
     db: Session = Depends(get_db),
 ):
-    """Trust Admin provisions a staff account, assigns to school tenant, and delegates responsibility."""
-    school = db.query(models.School).filter(models.School.id == payload.school_id).first()
+    """Admin or SENCO provisions a staff account.
+    - Admins can onboard staff across any school and appoint Lead SENCOs.
+    - SENCOs can recruit and provision Teachers, TAs, and Specialists strictly within their own school tenant.
+    """
+    # 1. Resolve Target School & Tenant Boundary
+    if current_user.role == "senco":
+        if not current_user.school_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="SENCO account is not linked to an active school tenant.",
+            )
+        if payload.school_id and payload.school_id != current_user.school_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs can only provision staff for their assigned school.",
+            )
+        target_school_id = current_user.school_id
+    else:
+        if not payload.school_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Target school_id is required.",
+            )
+        target_school_id = payload.school_id
+
+    school = db.query(models.School).filter(models.School.id == target_school_id).first()
     if not school:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Target school with ID '{payload.school_id}' was not found.",
+            detail=f"Target school with ID '{target_school_id}' was not found.",
         )
+
+    # 2. Validate Role Permissions
+    role = payload.role.lower().strip()
+    if current_user.role == "senco":
+        if role == "admin":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="SENCOs are not authorized to provision Admin accounts.",
+            )
+        if role not in ["teacher", "ta", "specialist", "senco"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid persona role '{role}'. SENCOs can provision: teacher, ta, specialist, senco.",
+            )
+    else:
+        if role not in ["senco", "teacher", "ta", "specialist", "admin"]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid persona role '{role}'. Allowed roles: senco, teacher, ta, specialist, admin.",
+            )
 
     target_email = str(payload.email).lower().strip()
     existing_user = db.query(models.User).filter(models.User.email == target_email).first()
@@ -244,13 +288,6 @@ def provision_staff_persona(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"An account with email '{target_email}' already exists.",
-        )
-
-    role = payload.role.lower().strip()
-    if role not in ["senco", "teacher", "ta", "admin"]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid persona role '{role}'. Allowed roles: senco, teacher, ta, admin",
         )
 
     raw_password = payload.password or "Welcome2026!"
@@ -292,24 +329,27 @@ def provision_staff_persona(
     db.add(user)
     db.flush()
 
-    # If appointing a SENCO, update school lead_senco_name
+    # If appointing a SENCO by admin, update school lead_senco_name
     action_type = "PROVISION_STAFF"
-    if role == "senco":
+    if current_user.role == "senco":
+        action_type = "SENCO_PROVISION_STAFF"
+    elif role == "senco":
         action_type = "APPOINT_SENCO"
         school.lead_senco_name = full_name
         db.flush()
 
     # Record Audit Log
+    actor_label = "Admin" if current_user.role == "admin" else "SENCO"
     audit = models.AuditLog(
         actor_id=current_user.id,
-        actor_name=current_user.full_name or "Trust Admin",
-        actor_role="admin",
+        actor_name=current_user.full_name or actor_label,
+        actor_role=current_user.role,
         school_id=school.id,
         action=action_type,
         target_type="user",
         target_id=user.id,
         target_name=full_name,
-        details=f"Appointed and provisioned {role.upper()} ({full_name}) for {school.school_name} with job title '{payload.job_title or role.capitalize()}'.",
+        details=f"{actor_label} {current_user.full_name or ''} provisioned {role.upper()} ({full_name}) for {school.school_name} with job title '{payload.job_title or role.capitalize()}'.",
     )
     db.add(audit)
     db.commit()
@@ -389,27 +429,29 @@ def get_delegation_matrix():
     return [
         DelegationMatrixItem(
             role_key="admin",
-            role_title="MAT Executive & Governance Lead",
-            tier="Trust & Platform Level",
+            role_title="Admin (Platform & Governance)",
+            tier="Platform Administration Level",
             authorities=[
                 "Onboard new school tenants with DfE URN",
-                "Appoint and provision Lead SENCOs & staff",
-                "Monitor trust-wide high-needs funding and review compliance",
+                "Appoint and provision Lead SENCOs",
+                "Monitor cross-school compliance and high-needs funding",
                 "Inspect immutable compliance and access audit trails",
             ],
             delegated_responsibilities=[
+                "School-level staff recruitment & provisioning delegated to Lead SENCO",
                 "School-level SEND admissions delegated to Lead SENCO",
                 "Classroom differentiation delegated to Teachers",
                 "Statutory Section 44 pack generation delegated to SENCO",
             ],
             safeguarding_scope="Restricted: Cannot view confidential child ABC/medical notes without explicit DSL clearance.",
-            data_boundary="Trust portfolio oversight with tenant isolation enforcement.",
+            data_boundary="Multi-school platform oversight with strict tenant isolation enforcement.",
         ),
         DelegationMatrixItem(
             role_key="senco",
-            role_title="Lead SENCO & Inclusion Lead (School Lead)",
+            role_title="Lead SENCO & Inclusion Lead (School Admin)",
             tier="School Administrative & Pedagogical Level",
             authorities=[
+                "Recruit and provision school staff (Classroom Teachers, TAs, Specialists)",
                 "Admit and register pupils onto school SEND register",
                 "Dispatch parent onboarding invitations and link guardians",
                 "Compile Section 44 Annual Review Statutory Packs",
@@ -417,7 +459,7 @@ def get_delegation_matrix():
                 "Oversee whole-school SEND provision matrix",
             ],
             delegated_responsibilities=[
-                "School-level operations delegated by Trust Admin",
+                "School-level inclusion operations & staff management",
                 "Classroom adaptation delivery delegated to Class Teachers",
                 "Micro-event recording delegated to TAs",
             ],

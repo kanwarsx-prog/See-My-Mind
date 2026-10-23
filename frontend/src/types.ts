@@ -522,7 +522,7 @@ export interface StaffProvisionRequest {
   last_name: string;
   email: string;
   role: string;
-  school_id: string;
+  school_id?: string;
   job_title?: string;
   password?: string;
 }

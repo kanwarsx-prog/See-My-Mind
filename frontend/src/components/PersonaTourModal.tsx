@@ -362,22 +362,22 @@ const PERSONA_SLIDES: PersonaSlide[] = [
   {
     role: 'admin',
     name: 'Dr. Alistair Vance',
-    roleTitle: 'MAT Executive & Governance Lead',
+    roleTitle: 'Admin',
     avatarEmoji: '🏛️',
-    subtitle: 'Multi-Academy Trust Central Office',
+    subtitle: 'Platform & Multi-School Governance',
     color: '#3B4261',
     badgeBg: 'bg-indigo-50',
     badgeText: 'text-indigo-900',
     badgeBorder: 'border-indigo-200',
     icon: Building2,
     quote: '"Managing SEND compliance across multiple schools without strict data boundaries is a massive legal and safeguarding liability."',
-    realWorldChallenge: 'Multi-school MATs risk catastrophic data leaks if pupil records, clinical notes, or safeguarding files are commingled across schools.',
+    realWorldChallenge: 'Organisations risk catastrophic data leaks if pupil records, clinical notes, or safeguarding files are commingled across schools.',
     solution: 'Strict tenant isolation per school, delegated school-level leadership to Lead SENCOs, and an immutable audit trail for full GDPR and KCSIE governance.',
     loopSteps: [
       {
         time: '9:00 AM',
         action: 'Onboard New School Tenant',
-        detail: 'Onboards Highland Park Academy with DfE URN and isolated cryptographic database schema.',
+        detail: 'Onboards Highland Park Academy with DfE URN and isolated database schema.',
         overlayBadge: '🏛️ STRICT DATA SEGREGATION',
         overlayText: 'School tenants operate in sealed silos; School A staff can never query or leak School B pupils.',
         simType: 'admin_onboard',
@@ -385,9 +385,9 @@ const PERSONA_SLIDES: PersonaSlide[] = [
       {
         time: '9:30 AM',
         action: 'Appoint Lead SENCO',
-        detail: 'Provisions Dr Marcus Thorne as Lead SENCO with delegated pupil registration and Section 44 pack authority.',
+        detail: 'Provisions Dr Marcus Thorne as Lead SENCO with delegated staff provisioning, pupil registration, and Section 44 pack authority.',
         overlayBadge: '🛡️ RESPONSIBILITY DELEGATION',
-        overlayText: 'Operational SEND admissions are delegated to school SENCOs while the Trust retains governance oversight.',
+        overlayText: 'Operational SEND admissions and staff recruitment are delegated to school SENCOs while Admins retain governance oversight.',
         simType: 'admin_appoint',
       },
       {

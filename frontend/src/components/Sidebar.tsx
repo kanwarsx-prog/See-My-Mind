@@ -147,6 +147,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           },
         },
         {
+          id: 'staff_team',
+          label: 'Staff & Team Directory',
+          icon: Users,
+          action: () => {
+            onSelectNav?.('staff_team');
+          },
+        },
+        {
           id: 'register_pupil',
           label: '+ Register SEND Pupil',
           icon: FileText,
@@ -314,8 +322,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     admin: {
       av: 'AV',
       name: currentUser?.full_name || 'Dr. Alistair Vance',
-      roleTitle: 'MAT Governance Lead',
-      sub: 'Multi-Academy Trust Operations',
+      roleTitle: 'Admin',
+      sub: 'Platform & School Governance',
       bg: '#3B4261',
       icon: Building2,
       navItems: [

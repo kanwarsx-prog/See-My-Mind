@@ -41,8 +41,8 @@ class StaffProvisionRequest(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=140)
     last_name: str = Field(..., min_length=1, max_length=140)
     email: EmailStr
-    role: str = Field(..., description="Role to provision: senco, teacher, ta, admin")
-    school_id: UUID = Field(..., description="Target school tenant ID")
+    role: str = Field(..., description="Role to provision: senco, teacher, ta, specialist, admin")
+    school_id: UUID | None = Field(default=None, description="Target school tenant ID (optional for SENCO, defaults to own school)")
     job_title: str | None = None
     password: str | None = Field(default=None, description="Optional custom initial password")
 
@@ -86,7 +86,8 @@ class TrustGovernanceStats(BaseModel):
     ehcp_pupils: int
     compliance_score: str
     audit_events_count: int
-    lead_trust_admin: str
+    lead_admin: str = "Dr. Alistair Vance"
+    lead_trust_admin: str = "Dr. Alistair Vance"
 
 
 class DelegationMatrixItem(BaseModel):

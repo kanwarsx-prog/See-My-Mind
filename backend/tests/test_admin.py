@@ -120,3 +120,88 @@ def test_delegation_matrix_endpoint(client):
     assert "ta" in roles
     assert "parent" in roles
     assert "child" in roles
+
+
+def test_senco_can_provision_teacher_and_ta(client):
+    """Test that SENCO can provision teachers and TAs at their assigned school."""
+    # Authenticate as SENCO
+    senco_login = client.post("/api/v1/auth/demo-login", json={"role": "senco"})
+    assert senco_login.status_code == 200
+    senco_token = senco_login.json()["access_token"]
+    senco_headers = {"Authorization": f"Bearer {senco_token}", "X-User-Role": "senco"}
+
+    # 1. Provision a classroom teacher
+    teacher_payload = {
+        "first_name": "Thomas",
+        "last_name": "Clarke",
+        "email": "t.clarke@stjudes.sch.uk",
+        "role": "teacher",
+        "job_title": "Year 4 Class Teacher",
+    }
+    resp = client.post("/api/v1/admin/users", json=teacher_payload, headers=senco_headers)
+    assert resp.status_code == 201
+    created_teacher = resp.json()
+    assert created_teacher["full_name"] == "Thomas Clarke"
+    assert created_teacher["role"] == "teacher"
+    assert created_teacher["job_title"] == "Year 4 Class Teacher"
+
+    # 2. Provision a Teaching Assistant (TA)
+    ta_payload = {
+        "first_name": "Sarah",
+        "last_name": "O'Connor",
+        "email": "s.oconnor@stjudes.sch.uk",
+        "role": "ta",
+        "job_title": "1:1 Autism & Sensory Support Assistant",
+    }
+    ta_resp = client.post("/api/v1/admin/users", json=ta_payload, headers=senco_headers)
+    assert ta_resp.status_code == 201
+    created_ta = ta_resp.json()
+    assert created_ta["full_name"] == "Sarah O'Connor"
+    assert created_ta["role"] == "ta"
+
+    # 3. Verify audit trail captured the action with SENCO actor
+    admin_login = client.post("/api/v1/auth/demo-login", json={"role": "admin"})
+    admin_token = admin_login.json()["access_token"]
+    admin_headers = {"Authorization": f"Bearer {admin_token}", "X-User-Role": "admin"}
+    audit_resp = client.get("/api/v1/admin/audit-logs", headers=admin_headers)
+    assert audit_resp.status_code == 200
+    logs = audit_resp.json()
+    assert any(
+        log["action"] == "SENCO_PROVISION_STAFF" and "Thomas Clarke" in log["details"]
+        for log in logs
+    )
+
+
+def test_senco_cannot_provision_admin_or_cross_school(client):
+    """Test security boundaries: SENCO cannot provision Admin accounts or staff at foreign schools."""
+    senco_login = client.post("/api/v1/auth/demo-login", json={"role": "senco"})
+    assert senco_login.status_code == 200
+    senco_token = senco_login.json()["access_token"]
+    senco_headers = {"Authorization": f"Bearer {senco_token}", "X-User-Role": "senco"}
+
+    # 1. Attempt to provision an Admin account -> 403 Forbidden
+    admin_payload = {
+        "first_name": "Evil",
+        "last_name": "Admin",
+        "email": "evil.admin@unauthorized.org",
+        "role": "admin",
+        "job_title": "Unauthorized Admin",
+    }
+    resp = client.post("/api/v1/admin/users", json=admin_payload, headers=senco_headers)
+    assert resp.status_code == 403
+    assert "not authorized to provision Admin accounts" in resp.json()["detail"]
+
+    # 2. Attempt to provision staff at a foreign school_id -> 403 Forbidden
+    import uuid
+    foreign_school_id = str(uuid.uuid4())
+    cross_school_payload = {
+        "first_name": "Foreign",
+        "last_name": "Teacher",
+        "email": "foreign.teacher@external.org",
+        "role": "teacher",
+        "school_id": foreign_school_id,
+        "job_title": "External Teacher",
+    }
+    resp_cross = client.post("/api/v1/admin/users", json=cross_school_payload, headers=senco_headers)
+    assert resp_cross.status_code == 403
+    assert "only provision staff for their assigned school" in resp_cross.json()["detail"]

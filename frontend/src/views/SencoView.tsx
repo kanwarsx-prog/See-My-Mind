@@ -8,6 +8,7 @@ import {
   AnnualReviewPackResponse,
   SchoolProvisionMatrixResponse,
   ProvisionMapPupil,
+  AdminUserItem,
 } from '../types';
 import {
   ShieldCheck,
@@ -21,15 +22,24 @@ import {
   ArrowRight,
   Filter,
   Users,
+  Check,
+  Mail,
+  X,
+  UserPlus,
+  RefreshCw,
+  GraduationCap,
+  UserCheck,
 } from 'lucide-react';
 import { api } from '../api';
 import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
 
+export type SencoTab = 'review_pack' | 'provision_map' | 'assistant' | 'staff_team';
+
 interface SencoViewProps {
   child: Child;
   timeline: ChildEvent[];
-  activeTab?: 'review_pack' | 'provision_map' | 'assistant';
-  onTabChange?: (tab: 'review_pack' | 'provision_map' | 'assistant') => void;
+  activeTab?: SencoTab;
+  onTabChange?: (tab: SencoTab) => void;
   onOpenDocModal?: () => void;
   onOpenIncidentModal?: () => void;
   onRegisterChild?: () => void;
@@ -44,7 +54,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
   onOpenIncidentModal,
   onRegisterChild,
 }) => {
-  const [activeTab, setActiveTab] = useState<'review_pack' | 'provision_map' | 'assistant'>(
+  const [activeTab, setActiveTab] = useState<SencoTab>(
     propActiveTab || 'review_pack'
   );
 
@@ -54,7 +64,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
     }
   }, [propActiveTab]);
 
-  const handleTabSelect = (tab: 'review_pack' | 'provision_map' | 'assistant') => {
+  const handleTabSelect = (tab: SencoTab) => {
     setActiveTab(tab);
     onTabChange?.(tab);
   };
@@ -98,6 +108,92 @@ export const SencoView: React.FC<SencoViewProps> = ({
         .finally(() => setLoadingMatrix(false));
     }
   }, [activeTab, provisionMatrix]);
+
+  // Staff Directory & Provisioning state
+  const [staffList, setStaffList] = useState<AdminUserItem[]>([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
+  const [staffFilter, setStaffFilter] = useState<'all' | 'teacher' | 'ta' | 'specialist'>('all');
+  const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState(false);
+  const [submittingStaff, setSubmittingStaff] = useState(false);
+  const [provisionSuccessMsg, setProvisionSuccessMsg] = useState<{
+    name: string;
+    email: string;
+    role: string;
+    password?: string;
+  } | null>(null);
+
+  const [staffForm, setStaffForm] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: 'teacher' | 'ta' | 'specialist';
+    jobTitle: string;
+    password?: string;
+  }>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    role: 'teacher',
+    jobTitle: '',
+    password: '',
+  });
+
+  const loadStaff = async () => {
+    try {
+      setLoadingStaff(true);
+      const data = await api.getAdminUsers();
+      setStaffList(data);
+    } catch (err) {
+      console.error('Failed to load staff list:', err);
+    } finally {
+      setLoadingStaff(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'staff_team') {
+      loadStaff();
+    }
+  }, [activeTab]);
+
+  const handleProvisionStaff = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!staffForm.firstName || !staffForm.lastName || !staffForm.email) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    try {
+      setSubmittingStaff(true);
+      const res = await api.provisionStaff({
+        first_name: staffForm.firstName,
+        last_name: staffForm.lastName,
+        email: staffForm.email,
+        role: staffForm.role,
+        job_title: staffForm.jobTitle || undefined,
+        password: staffForm.password || undefined,
+      });
+      setProvisionSuccessMsg({
+        name: res.full_name,
+        email: res.email,
+        role: res.role,
+        password: res.temporary_credentials,
+      });
+      setIsAddStaffModalOpen(false);
+      setStaffForm({
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: 'teacher',
+        jobTitle: '',
+        password: '',
+      });
+      await loadStaff();
+    } catch (err: any) {
+      alert(`Staff appointment failed: ${err.message}`);
+    } finally {
+      setSubmittingStaff(false);
+    }
+  };
 
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -189,6 +285,21 @@ export const SencoView: React.FC<SencoViewProps> = ({
           <span>📊 Caseload & Provision Mapping</span>
           <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono">
             34 Pupils
+          </span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('staff_team')}
+          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
+            activeTab === 'staff_team'
+              ? 'bg-emerald-700 text-white shadow-xs'
+              : 'text-gray-600 hover:text-navy hover:bg-gray-100'
+          }`}
+        >
+          <UserPlus className="w-4 h-4" />
+          <span>👥 School Staff & Team</span>
+          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono">
+            {staffList.length > 0 ? `${staffList.length} Staff` : 'Team'}
           </span>
         </button>
 
@@ -816,6 +927,459 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* TAB 4: SCHOOL STAFF & TEAM DIRECTORY (SENCO RECRUITING & DELEGATION) */}
+      {/* ============================================================== */}
+      {activeTab === 'staff_team' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          {/* Header Action Banner */}
+          <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-navy text-white p-5 rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center text-xl font-bold font-serif text-mint border border-white/10">
+                👥
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg font-bold font-serif text-white">
+                    School Staff & Inclusion Team Directory
+                  </h3>
+                  <span className="text-[10px] bg-emerald-400/20 text-emerald-200 border border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">
+                    St. Jude&apos;s Inclusive Academy
+                  </span>
+                </div>
+                <p className="text-xs text-mint/80 mt-1 max-w-2xl">
+                  SENCO operational authority: Appoint, provision, and allocate Classroom Teachers, Teaching Assistants, and Specialists within your school tenant.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <button
+                onClick={loadStaff}
+                disabled={loadingStaff}
+                className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all border border-white/15 flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                title="Refresh Staff List"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${loadingStaff ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+              <button
+                onClick={() => setIsAddStaffModalOpen(true)}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-mint hover:from-teal-300 hover:to-mint text-navy text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
+              >
+                <UserPlus className="w-4 h-4 text-navy" />
+                <span>+ Add Staff Member</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Provisioning Success Notification */}
+          {provisionSuccessMsg && (
+            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start justify-between gap-3 shadow-xs">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <div className="text-xs space-y-1">
+                  <p className="font-bold">
+                    ✓ Successfully appointed and provisioned {provisionSuccessMsg.name} ({provisionSuccessMsg.email})
+                  </p>
+                  <p className="text-emerald-700">
+                    Role: <span className="font-semibold uppercase tracking-wider">{provisionSuccessMsg.role}</span> &bull; Initial Password: <code className="bg-emerald-100 px-1.5 py-0.5 rounded font-mono font-bold text-emerald-900">{provisionSuccessMsg.password || 'Welcome2026!'}</code> &bull; Invitation email logged in audit trail.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setProvisionSuccessMsg(null)}
+                className="text-emerald-700 hover:text-emerald-900 p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* 4 Summary Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
+              <div className="flex items-center justify-between text-gray-500 mb-1">
+                <span className="text-xs font-semibold">Total Appointed</span>
+                <Users className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="text-2xl font-bold font-serif text-navy">
+                {staffList.length}
+              </div>
+              <p className="text-[10px] text-gray-400 mt-0.5">Active School Team</p>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
+              <div className="flex items-center justify-between text-gray-500 mb-1">
+                <span className="text-xs font-semibold">Teachers</span>
+                <GraduationCap className="w-4 h-4 text-purple-600" />
+              </div>
+              <div className="text-2xl font-bold font-serif text-navy">
+                {staffList.filter((s) => s.role === 'teacher').length}
+              </div>
+              <p className="text-[10px] text-purple-600 font-medium mt-0.5">Classroom & Handover Leads</p>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
+              <div className="flex items-center justify-between text-gray-500 mb-1">
+                <span className="text-xs font-semibold">1:1 TAs</span>
+                <Users className="w-4 h-4 text-teal" />
+              </div>
+              <div className="text-2xl font-bold font-serif text-navy">
+                {staffList.filter((s) => s.role === 'ta').length}
+              </div>
+              <p className="text-[10px] text-teal font-medium mt-0.5">SEND Transition & Micro-Logs</p>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
+              <div className="flex items-center justify-between text-gray-500 mb-1">
+                <span className="text-xs font-semibold">Specialists / SENCO</span>
+                <ShieldCheck className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="text-2xl font-bold font-serif text-navy">
+                {staffList.filter((s) => s.role === 'specialist' || s.role === 'senco').length}
+              </div>
+              <p className="text-[10px] text-indigo-600 font-medium mt-0.5">SaLT, Ed Psych & Leadership</p>
+            </div>
+          </div>
+
+          {/* Quick Filter Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-2xs">
+            <div className="flex items-center gap-1.5 overflow-x-auto">
+              <button
+                onClick={() => setStaffFilter('all')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  staffFilter === 'all'
+                    ? 'bg-navy text-white shadow-xs'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                All Staff ({staffList.length})
+              </button>
+              <button
+                onClick={() => setStaffFilter('teacher')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  staffFilter === 'teacher'
+                    ? 'bg-purple-600 text-white shadow-xs'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Classroom Teachers ({staffList.filter((s) => s.role === 'teacher').length})
+              </button>
+              <button
+                onClick={() => setStaffFilter('ta')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  staffFilter === 'ta'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Teaching Assistants ({staffList.filter((s) => s.role === 'ta').length})
+              </button>
+              <button
+                onClick={() => setStaffFilter('specialist')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  staffFilter === 'specialist'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Specialists ({staffList.filter((s) => s.role === 'specialist').length})
+              </button>
+            </div>
+
+            <div className="text-xs text-gray-400 font-medium flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-teal" />
+              <span>Strict School Tenant Boundary Enforced</span>
+            </div>
+          </div>
+
+          {/* Staff Grid */}
+          {loadingStaff ? (
+            <div className="p-12 text-center text-gray-400 bg-white rounded-2xl border border-gray-100">
+              <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-teal" />
+              <p className="text-xs">Loading appointed school team...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {staffList
+                .filter((s) => {
+                  if (staffFilter === 'teacher') return s.role === 'teacher';
+                  if (staffFilter === 'ta') return s.role === 'ta';
+                  if (staffFilter === 'specialist') return s.role === 'specialist';
+                  return true;
+                })
+                .map((staff) => {
+                  const roleConfig = {
+                    teacher: {
+                      badge: 'Classroom Teacher',
+                      badgeBg: 'bg-purple-100 text-purple-700 border-purple-200',
+                      avatarBg: 'bg-purple-600 text-white',
+                      duties: 'Pre-Flight Handovers, differentiated pathways & lesson worksheets',
+                    },
+                    ta: {
+                      badge: '1:1 Teaching Assistant',
+                      badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                      avatarBg: 'bg-emerald-600 text-white',
+                      duties: 'High-risk timetable execution, <45s micro-logs & sensory decompression',
+                    },
+                    specialist: {
+                      badge: 'Specialist / Therapist',
+                      badgeBg: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                      avatarBg: 'bg-indigo-600 text-white',
+                      duties: 'Clinical observations, SaLT therapy programs & diagnostic reports',
+                    },
+                    senco: {
+                      badge: 'Lead SENCO & Inclusion Lead',
+                      badgeBg: 'bg-teal/10 text-teal border-teal/20',
+                      avatarBg: 'bg-teal text-white',
+                      duties: 'Statutory Section 44 packs, SEND register & staff team management',
+                    },
+                  }[staff.role] || {
+                    badge: staff.role.toUpperCase(),
+                    badgeBg: 'bg-gray-100 text-gray-700 border-gray-200',
+                    avatarBg: 'bg-gray-600 text-white',
+                    duties: 'Staff operations',
+                  };
+
+                  const initials = staff.full_name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+
+                  return (
+                    <div
+                      key={staff.id}
+                      className="bg-white rounded-2xl border border-gray-100 p-5 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${roleConfig.avatarBg}`}
+                            >
+                              {initials}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-navy text-sm leading-tight">
+                                {staff.full_name}
+                              </h4>
+                              <a
+                                href={`mailto:${staff.email}`}
+                                className="text-[11px] text-gray-400 hover:text-teal flex items-center gap-1 mt-0.5"
+                              >
+                                <Mail className="w-3 h-3" />
+                                <span>{staff.email}</span>
+                              </a>
+                            </div>
+                          </div>
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${roleConfig.badgeBg} whitespace-nowrap`}
+                          >
+                            {roleConfig.badge}
+                          </span>
+                        </div>
+
+                        <div className="space-y-1.5 py-3 border-t border-b border-gray-100 my-3 text-xs">
+                          <div className="flex justify-between items-center text-gray-500">
+                            <span>Assigned Tenant:</span>
+                            <span className="font-semibold text-navy">
+                              {staff.school_name || "St. Jude's Inclusive Academy"}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center text-gray-500">
+                            <span>Status:</span>
+                            <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold text-[11px]">
+                              <UserCheck className="w-3 h-3" />
+                              Active & Verified
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
+                            Delegated Responsibilities:
+                          </span>
+                          <p className="text-[11px] text-gray-600 leading-relaxed">
+                            {roleConfig.duties}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                        <span>Appointed by SENCO</span>
+                        <span className="text-teal font-semibold">1-Click Connected</span>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+
+          {/* Modal: Add Staff Member */}
+          {isAddStaffModalOpen && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
+              <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-150">
+                <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                      <UserPlus className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-navy text-base">
+                        Provision School Staff Member
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        St. Jude&apos;s Inclusive Academy &bull; Recruited under SENCO leadership
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsAddStaffModalOpen(false)}
+                    className="text-gray-400 hover:text-navy p-1 rounded-lg hover:bg-gray-100 cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleProvisionStaff} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-navy mb-1">
+                        First Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={staffForm.firstName}
+                        onChange={(e) =>
+                          setStaffForm({ ...staffForm, firstName: e.target.value })
+                        }
+                        placeholder="e.g. Thomas"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-navy mb-1">
+                        Last Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={staffForm.lastName}
+                        onChange={(e) =>
+                          setStaffForm({ ...staffForm, lastName: e.target.value })
+                        }
+                        placeholder="e.g. Clarke"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy mb-1">
+                      School Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={staffForm.email}
+                      onChange={(e) =>
+                        setStaffForm({ ...staffForm, email: e.target.value })
+                      }
+                      placeholder="e.g. t.clarke@stjudes.sch.uk"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy mb-1">
+                      Role & Support Tier *
+                    </label>
+                    <select
+                      value={staffForm.role}
+                      onChange={(e) =>
+                        setStaffForm({
+                          ...staffForm,
+                          role: e.target.value as 'teacher' | 'ta' | 'specialist',
+                        })
+                      }
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal bg-white cursor-pointer"
+                    >
+                      <option value="teacher">Classroom Teacher (Class Lead, Handover recipient)</option>
+                      <option value="ta">Teaching Assistant / 1:1 Support (Micro-logs, High-risk transitions)</option>
+                      <option value="specialist">Specialist / Therapist / SaLT (Clinical observations)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy mb-1">
+                      Class / Room / Specialism Assignment
+                    </label>
+                    <input
+                      type="text"
+                      value={staffForm.jobTitle}
+                      onChange={(e) =>
+                        setStaffForm({ ...staffForm, jobTitle: e.target.value })
+                      }
+                      placeholder="e.g. Year 4 Teacher (Room 2) or Autism 1:1 Specialist"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy mb-1">
+                      Initial Temporary Password (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={staffForm.password}
+                      onChange={(e) =>
+                        setStaffForm({ ...staffForm, password: e.target.value })
+                      }
+                      placeholder="Defaults to Welcome2026!"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal font-mono"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">
+                      The user will be prompted to change their password upon first login.
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddStaffModalOpen(false)}
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submittingStaff}
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal text-white text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                    >
+                      {submittingStaff ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <span>Provisioning...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Appoint & Provision Staff</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

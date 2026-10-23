@@ -56,7 +56,7 @@ export const App: React.FC = () => {
   const [activeNavId, setActiveNavId] = useState<string>('');
   const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('focused');
   const [parentSubTab, setParentSubTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
-  const [sencoSubTab, setSencoSubTab] = useState<'review_pack' | 'provision_map' | 'assistant'>('provision_map');
+  const [sencoSubTab, setSencoSubTab] = useState<'review_pack' | 'provision_map' | 'assistant' | 'staff_team'>('provision_map');
   const [adminSubTab, setAdminSubTab] = useState<'schools' | 'staff' | 'delegation' | 'audit'>('schools');
 
   // Registration & Onboarding state
@@ -116,6 +116,7 @@ export const App: React.FC = () => {
 
     if (activeView === 'senco') {
       if (navId === 'provision_map') setSencoSubTab('provision_map');
+      if (navId === 'staff_team') setSencoSubTab('staff_team');
       if (navId === 'review_pack') setSencoSubTab('review_pack');
       if (navId === 'assistant') setSencoSubTab('assistant');
     }
@@ -510,8 +511,8 @@ export const App: React.FC = () => {
       pills: [{ label: 'Top Match: Game Design (92%)', color: 'gold' as const }],
     },
     admin: {
-      title: 'MAT Executive & Multi-School Governance',
-      subtitle: `${currentUser.full_name} · Multi-Academy Trust Central Office`,
+      title: 'Admin & School Governance Hub',
+      subtitle: `${currentUser.full_name} · Platform Governance`,
       pills: [
         { label: '🏛️ Multi-School Isolation', color: 'indigo' as const },
         { label: '📜 Audit Trail Active', color: 'teal' as const },

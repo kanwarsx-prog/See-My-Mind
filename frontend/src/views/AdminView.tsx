@@ -203,13 +203,13 @@ export const AdminView: React.FC<AdminViewProps> = ({
           <div className="space-y-1.5">
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold">
               <Building2 className="w-3.5 h-3.5 text-indigo-300" />
-              <span>Multi-Academy Trust & Platform Governance</span>
+              <span>Platform & School Governance</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
-              Trust Operations & Multi-Tenancy Hub
+              Admin & Multi-Tenancy Hub
             </h1>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-              Executive oversight for Multi-Academy Trusts and Local Authorities. Onboard discrete school tenants,
+              Executive governance across school tenants. Onboard discrete school tenants,
               appoint Lead SENCOs, and maintain strict cross-tenant data segregation with immutable audit logging.
             </p>
           </div>
@@ -518,7 +518,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
                 <option value="senco">SENCO & Inclusion Lead</option>
                 <option value="teacher">Classroom Teacher</option>
                 <option value="ta">1:1 Teaching Assistant</option>
-                <option value="admin">Trust Admin</option>
+                <option value="admin">Admin</option>
               </select>
             </div>
 
@@ -609,7 +609,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
             </div>
             <p className="mt-1 text-indigo-800 text-xs">
               To safeguard child privacy and satisfy UK statutory requirements, operational capabilities are explicitly
-              delegated. While the Trust Admin provisions schools and accounts, day-to-day SEND admissions and clinical
+              delegated. While Admins provision schools and appoint Lead SENCOs, school staff recruitment, day-to-day SEND admissions, and clinical
               Section 44 oversight rest strictly with the school-level Lead SENCO.
             </p>
           </div>
@@ -759,7 +759,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
                         </div>
                       </td>
                       <td className="py-3 px-4 text-xs text-gray-600 font-medium">
-                        {log.school_name || 'Trust Portfolio'}
+                        {log.school_name || 'Platform Governance'}
                       </td>
                       <td className="py-3 px-4 text-xs text-gray-700 max-w-md">
                         {log.details}
@@ -971,7 +971,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
                     <option value="senco">🛡️ Lead SENCO (School Lead)</option>
                     <option value="teacher">👩‍🏫 Classroom Teacher</option>
                     <option value="ta">🤝 1:1 Teaching Assistant</option>
-                    <option value="admin">🏛️ Trust / Central Admin</option>
+                    <option value="admin">🏛️ Admin</option>
                   </select>
                 </div>
 
