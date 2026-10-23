@@ -161,21 +161,21 @@ export const ParentView: React.FC<ParentViewProps> = ({
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10">
       {/* 1. Welcome & Adult Intelligence Banner */}
-      <div className="card p-5 sm:p-6 bg-gradient-to-r from-amber-light/30 via-white to-mint/20 border-l-4 border-l-amber-dark">
+      <div className="card p-5 sm:p-6 bg-gradient-to-r from-amber-light/30 via-cardBg to-mint/20 dark:from-amber-950/20 dark:via-cardBg dark:to-teal-950/20 border-l-4 border-l-amber-dark">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-2xl">👩‍👦</span>
-              <h2 className="text-xl font-serif font-bold text-navy">Welcome, Dana Carter</h2>
+              <h2 className="text-xl font-serif font-bold text-navy dark:text-white">Welcome, Dana Carter</h2>
             </div>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className="text-xs text-textSub dark:text-slate-300 mt-1">
               Direct connection with Ms Johnson & St. Jude's Academy for {child.full_name || 'Phoenix'}
             </p>
-            <div className="mt-2 flex items-center gap-2">
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
+            <div className="mt-2 flex items-center gap-2 flex-wrap">
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/40">
                 🛡️ Zero Child Logging Burden
               </span>
-              <span className="text-[11px] text-gray-500">
+              <span className="text-[11px] text-textDim dark:text-slate-400">
                 All sensory insights derived entirely from adult proxy observations.
               </span>
             </div>
@@ -184,13 +184,13 @@ export const ParentView: React.FC<ParentViewProps> = ({
           <div className="flex flex-col sm:items-end gap-2">
             <button
               onClick={() => setEveningModalOpen(true)}
-              className="py-2.5 px-4 bg-navy hover:bg-navy-light text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="py-2.5 px-4 bg-teal hover:bg-teal-dark text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <Moon className="w-4 h-4 text-amber-300" />
               <span>Evening Check-In (20s)</span>
             </button>
-            <div className="text-left sm:text-right text-[11px] text-gray-500">
-              <span className="font-semibold text-navy">Today: </span>
+            <div className="text-left sm:text-right text-[11px] text-textDim dark:text-slate-400">
+              <span className="font-semibold text-navy dark:text-white">Today: </span>
               {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
             </div>
           </div>
@@ -198,20 +198,24 @@ export const ParentView: React.FC<ParentViewProps> = ({
       </div>
 
       {/* 2. 4-Pillar Tab Navigation (Mobile Responsive) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-gray-200 scrollbar-none">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-borderMain scrollbar-none">
         <button
           onClick={() => handleTabSelect('bridge')}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'bridge'
-              ? 'bg-navy text-white shadow-sm'
-              : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+              ? 'bg-teal text-white shadow-sm font-bold'
+              : 'bg-cardBg text-textDim hover:text-textMain hover:bg-cardSubtle border border-borderMain font-semibold'
           }`}
         >
-          <BatteryCharging className="w-4 h-4 text-teal-300" />
+          <BatteryCharging className={`w-4 h-4 ${activeTab === 'bridge' ? 'text-white' : 'text-teal dark:text-teal-300'}`} />
           <span>3:15 PM Decompression Bridge</span>
           {bridge && (
             <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
-              bridge.battery_percentage < 35 ? 'bg-rose-500 text-white' : 'bg-teal-500 text-white'
+              bridge.battery_percentage < 35 
+                ? 'bg-rose-500 text-white' 
+                : activeTab === 'bridge' 
+                ? 'bg-teal-700 text-white' 
+                : 'bg-teal-100 text-teal-800 dark:bg-teal-900/60 dark:text-teal-200'
             }`}>
               {bridge.battery_percentage}%
             </span>
@@ -220,13 +224,13 @@ export const ParentView: React.FC<ParentViewProps> = ({
 
         <button
           onClick={() => handleTabSelect('handover')}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'handover'
-              ? 'bg-navy text-white shadow-sm'
-              : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+              ? 'bg-teal text-white shadow-sm font-bold'
+              : 'bg-cardBg text-textDim hover:text-textMain hover:bg-cardSubtle border border-borderMain font-semibold'
           }`}
         >
-          <Clock className="w-4 h-4 text-amber-300" />
+          <Clock className={`w-4 h-4 ${activeTab === 'handover' ? 'text-white' : 'text-amber-600 dark:text-amber-400'}`} />
           <span>24-Hour Handover Loop</span>
           {effectiveHandover?.acknowledged_by_staff && (
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -235,28 +239,30 @@ export const ParentView: React.FC<ParentViewProps> = ({
 
         <button
           onClick={() => handleTabSelect('correlation')}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'correlation'
-              ? 'bg-navy text-white shadow-sm'
-              : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+              ? 'bg-teal text-white shadow-sm font-bold'
+              : 'bg-cardBg text-textDim hover:text-textMain hover:bg-cardSubtle border border-borderMain font-semibold'
           }`}
         >
-          <Pill className="w-4 h-4 text-purple-300" />
+          <Pill className={`w-4 h-4 ${activeTab === 'correlation' ? 'text-white' : 'text-purple-600 dark:text-purple-400'}`} />
           <span>Medication & Routine Digest</span>
         </button>
 
         <button
           onClick={() => handleTabSelect('wins')}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer min-h-[44px] ${
             activeTab === 'wins'
-              ? 'bg-navy text-white shadow-sm'
-              : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+              ? 'bg-teal text-white shadow-sm font-bold'
+              : 'bg-cardBg text-textDim hover:text-textMain hover:bg-cardSubtle border border-borderMain font-semibold'
           }`}
         >
-          <Award className="w-4 h-4 text-gold" />
+          <Award className={`w-4 h-4 ${activeTab === 'wins' ? 'text-white' : 'text-gold'}`} />
           <span>Wins & Strengths Space</span>
           {wins.length > 0 && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-400 text-navy font-bold">
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+              activeTab === 'wins' ? 'bg-amber-300 text-teal-950' : 'bg-amber-100 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200'
+            }`}>
               {wins.length}
             </span>
           )}
@@ -290,42 +296,42 @@ export const ParentView: React.FC<ParentViewProps> = ({
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Read Receipt Banner */}
           {effectiveHandover?.acknowledged_by_staff ? (
-            <div className="card p-5 bg-gradient-to-r from-emerald-50 via-white to-mint-pale border-l-4 border-l-emerald-600 shadow-xs">
+            <div className="card p-5 bg-gradient-to-r from-emerald-50 via-cardBg to-emerald-50/30 dark:from-emerald-950/30 dark:via-cardBg dark:to-teal-950/20 border-l-4 border-l-emerald-600 shadow-xs">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-700 flex-shrink-0 mt-0.5">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-700 dark:text-emerald-300 flex-shrink-0 mt-0.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-sm font-bold text-navy">
+                    <h3 className="text-sm font-bold text-navy dark:text-white">
                       Handover Read by Ms Johnson at {ackTime}
                     </h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300">
                       ✓ Phoenix Welcomed in Room 4
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                  <p className="text-xs text-textSub dark:text-slate-300 mt-1 leading-relaxed">
                     Ms Johnson has acknowledged your morning notes. Noise defenders are on {childName}'s desk for the 9:05am assembly, and TA Melissa Grant has crackers and water ready for his 10:00am medication window.
                   </p>
                 </div>
               </div>
             </div>
           ) : effectiveHandover ? (
-            <div className="card p-5 bg-gradient-to-r from-amber-50 via-white to-amber-50/30 border-l-4 border-l-amber-dark shadow-xs">
+            <div className="card p-5 bg-gradient-to-r from-amber-50 via-cardBg to-amber-50/30 dark:from-amber-950/30 dark:via-cardBg dark:to-amber-950/20 border-l-4 border-l-amber-dark shadow-xs">
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-2xl bg-amber-light flex items-center justify-center text-amber-dark flex-shrink-0 mt-0.5">
-                  <Clock className="w-5 h-5 text-amber-dark" />
+                <div className="w-10 h-10 rounded-2xl bg-amber-light dark:bg-amber-900/40 flex items-center justify-center text-amber-dark dark:text-amber-300 flex-shrink-0 mt-0.5">
+                  <Clock className="w-5 h-5 text-amber-dark dark:text-amber-300" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-sm font-bold text-navy">
+                    <h3 className="text-sm font-bold text-navy dark:text-white">
                       Handover Sent · Awaiting Teacher Registration Check-In
                     </h3>
-                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
                       Transmitted to School
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                  <p className="text-xs text-textSub dark:text-slate-300 mt-1 leading-relaxed">
                     Your notes about sleep, breakfast, and assembly noise have been delivered to Room 4. You will see an instant confirmation receipt here the second Ms Johnson opens her morning briefing.
                   </p>
                 </div>
@@ -334,37 +340,37 @@ export const ParentView: React.FC<ParentViewProps> = ({
           ) : null}
 
           {/* 4-Stage Mood Arc */}
-          <div className="p-5 bg-[#1A3A4A] bg-gradient-to-br from-[#1A3A4A] via-[#244b5f] to-[#1A3A4A] text-white rounded-2xl overflow-hidden relative shadow-lg border border-[#2D5A6E]">
-            <div className="font-serif text-base font-bold text-white mb-1">{childName}'s Day at a Glance</div>
-            <p className="text-[11px] text-white/60 mb-4">Adult-observed emotional progression · St. Jude's Academy</p>
+          <div className="p-5 rounded-2xl overflow-hidden relative shadow-sm border border-borderMain bg-gradient-to-br from-indigo-50/50 via-cardBg to-teal-50/40 dark:from-[#142234] dark:via-[#1B2F44] dark:to-[#142234] text-textMain dark:text-white">
+            <div className="font-serif text-base font-bold text-navy dark:text-white mb-1">{childName}'s Day at a Glance</div>
+            <p className="text-[11px] text-textDim dark:text-white/60 mb-4">Adult-observed emotional progression · St. Jude's Academy</p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-white/10">
+              <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-borderMain dark:border-white/10 shadow-2xs">
                 <div className="text-2xl mb-1">😐</div>
-                <div className="text-[10px] text-white/60 uppercase font-semibold">Morning Handover</div>
-                <div className="text-xs font-bold text-coral-light">Tricky Start</div>
-                <div className="text-[10px] text-white/50 mt-0.5">Restless sleep (4am)</div>
+                <div className="text-[10px] text-textDim dark:text-white/60 uppercase font-semibold">Morning Handover</div>
+                <div className="text-xs font-bold text-coral-dark dark:text-coral-light">Tricky Start</div>
+                <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Restless sleep (4am)</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-white/10">
+              <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-borderMain dark:border-white/10 shadow-2xs">
                 <div className="text-2xl mb-1">🙂</div>
-                <div className="text-[10px] text-white/60 uppercase font-semibold">Assembly (9:05)</div>
-                <div className="text-xs font-bold text-amber-light">Defenders Used</div>
-                <div className="text-[10px] text-white/50 mt-0.5">Sat near aisle exit</div>
+                <div className="text-[10px] text-textDim dark:text-white/60 uppercase font-semibold">Assembly (9:05)</div>
+                <div className="text-xs font-bold text-amber-dark dark:text-amber-light">Defenders Used</div>
+                <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Sat near aisle exit</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-white/10">
+              <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-borderMain dark:border-white/10 shadow-2xs">
                 <div className="text-2xl mb-1">⭐</div>
-                <div className="text-[10px] text-white/60 uppercase font-semibold">Maths (10:45)</div>
-                <div className="text-xs font-bold text-mint">Breakthrough!</div>
-                <div className="text-[10px] text-white/50 mt-0.5">Gradient slope win</div>
+                <div className="text-[10px] text-textDim dark:text-white/60 uppercase font-semibold">Maths (10:45)</div>
+                <div className="text-xs font-bold text-teal dark:text-mint">Breakthrough!</div>
+                <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Gradient slope win</div>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-white/10">
+              <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-borderMain dark:border-white/10 shadow-2xs">
                 <div className="text-2xl mb-1">😄</div>
-                <div className="text-[10px] text-white/60 uppercase font-semibold">Afternoon (3:20)</div>
-                <div className="text-xs font-bold text-emerald-300">Regulated Finish</div>
-                <div className="text-[10px] text-white/50 mt-0.5">Downtime planned</div>
+                <div className="text-[10px] text-textDim dark:text-white/60 uppercase font-semibold">Afternoon (3:20)</div>
+                <div className="text-xs font-bold text-emerald-700 dark:text-emerald-300">Regulated Finish</div>
+                <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Downtime planned</div>
               </div>
             </div>
           </div>
@@ -372,31 +378,31 @@ export const ParentView: React.FC<ParentViewProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Left: Morning Handover Check-In Form */}
             <div className="md:col-span-6 space-y-5">
-              <div className="card p-5 border border-amber/30">
-                <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-100">
-                  <Clock className="w-4 h-4 text-amber-dark" />
-                  <h3 className="text-sm font-bold text-navy">Submit / Update Morning Handover</h3>
+              <div className="card p-5 border border-borderMain">
+                <div className="flex items-center gap-2 mb-2 pb-2 border-b border-borderMain">
+                  <Clock className="w-4 h-4 text-amber-dark dark:text-amber-400" />
+                  <h3 className="text-sm font-bold text-navy dark:text-white">Submit / Update Morning Handover</h3>
                 </div>
-                <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                <p className="text-xs text-textDim dark:text-slate-400 mb-4 leading-relaxed">
                   Help Ms Johnson and TA Melissa prepare before registration. Takes under 30 seconds.
                 </p>
 
                 {submitted ? (
-                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-800 text-xs animate-in zoom-in-95">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                  <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center gap-3 text-emerald-800 dark:text-emerald-300 text-xs animate-in zoom-in-95">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                     <div>
                       <div className="font-bold">Handover Sent to Room 4!</div>
-                      <div className="text-[11px] text-emerald-700">Ms Johnson and TA Melissa have received {childName}'s updated morning signals.</div>
+                      <div className="text-[11px] text-emerald-700 dark:text-emerald-300">Ms Johnson and TA Melissa have received {childName}'s updated morning signals.</div>
                     </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmitMorningHandover} className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold text-navy mb-1">How did {childName} sleep?</label>
+                      <label className="block text-xs font-semibold text-navy dark:text-white mb-1">How did {childName} sleep?</label>
                       <select
                         value={sleep}
                         onChange={(e) => setSleep(e.target.value)}
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-dark"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-none focus:border-amber-dark"
                       >
                         <option>Good (8+ hours restful)</option>
                         <option>Restless (woke in night at 4am)</option>
@@ -405,11 +411,11 @@ export const ParentView: React.FC<ParentViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-navy mb-1">Morning mood at breakfast</label>
+                      <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Morning mood at breakfast</label>
                       <select
                         value={mood}
                         onChange={(e) => setMood(e.target.value)}
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-amber-dark"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-none focus:border-amber-dark"
                       >
                         <option>Calm & Happy</option>
                         <option>Anxious / Apprehensive</option>
@@ -419,7 +425,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 py-1">
-                      <label className="flex items-center gap-2 text-xs text-navy p-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer">
+                      <label className="flex items-center gap-2 text-xs text-textMain p-2 bg-cardSubtle rounded-xl border border-borderMain cursor-pointer">
                         <input
                           type="checkbox"
                           checked={breakfast}
@@ -429,7 +435,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
                         <span className="font-medium">Breakfast Eaten</span>
                       </label>
 
-                      <label className="flex items-center gap-2 text-xs text-navy p-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer">
+                      <label className="flex items-center gap-2 text-xs text-textMain p-2 bg-cardSubtle rounded-xl border border-borderMain cursor-pointer">
                         <input
                           type="checkbox"
                           checked={meds}
@@ -441,7 +447,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-navy mb-1">
+                      <label className="block text-xs font-semibold text-navy dark:text-white mb-1">
                         Special notes for today (sensory alerts, changes)
                       </label>
                       <textarea
@@ -449,14 +455,14 @@ export const ParentView: React.FC<ParentViewProps> = ({
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="e.g. Nervous about assembly; noise defenders in his bag..."
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-amber-dark"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-none focus:border-amber-dark"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submittingHandover}
-                      className="w-full py-2.5 px-4 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-2.5 px-4 bg-teal hover:bg-teal-dark text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>{submittingHandover ? 'Sending Handover...' : 'Send Morning Handover to School'}</span>
@@ -469,36 +475,36 @@ export const ParentView: React.FC<ParentViewProps> = ({
             {/* Right: Live Shared Feed from Room 4 */}
             <div className="md:col-span-6 space-y-4">
               <div className="card p-5">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-3">
+                <div className="flex items-center justify-between border-b border-borderMain pb-2 mb-3">
                   <div className="flex items-center gap-2">
                     <Heart className="w-4 h-4 text-coral-dark" />
-                    <h3 className="text-sm font-bold text-navy">{childName}'s Day at School</h3>
+                    <h3 className="text-sm font-bold text-navy dark:text-white">{childName}'s Day at School</h3>
                   </div>
-                  <span className="text-[10px] text-gray-400">Live feed from Room 4</span>
+                  <span className="text-[10px] text-textDim dark:text-slate-400">Live feed from Room 4</span>
                 </div>
 
                 <div className="space-y-3">
                   {timeline.filter(e => e.visibility === 'Shared').length === 0 ? (
-                    <p className="text-xs text-gray-400 italic py-4 text-center">No shared notes logged yet.</p>
+                    <p className="text-xs text-textDim italic py-4 text-center">No shared notes logged yet.</p>
                   ) : (
                     timeline.filter(e => e.visibility === 'Shared').map((evt) => (
-                      <div key={evt.id} className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 space-y-1">
+                      <div key={evt.id} className="p-3.5 rounded-xl bg-cardSubtle border border-borderMain space-y-1">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-navy">{evt.title}</span>
-                          <span className="text-gray-400 text-[10px]">
+                          <span className="font-bold text-navy dark:text-white">{evt.title}</span>
+                          <span className="text-textDim dark:text-slate-400 text-[10px]">
                             {new Date(evt.event_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-600 leading-relaxed">{evt.summary}</p>
+                        <p className="text-xs text-textSub dark:text-slate-300 leading-relaxed">{evt.summary}</p>
                         {evt.observation?.strengths_observed && (
-                          <div className="text-[11px] text-teal font-medium pt-1">
+                          <div className="text-[11px] text-teal dark:text-mint font-medium pt-1">
                             🌟 Strengths noticed: {evt.observation.strengths_observed}
                           </div>
                         )}
-                        <div className="text-[10px] text-gray-400 pt-1 flex items-center justify-between">
+                        <div className="text-[10px] text-textDim dark:text-slate-400 pt-1 flex items-center justify-between">
                           <span>Logged by {evt.reporter_name || evt.reporter_type}</span>
                           {evt.status === 'Acknowledged' && (
-                            <span className="text-emerald-700 font-semibold text-[10px]">✓ Acknowledged</span>
+                            <span className="text-emerald-700 dark:text-emerald-300 font-semibold text-[10px]">✓ Acknowledged</span>
                           )}
                         </div>
                       </div>
@@ -517,53 +523,53 @@ export const ParentView: React.FC<ParentViewProps> = ({
       {activeTab === 'correlation' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {corrLoading ? (
-            <div className="card p-12 text-center text-gray-400">
+            <div className="card p-12 text-center text-textDim space-y-2">
               <div className="w-8 h-8 border-3 border-teal border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-xs">Analyzing 30-day medication and routine correlations...</p>
             </div>
           ) : correlation ? (
             <div className="space-y-6">
               {/* Hero Medication Card */}
-              <div className="p-6 bg-[#1A3A4A] bg-gradient-to-br from-[#1A3A4A] via-[#244b5f] to-[#1A3A4A] text-white rounded-2xl shadow-lg border border-[#2D5A6E]">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+              <div className="p-6 rounded-2xl shadow-sm border border-borderMain bg-gradient-to-br from-indigo-50/60 via-cardBg to-teal-50/40 dark:from-[#142234] dark:via-[#1B2F44] dark:to-[#142234] text-textMain dark:text-white">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-borderMain dark:border-white/10">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs uppercase font-bold text-amber-300 bg-amber-400/20 px-2.5 py-1 rounded-full">
+                      <span className="text-xs uppercase font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-400/20 px-2.5 py-1 rounded-full border border-amber-200/50 dark:border-transparent">
                         Clinical Correlation Engine
                       </span>
-                      <span className="text-xs text-white/60">30 School Days Analyzed</span>
+                      <span className="text-xs text-textDim dark:text-white/60">30 School Days Analyzed</span>
                     </div>
-                    <h2 className="text-xl font-serif font-bold text-white mt-1.5">
+                    <h2 className="text-xl font-serif font-bold text-navy dark:text-white mt-1.5">
                       {correlation.medication_name}
                     </h2>
                   </div>
 
                   <button
                     onClick={handleCopyPediatricianSummary}
-                    className="px-4 py-2 bg-white/10 hover:bg-white/20 active:scale-95 text-xs text-white rounded-xl flex items-center gap-2 transition-all cursor-pointer border border-white/10 self-start md:self-auto"
+                    className="px-4 py-2 bg-cardBg dark:bg-white/10 hover:bg-cardSubtle dark:hover:bg-white/20 active:scale-95 text-xs text-textMain dark:text-white rounded-xl flex items-center gap-2 transition-all cursor-pointer border border-borderMain dark:border-white/10 self-start md:self-auto shadow-2xs"
                   >
-                    {copiedSummary ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-300" />}
+                    {copiedSummary ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-600 dark:text-amber-300" />}
                     <span>{copiedSummary ? 'Copied Pediatrician Digest!' : 'Copy CAMHS / Pediatrician Summary'}</span>
                   </button>
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-                    <div className="text-white/60 text-[10px] uppercase font-semibold">Morning Window</div>
-                    <div className="text-sm font-bold text-teal-300 mt-0.5">{correlation.morning_window}</div>
-                    <div className="text-[10px] text-white/50 mt-0.5">Administered with food</div>
+                  <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-borderMain dark:border-white/10 shadow-2xs">
+                    <div className="text-textDim dark:text-white/60 text-[10px] uppercase font-semibold">Morning Window</div>
+                    <div className="text-sm font-bold text-teal dark:text-teal-300 mt-0.5">{correlation.morning_window}</div>
+                    <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Administered with food</div>
                   </div>
 
-                  <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-                    <div className="text-white/60 text-[10px] uppercase font-semibold">Mid-Morning Vulnerability Dip</div>
-                    <div className="text-sm font-bold text-amber-300 mt-0.5">{correlation.dip_window}</div>
-                    <div className="text-[10px] text-white/50 mt-0.5">10:00am snack bridge critical</div>
+                  <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-borderMain dark:border-white/10 shadow-2xs">
+                    <div className="text-textDim dark:text-white/60 text-[10px] uppercase font-semibold">Mid-Morning Vulnerability Dip</div>
+                    <div className="text-sm font-bold text-amber-dark dark:text-amber-300 mt-0.5">{correlation.dip_window}</div>
+                    <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">10:00am snack bridge critical</div>
                   </div>
 
-                  <div className="bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-white/10">
-                    <div className="text-white/60 text-[10px] uppercase font-semibold">Multi-Agency Data Integrity</div>
-                    <div className="text-sm font-bold text-emerald-300 mt-0.5">100% Concordance</div>
-                    <div className="text-[10px] text-white/50 mt-0.5">Home Handover + School Log</div>
+                  <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl border border-borderMain dark:border-white/10 shadow-2xs">
+                    <div className="text-textDim dark:text-white/60 text-[10px] uppercase font-semibold">Multi-Agency Data Integrity</div>
+                    <div className="text-sm font-bold text-emerald-700 dark:text-emerald-300 mt-0.5">100% Concordance</div>
+                    <div className="text-[10px] text-textDim dark:text-white/50 mt-0.5">Home Handover + School Log</div>
                   </div>
                 </div>
               </div>
@@ -571,11 +577,11 @@ export const ParentView: React.FC<ParentViewProps> = ({
               {/* Correlation Insights Grid */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-navy flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-dark" />
+                  <h3 className="text-sm font-bold text-navy dark:text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-dark dark:text-amber-400" />
                     <span>Empirical Routine Insights</span>
                   </h3>
-                  <span className="text-[10px] text-gray-500">Cross-referenced against behavioral and sensory data</span>
+                  <span className="text-[10px] text-textDim dark:text-slate-400">Cross-referenced against behavioral and sensory data</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -584,52 +590,52 @@ export const ParentView: React.FC<ParentViewProps> = ({
                       key={idx}
                       className={`p-4 rounded-xl border transition-all ${
                         item.status === 'positive'
-                          ? 'bg-emerald-50/50 border-emerald-200'
+                          ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/40'
                           : item.status === 'warning'
-                          ? 'bg-amber-50/60 border-amber-200'
-                          : 'bg-gray-50 border-gray-200'
+                          ? 'bg-amber-50/60 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/40'
+                          : 'bg-cardSubtle border-borderMain'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                           item.status === 'positive'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-amber-100 text-amber-900'
+                            ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300'
+                            : 'bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-300'
                         }`}>
                           {item.confidence}
                         </span>
-                        <span className="text-xs font-bold text-navy">{item.incident_rate}</span>
+                        <span className="text-xs font-bold text-navy dark:text-white">{item.incident_rate}</span>
                       </div>
-                      <h4 className="text-xs font-bold text-navy">{item.factor}</h4>
-                      <p className="text-xs text-gray-600 mt-1 leading-relaxed">{item.effect}</p>
+                      <h4 className="text-xs font-bold text-navy dark:text-white">{item.factor}</h4>
+                      <p className="text-xs text-textSub dark:text-slate-300 mt-1 leading-relaxed">{item.effect}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Ready-to-Share Pediatrician Summary Box */}
-              <div className="card p-5 bg-gray-50 border border-gray-200 space-y-3">
-                <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+              <div className="card p-5 bg-cardSubtle border border-borderMain space-y-3">
+                <div className="flex items-center justify-between border-b border-borderMain pb-2">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-navy" />
-                    <h3 className="text-xs font-bold text-navy uppercase tracking-wider">
+                    <FileText className="w-4 h-4 text-teal dark:text-teal-300" />
+                    <h3 className="text-xs font-bold text-navy dark:text-white uppercase tracking-wider">
                       Exportable Clinical Summary for Medical Reviews
                     </h3>
                   </div>
                   <button
                     onClick={handleCopyPediatricianSummary}
-                    className="text-xs font-bold text-teal hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-bold text-teal dark:text-teal-300 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     {copiedSummary ? 'Copied!' : 'Copy to Clipboard'}
                   </button>
                 </div>
-                <pre className="text-[11px] font-mono text-gray-700 bg-white p-4 rounded-xl border border-gray-200 whitespace-pre-wrap leading-relaxed">
+                <pre className="text-[11px] font-mono text-textMain dark:text-slate-200 bg-cardBg p-4 rounded-xl border border-borderMain whitespace-pre-wrap leading-relaxed">
                   {correlation.pediatrician_summary}
                 </pre>
               </div>
             </div>
           ) : (
-            <p className="text-xs text-gray-500 text-center py-8">No correlation data available.</p>
+            <p className="text-xs text-textDim text-center py-8">No correlation data available.</p>
           )}
         </div>
       )}
@@ -639,16 +645,16 @@ export const ParentView: React.FC<ParentViewProps> = ({
       {/* ======================================================== */}
       {activeTab === 'wins' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="card p-6 bg-gradient-to-r from-amber-50 via-white to-mint-pale border-l-4 border-l-gold">
+          <div className="card p-6 bg-gradient-to-r from-amber-50 via-cardBg to-mint/20 dark:from-amber-950/20 dark:via-cardBg dark:to-teal-950/20 border-l-4 border-l-gold">
             <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-amber-100 flex items-center justify-center text-gold flex-shrink-0 mt-0.5">
-                <Sparkles className="w-6 h-6 text-amber-600" />
+              <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-gold flex-shrink-0 mt-0.5">
+                <Sparkles className="w-6 h-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-navy">
+                <h3 className="text-sm font-bold text-navy dark:text-white">
                   Counteracting Deficit Fatigue: Celebrating {childName}'s Brilliance
                 </h3>
-                <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                <p className="text-xs text-textSub dark:text-slate-300 mt-1 leading-relaxed">
                   SEND parenting can feel like a relentless litany of incident reports, sensory dysregulations, and deficits. This space is dedicated purely to {childName}'s genuine breakthroughs, strengths, and moments of joy observed by adults.
                 </p>
               </div>
@@ -656,7 +662,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
           </div>
 
           {winsLoading ? (
-            <div className="card p-12 text-center text-gray-400">
+            <div className="card p-12 text-center text-textDim space-y-2">
               <div className="w-8 h-8 border-3 border-teal border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-xs">Gathering teacher praise and milestone celebrations...</p>
             </div>
@@ -665,34 +671,34 @@ export const ParentView: React.FC<ParentViewProps> = ({
               {wins.map((win) => (
                 <div
                   key={win.id}
-                  className="card p-5 border border-gray-100 shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
+                  className="card p-5 border border-borderMain shadow-xs hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-navy px-2.5 py-1 rounded-full bg-amber-100/70 text-amber-900 text-[11px]">
+                      <span className="font-bold text-amber-900 dark:text-amber-200 px-2.5 py-1 rounded-full bg-amber-100/70 dark:bg-amber-900/50 text-[11px]">
                         {win.celebration_badge}
                       </span>
-                      <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                      <span className="text-[10px] text-textDim dark:text-slate-400 flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {win.date}
                       </span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-navy">{win.title}</h4>
-                    <p className="text-xs text-gray-600 leading-relaxed">{win.description}</p>
+                    <h4 className="text-sm font-bold text-navy dark:text-white">{win.title}</h4>
+                    <p className="text-xs text-textSub dark:text-slate-300 leading-relaxed">{win.description}</p>
 
                     {/* Teacher quote */}
-                    <div className="p-3 rounded-xl bg-teal-50/60 border border-teal-100 text-xs italic text-teal-900 leading-relaxed">
+                    <div className="p-3 rounded-xl bg-teal-50/60 dark:bg-teal-950/30 border border-teal-100 dark:border-teal-900/40 text-xs italic text-teal-900 dark:text-teal-200 leading-relaxed">
                       "{win.teacher_quote}"
                     </div>
                   </div>
 
                   {/* Tags */}
-                  <div className="pt-2 border-t border-gray-100 flex flex-wrap gap-1.5">
+                  <div className="pt-2 border-t border-borderMain flex flex-wrap gap-1.5">
                     {win.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-600"
+                        className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-cardSubtle border border-borderMain text-textDim dark:text-slate-300"
                       >
                         #{tag}
                       </span>
@@ -702,7 +708,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
               ))}
             </div>
           ) : (
-            <p className="text-xs text-gray-500 text-center py-8">No wins recorded yet.</p>
+            <p className="text-xs text-textDim text-center py-8">No wins recorded yet.</p>
           )}
         </div>
       )}
