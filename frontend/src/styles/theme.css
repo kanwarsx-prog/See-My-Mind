@@ -23,13 +23,13 @@
   /* -----------------------------------------------------------------------
      3. Left Navigation Sidebar (Light Mode)
      ----------------------------------------------------------------------- */
-  --sidebar-bg: #112533;                /* Rich deep navy anchor */
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-text-primary: #FFFFFF;      /* Main headings and titles */
-  --sidebar-text-secondary: rgba(255, 255, 255, 0.75); /* Inactive nav links */
-  --sidebar-text-muted: rgba(255, 255, 255, 0.55);     /* Sub-headers and section labels */
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.08);       /* Hover highlight */
-  --sidebar-badge-bg: rgba(255, 255, 255, 0.05);       /* Profile badge card */
+  --sidebar-bg: #FFFFFF;                /* Crisp clean white sidebar */
+  --sidebar-border: #E2E8F0;            /* Subtle structural divider */
+  --sidebar-text-primary: #1A3A4A;      /* Heading and active titles (Deep Slate) */
+  --sidebar-text-secondary: #475569;    /* Inactive nav links (Slate-600) */
+  --sidebar-text-muted: #64748B;        /* Sub-headers and section labels (Slate-500) */
+  --sidebar-hover-bg: #F1F5F9;          /* Subtle hover highlight */
+  --sidebar-badge-bg: #F8FAFC;          /* Profile badge surface */
   --sidebar-active-bg: #2A6B62;         /* Active tab highlight (Teal) */
   --sidebar-active-text: #FFFFFF;       /* Active tab text */
 

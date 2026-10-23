@@ -262,18 +262,18 @@ export const AdminView: React.FC<AdminViewProps> = ({
   return (
     <div className="space-y-6 pb-12">
       {/* Top Governance Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-800/40 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-white via-indigo-50/40 to-white dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 border border-slate-200 dark:border-indigo-800/40 rounded-2xl p-6 text-slate-800 dark:text-white shadow-sm dark:shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold">
-              <Building2 className="w-3.5 h-3.5 text-indigo-300" />
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/20 border border-indigo-200 dark:border-indigo-400/30 text-indigo-700 dark:text-indigo-200 text-xs font-semibold">
+              <Building2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-300" />
               <span>Platform & School Governance</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-navy dark:text-white">
               Admin & Multi-Tenancy Hub
             </h1>
-            <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm max-w-2xl leading-relaxed">
               Executive governance across school tenants. Onboard discrete school tenants,
               appoint Lead SENCOs, and maintain strict cross-tenant data segregation with immutable audit logging.
             </p>
@@ -282,14 +282,14 @@ export const AdminView: React.FC<AdminViewProps> = ({
           <div className="flex items-center gap-2.5 flex-shrink-0">
             <button
               onClick={() => setIsOnboardModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal to-teal-dark hover:from-teal-dark hover:to-teal text-white font-medium text-xs sm:text-sm rounded-xl shadow-lg shadow-teal/20 transition-all active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal to-teal-dark hover:from-teal-dark hover:to-teal text-white font-medium text-xs sm:text-sm rounded-xl shadow-lg shadow-teal/20 transition-all active:scale-95 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>+ Onboard School</span>
             </button>
             <button
               onClick={() => setIsProvisionModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs sm:text-sm rounded-xl shadow-lg shadow-indigo-600/20 transition-all active:scale-95 cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               <span>+ Appoint Staff</span>
@@ -298,69 +298,69 @@ export const AdminView: React.FC<AdminViewProps> = ({
         </div>
 
         {/* Live KPI Metric Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-6 pt-6 border-t border-indigo-800/40">
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-6 pt-6 border-t border-slate-200 dark:border-indigo-800/40">
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
               <School className="w-3.5 h-3.5 text-teal" />
               <span>School Tenants</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">
               {stats?.total_schools ?? schools.length}
             </div>
             <div className="text-[10px] text-teal mt-0.5">Isolated Boundaries</div>
           </div>
 
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
               <span>Staff Personas</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">
               {stats?.total_staff ?? staffUsers.length}
             </div>
-            <div className="text-[10px] text-indigo-300 mt-0.5">Role-Delegated</div>
+            <div className="text-[10px] text-indigo-600 dark:text-indigo-300 mt-0.5">Role-Delegated</div>
           </div>
 
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber" />
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber" />
               <span>Pupils Enrolled</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">
               {stats?.total_pupils ?? 2}
             </div>
-            <div className="text-[10px] text-amber mt-0.5">Across All Schools</div>
+            <div className="text-[10px] text-amber-600 dark:text-amber mt-0.5">Across All Schools</div>
           </div>
 
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-coral" />
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-coral-dark dark:text-coral" />
               <span>EHCP Ratio</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">
               {stats?.ehcp_pupils ?? 1} / {stats?.total_pupils ?? 2}
             </div>
-            <div className="text-[10px] text-coral mt-0.5">High-Needs Banding</div>
+            <div className="text-[10px] text-coral-dark dark:text-coral mt-0.5">High-Needs Banding</div>
           </div>
 
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-mint" />
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-teal dark:text-mint" />
               <span>Compliance</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">99.4%</div>
-            <div className="text-[10px] text-mint mt-0.5">KCSIE & GDPR Audited</div>
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">99.4%</div>
+            <div className="text-[10px] text-teal dark:text-mint mt-0.5">KCSIE & GDPR Audited</div>
           </div>
 
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-700/60 rounded-xl p-3">
-            <div className="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-sky-400" />
+          <div className="bg-white dark:bg-slate-900/60 backdrop-blur-sm border border-slate-200 dark:border-slate-700/60 rounded-xl p-3 shadow-2xs">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
               <span>Audit Entries</span>
             </div>
-            <div className="text-xl font-bold text-white mt-1">
+            <div className="text-xl font-bold text-navy dark:text-white mt-1">
               {stats?.audit_events_count ?? auditLogs.length}
             </div>
-            <div className="text-[10px] text-sky-300 mt-0.5">Immutable Trail</div>
+            <div className="text-[10px] text-sky-600 dark:text-sky-300 mt-0.5">Immutable Trail</div>
           </div>
         </div>
       </div>
@@ -402,10 +402,10 @@ export const AdminView: React.FC<AdminViewProps> = ({
         <div className="flex items-center gap-1 sm:gap-2">
           <button
             onClick={() => handleTabSwitch('schools')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               tab === 'schools'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'bg-teal text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
             }`}
           >
             <Building2 className="w-4 h-4" />
@@ -414,10 +414,10 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
           <button
             onClick={() => handleTabSwitch('staff')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               tab === 'staff'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'bg-teal text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
             }`}
           >
             <Users className="w-4 h-4" />
@@ -426,10 +426,10 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
           <button
             onClick={() => handleTabSwitch('delegation')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               tab === 'delegation'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'bg-teal text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -438,10 +438,10 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
           <button
             onClick={() => handleTabSwitch('audit')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               tab === 'audit'
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                ? 'bg-teal text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
             }`}
           >
             <FileText className="w-4 h-4" />

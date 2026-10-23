@@ -395,7 +395,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-sm">
                 <div className="w-full h-full bg-sidebarBg rounded-[14px] flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-mint" />
+                  <Sparkles className="w-4 h-4 text-teal dark:text-mint" />
                 </div>
               </div>
               <div>
@@ -410,7 +410,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {onCloseMobile && (
               <button
                 onClick={onCloseMobile}
-                className="lg:hidden w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
+                className="lg:hidden w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 text-slate-700 dark:text-white flex items-center justify-center cursor-pointer transition-colors"
                 title="Close menu"
               >
                 <X className="w-4 h-4" />
@@ -429,7 +429,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xs font-bold text-sidebarPrimary truncate">{personaMeta.name}</div>
-                <div className="text-[10px] text-mint flex items-center gap-1 font-semibold truncate">
+                <div className="text-[10px] text-teal dark:text-mint flex items-center gap-1 font-semibold truncate">
                   <RoleIcon className="w-3 h-3 flex-shrink-0" />
                   <span>{personaMeta.roleTitle}</span>
                 </div>
@@ -437,7 +437,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div className="mt-2 pt-2 border-t border-sidebarBorder flex items-center justify-between text-[10px] text-sidebarMuted">
               <span>{personaMeta.sub}</span>
-              <span className="px-1.5 py-0.2 rounded bg-emerald-500/25 text-emerald-300 font-bold text-[9px]">
+              <span className="px-1.5 py-0.2 rounded bg-emerald-50 dark:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 font-bold text-[9px]">
                 Active Role
               </span>
             </div>
@@ -466,7 +466,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         : 'text-sidebarSecondary hover:text-sidebarPrimary hover:bg-sidebarHover'
                     }`}
                   >
-                    <ItemIcon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-mint'}`} />
+                    <ItemIcon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-teal dark:text-mint'}`} />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -476,17 +476,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer: User Profile & Session Logout */}
-        <div className="p-3 border-t border-sidebarBorder bg-black/20 dark:bg-black/40 space-y-2">
+        <div className="p-3 border-t border-sidebarBorder bg-slate-50/70 dark:bg-black/40 space-y-2">
           {onOpenTour && (
             <button
               onClick={() => {
                 onOpenTour();
                 onCloseMobile?.();
               }}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-teal/40 via-purple-600/30 to-teal/40 hover:from-teal/60 hover:to-teal/60 text-white text-xs font-bold transition-all cursor-pointer border border-teal/40 shadow-xs"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-teal/10 hover:bg-teal/20 text-teal-800 dark:text-teal-200 text-xs font-bold transition-all cursor-pointer border border-teal-300 dark:border-teal-700/50 shadow-2xs"
               title="Interactive Persona Tour & Walkthrough"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber animate-pulse flex-shrink-0" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber animate-pulse flex-shrink-0" />
               <span>✨ Interactive Persona Tour</span>
             </button>
           )}
@@ -496,10 +496,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onSwitchPersona();
               onCloseMobile?.();
             }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/90 hover:text-white text-xs font-semibold transition-all cursor-pointer border border-white/10"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-white/90 text-xs font-semibold transition-all cursor-pointer border border-slate-200 dark:border-white/10 shadow-2xs"
             title="Switch to another persona for testing"
           >
-            <Repeat className="w-3.5 h-3.5 text-amber flex-shrink-0" />
+            <Repeat className="w-3.5 h-3.5 text-amber-600 dark:text-amber flex-shrink-0" />
             <span>Switch Account (Demo)</span>
           </button>
 
@@ -508,9 +508,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onLogout();
               onCloseMobile?.();
             }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-500/20"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-200 dark:border-rose-500/20"
           >
-            <LogOut className="w-3.5 h-3.5 text-rose-400 flex-shrink-0" />
+            <LogOut className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
             <span>Sign Out</span>
           </button>
         </div>
