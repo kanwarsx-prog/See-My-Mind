@@ -124,3 +124,19 @@ def verify_child_access(
         )
 
     return child
+
+
+def verify_school_tenant_access(
+    school_id: UUID,
+    current_user: models.User = Depends(get_current_user),
+) -> None:
+    """Ensure non-admin users cannot access or mutate cross-school records."""
+    if current_user.role == "admin":
+        # Trust/Platform admin has cross-school governance oversight
+        return
+    if current_user.school_id and current_user.school_id != school_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. You do not have permission to access data belonging to another school tenant.",
+        )
+

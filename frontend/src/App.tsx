@@ -26,6 +26,7 @@ import { SencoView } from './views/SencoView';
 import { ChildView } from './views/ChildView';
 import { TaView } from './views/TaView';
 import { ParentPlusView } from './views/ParentPlusView';
+import { AdminView } from './views/AdminView';
 import { PersonaTourModal } from './components/PersonaTourModal';
 import { Plus } from 'lucide-react';
 
@@ -56,6 +57,7 @@ export const App: React.FC = () => {
   const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('focused');
   const [parentSubTab, setParentSubTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
   const [sencoSubTab, setSencoSubTab] = useState<'review_pack' | 'provision_map' | 'assistant'>('provision_map');
+  const [adminSubTab, setAdminSubTab] = useState<'schools' | 'staff' | 'delegation' | 'audit'>('schools');
 
   // Registration & Onboarding state
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -90,6 +92,7 @@ export const App: React.FC = () => {
     else if (view === 'parent') setActiveNavId('bridge');
     else if (view === 'child') setActiveNavId('child-checkin');
     else if (view === 'ta') setActiveNavId('ta-hub');
+    else if (view === 'admin') setActiveNavId('schools');
   };
 
   // Sync API role when active view changes
@@ -122,6 +125,13 @@ export const App: React.FC = () => {
       if (navId === 'handover') setParentSubTab('handover');
       if (navId === 'correlation') setParentSubTab('correlation');
       if (navId === 'wins') setParentSubTab('wins');
+    }
+
+    if (activeView === 'admin') {
+      if (navId === 'schools') setAdminSubTab('schools');
+      if (navId === 'staff') setAdminSubTab('staff');
+      if (navId === 'delegation') setAdminSubTab('delegation');
+      if (navId === 'audit') setAdminSubTab('audit');
     }
   };
 
@@ -499,6 +509,14 @@ export const App: React.FC = () => {
       subtitle: 'Longitudinal Strengths & Careers · Year 10+',
       pills: [{ label: 'Top Match: Game Design (92%)', color: 'gold' as const }],
     },
+    admin: {
+      title: 'MAT Executive & Multi-School Governance',
+      subtitle: `${currentUser.full_name} · Multi-Academy Trust Central Office`,
+      pills: [
+        { label: '🏛️ Multi-School Isolation', color: 'indigo' as const },
+        { label: '📜 Audit Trail Active', color: 'teal' as const },
+      ],
+    },
   }[activeView];
 
   return (
@@ -606,6 +624,16 @@ export const App: React.FC = () => {
           )}
 
           {activeView === 'parentplus' && <ParentPlusView child={child} />}
+
+          {activeView === 'admin' && (
+            <AdminView
+              activeTab={adminSubTab}
+              onTabChange={(tab) => {
+                setAdminSubTab(tab);
+                setActiveNavId(tab);
+              }}
+            />
+          )}
         </div>
       </main>
 

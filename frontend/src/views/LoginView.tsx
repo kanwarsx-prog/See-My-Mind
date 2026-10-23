@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { api } from '../api';
 import { UserProfile } from '../types';
-import { Sparkles, GraduationCap, ShieldCheck, HeartHandshake, User, Users, Lock, ArrowRight, KeyRound } from 'lucide-react';
+import { Sparkles, GraduationCap, ShieldCheck, HeartHandshake, User, Users, Lock, ArrowRight, KeyRound, Building2 } from 'lucide-react';
 
 interface LoginViewProps {
   onLoginSuccess: (user: UserProfile) => void;
@@ -87,6 +87,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
   };
 
   const demoPersonas = [
+    {
+      role: 'admin',
+      name: 'Dr. Alistair Vance',
+      subtitle: 'MAT Governance Lead',
+      icon: Building2,
+      color: 'from-indigo-600 to-slate-800',
+      textColor: 'text-indigo-400',
+      badge: '🏛️ Trust Admin Hub',
+      desc: 'Multi-school onboarding, persona provisioning & GDPR audit logs',
+    },
     {
       role: 'teacher',
       name: 'Ms Johnson',
@@ -447,7 +457,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
             Select any persona below to authenticate with a live JWT token and experience their dedicated, role-locked dashboard:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
             {demoPersonas.map((p) => {
               const Icon = p.icon;
               const isCurrentLoading = demoLoadingRole === p.role;

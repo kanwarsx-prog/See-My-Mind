@@ -6,6 +6,7 @@ from app.models.ai_noya import (
     RAGChunkIndex,
     RAGSourceDocument,
 )
+from app.models.audit import AuditLog
 from app.models.auth import ChildAccount, Invitation, User
 from app.models.base import TimestampedUUIDModel
 from app.models.organisation import AcademicYear, School, StaffMember, StaffSchoolAssignment
@@ -31,6 +32,7 @@ __all__ = [
     "AIInsightEvidence",
     "AIRun",
     "AcademicYear",
+    "AuditLog",
     "Base",
     "BehaviouralIncident",
     "Child",

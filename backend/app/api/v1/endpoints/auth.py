@@ -13,6 +13,11 @@ from app.schemas.registration import UserResponse
 router = APIRouter()
 
 DEMO_ACCOUNTS = {
+    "admin": {
+        "email": "admin@trust.seemy-mind.org",
+        "full_name": "Dr. Alistair Vance",
+        "role": "admin",
+    },
     "senco": {
         "email": "senco@stjudes.sch.uk",
         "full_name": "Ms Amara Okafor",
@@ -44,17 +49,65 @@ DEMO_ACCOUNTS = {
 
 
 def _ensure_demo_entities(db: Session) -> tuple[models.School, models.Child]:
-    """Ensure baseline school and primary child exist for demo accounts."""
-    school = db.query(models.School).first()
+    """Ensure baseline school, secondary tenant, and demo accounts exist."""
+    school = db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first()
+    if not school:
+        school = db.query(models.School).first()
     if not school:
         school = models.School(
             school_name="St. Jude's Inclusive Academy",
             school_reference="SCH-STJUDES",
+            urn_number="138942",
+            phase="Primary",
+            local_authority="Southwark",
+            lead_senco_name="Ms Amara Okafor",
             town_city="London",
             postcode="SE1 7PB",
             main_email="admin@stjudes.sch.uk",
         )
         db.add(school)
+        db.flush()
+    else:
+        if not school.urn_number:
+            school.urn_number = "138942"
+        if not school.phase:
+            school.phase = "Primary"
+        if not school.local_authority:
+            school.local_authority = "Southwark"
+        if not school.lead_senco_name:
+            school.lead_senco_name = "Ms Amara Okafor"
+        db.flush()
+
+    # Seed secondary school tenant (Oakwood Community Primary) for multi-tenancy testing
+    oakwood = db.query(models.School).filter(models.School.school_reference == "SCH-OAKWOOD").first()
+    if not oakwood:
+        oakwood = models.School(
+            school_name="Oakwood Community Primary",
+            school_reference="SCH-OAKWOOD",
+            urn_number="142109",
+            phase="Primary",
+            local_authority="Camden",
+            lead_senco_name="Mr David Davies",
+            town_city="London",
+            postcode="NW3 2QL",
+            main_email="office@oakwood.sch.uk",
+        )
+        db.add(oakwood)
+        db.flush()
+
+        # Seed an Oakwood pupil to demonstrate data segregation
+        oakwood_child = models.Child(
+            first_name="Liam",
+            last_name="Campbell",
+            full_name="Liam Campbell",
+            preferred_name="Liam",
+            date_of_birth=datetime(2016, 3, 22, tzinfo=UTC).date(),
+            sex="Male",
+            year_group="Year 4",
+            school_id=oakwood.id,
+            active=True,
+        )
+        db.add(oakwood_child)
         db.flush()
 
     child = db.query(models.Child).filter(models.Child.first_name == "Phoenix").first()
@@ -98,6 +151,40 @@ def _ensure_demo_entities(db: Session) -> tuple[models.School, models.Child]:
             avatar_emoji="⭐",
         )
         db.add(phoenix_acc)
+        db.flush()
+
+    # Seed baseline audit log events if empty
+    if db.query(models.AuditLog).count() == 0:
+        log1 = models.AuditLog(
+            actor_name="Dr. Alistair Vance",
+            actor_role="admin",
+            school_id=school.id,
+            action="ONBOARD_SCHOOL",
+            target_type="school",
+            target_id=school.id,
+            target_name=school.school_name,
+            details="Onboarded St. Jude's Inclusive Academy into Trust Portfolio with Section 44 Statutory Framework.",
+        )
+        log2 = models.AuditLog(
+            actor_name="Dr. Alistair Vance",
+            actor_role="admin",
+            school_id=school.id,
+            action="APPOINT_SENCO",
+            target_type="user",
+            target_name="Ms Amara Okafor",
+            details="Appointed Ms Amara Okafor as Lead SENCO with delegated school admissions and EHCP authority.",
+        )
+        log3 = models.AuditLog(
+            actor_name="Ms Amara Okafor",
+            actor_role="senco",
+            school_id=school.id,
+            action="REGISTER_PUPIL",
+            target_type="pupil",
+            target_id=child.id,
+            target_name=child.full_name,
+            details="Registered Phoenix Carter to Year 5 SEND roster with Band E High-Needs provision.",
+        )
+        db.add_all([log1, log2, log3])
         db.flush()
 
     return school, child

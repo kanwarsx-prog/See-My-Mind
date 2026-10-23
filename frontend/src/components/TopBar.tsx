@@ -5,7 +5,7 @@ import { Child } from '../types';
 interface TopBarProps {
   title: string;
   subtitle: string;
-  pills?: { label: string; color: 'red' | 'amber' | 'gold' | 'green' | 'teal' | 'purple' }[];
+  pills?: { label: string; color: 'red' | 'amber' | 'gold' | 'green' | 'teal' | 'purple' | 'indigo' }[];
   actionButton?: {
     label: string;
     onClick: () => void;
@@ -36,6 +36,7 @@ export const TopBar: React.FC<TopBarProps> = ({
     green: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
     teal: 'bg-teal-50 text-teal-800 border border-teal-200',
     purple: 'bg-purple-50 text-purple-800 border border-purple-200',
+    indigo: 'bg-indigo-50 text-indigo-900 border border-indigo-200',
   };
 
   return (

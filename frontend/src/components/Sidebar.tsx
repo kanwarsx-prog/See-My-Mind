@@ -18,6 +18,7 @@ import {
   BatteryCharging,
   Pill,
   X,
+  Building2,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -306,6 +307,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Layers,
           action: () => {
             onSelectNav?.('post16-hub');
+          },
+        },
+      ],
+    },
+    admin: {
+      av: 'AV',
+      name: currentUser?.full_name || 'Dr. Alistair Vance',
+      roleTitle: 'MAT Governance Lead',
+      sub: 'Multi-Academy Trust Operations',
+      bg: '#3B4261',
+      icon: Building2,
+      navItems: [
+        {
+          id: 'schools',
+          label: 'School Multi-Tenancy Hub',
+          icon: Building2,
+          action: () => {
+            onSelectNav?.('schools');
+          },
+        },
+        {
+          id: 'staff',
+          label: 'Staff & SENCO Directory',
+          icon: Users,
+          action: () => {
+            onSelectNav?.('staff');
+          },
+        },
+        {
+          id: 'delegation',
+          label: 'Responsibility Delegation',
+          icon: ShieldCheck,
+          action: () => {
+            onSelectNav?.('delegation');
+          },
+        },
+        {
+          id: 'audit',
+          label: 'Security & Audit Logs',
+          icon: FileText,
+          action: () => {
+            onSelectNav?.('audit');
           },
         },
       ],

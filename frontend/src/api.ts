@@ -20,6 +20,14 @@ import {
   EveningCheckInResponse,
   MedicationCorrelationResponse,
   ParentWinsGalleryItem,
+  SchoolTenant,
+  AdminSchoolCreate,
+  AdminUserItem,
+  StaffProvisionRequest,
+  StaffProvisionResponse,
+  AuditLogEntry,
+  TrustGovernanceStats,
+  DelegationMatrixItem,
 } from './types';
 
 const API_BASE =
@@ -421,6 +429,81 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to fetch school provision matrix');
+    return res.json();
+  },
+
+  // Admin & Multi-School Governance
+  async getAdminStats(): Promise<TrustGovernanceStats> {
+    const res = await fetch(`${API_BASE}/admin/stats`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch trust governance stats');
+    return res.json();
+  },
+
+  async getAdminSchools(): Promise<SchoolTenant[]> {
+    const res = await fetch(`${API_BASE}/admin/schools`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch school tenants');
+    return res.json();
+  },
+
+  async onboardSchool(payload: AdminSchoolCreate): Promise<SchoolTenant> {
+    const res = await fetch(`${API_BASE}/admin/schools`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to onboard school');
+    }
+    return res.json();
+  },
+
+  async getAdminUsers(schoolId?: string, role?: string): Promise<AdminUserItem[]> {
+    const params = new URLSearchParams();
+    if (schoolId) params.append('school_id', schoolId);
+    if (role) params.append('role', role);
+    const query = params.toString() ? `?${params.toString()}` : '';
+    const res = await fetch(`${API_BASE}/admin/users${query}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch staff members');
+    return res.json();
+  },
+
+  async provisionStaff(payload: StaffProvisionRequest): Promise<StaffProvisionResponse> {
+    const res = await fetch(`${API_BASE}/admin/users`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || 'Failed to provision staff account');
+    }
+    return res.json();
+  },
+
+  async getAuditLogs(schoolId?: string, action?: string, limit: number = 50): Promise<AuditLogEntry[]> {
+    const params = new URLSearchParams();
+    if (schoolId) params.append('school_id', schoolId);
+    if (action) params.append('action', action);
+    params.append('limit', limit.toString());
+    const res = await fetch(`${API_BASE}/admin/audit-logs?${params.toString()}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch audit logs');
+    return res.json();
+  },
+
+  async getDelegationMatrix(): Promise<DelegationMatrixItem[]> {
+    const res = await fetch(`${API_BASE}/admin/delegation-matrix`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch delegation matrix');
     return res.json();
   },
 };

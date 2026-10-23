@@ -10,6 +10,10 @@ class School(TimestampedUUIDModel):
 
     school_name = Column(String(140), nullable=False, index=True)
     school_reference = Column(String(140), nullable=True, unique=True, index=True)
+    urn_number = Column(String(20), nullable=True, unique=True, index=True)
+    phase = Column(String(50), nullable=True, default="Primary")  # Primary, Secondary, All-through, Special
+    local_authority = Column(String(100), nullable=True)
+    lead_senco_name = Column(String(140), nullable=True)
     address_line_1 = Column(String(140), nullable=True)
     address_line_2 = Column(String(140), nullable=True)
     town_city = Column(String(140), nullable=True)

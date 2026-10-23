@@ -163,7 +163,7 @@ export interface PeerAdaptation {
   color: string;
 }
 
-export type RoleView = 'teacher' | 'senco' | 'parent' | 'child' | 'ta' | 'parentplus';
+export type RoleView = 'teacher' | 'senco' | 'parent' | 'child' | 'ta' | 'parentplus' | 'admin';
 
 export interface EmailPreview {
   to_email: string;
@@ -471,5 +471,109 @@ export interface ParentWinsGalleryItem {
   teacher_quote: string;
   celebration_badge: string;
   tags: string[];
+}
+
+// Trust & Multi-School Governance Types
+export interface SchoolTenant {
+  id: string;
+  school_name: string;
+  urn_number?: string;
+  phase?: string;
+  local_authority?: string;
+  lead_senco_name?: string;
+  school_reference?: string;
+  town_city?: string;
+  postcode?: string;
+  main_email?: string;
+  main_telephone?: string;
+  active: boolean;
+  pupil_count: number;
+  staff_count: number;
+  created_at: string;
+}
+
+export interface AdminSchoolCreate {
+  school_name: string;
+  urn_number: string;
+  phase?: string;
+  local_authority?: string;
+  lead_senco_name?: string;
+  school_reference?: string;
+  town_city?: string;
+  postcode?: string;
+  main_email?: string;
+  main_telephone?: string;
+}
+
+export interface AdminUserItem {
+  id: string;
+  email: string;
+  full_name: string;
+  role: string;
+  school_id?: string;
+  school_name: string;
+  is_active: boolean;
+  is_verified: boolean;
+  created_at?: string;
+}
+
+export interface StaffProvisionRequest {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  school_id: string;
+  job_title?: string;
+  password?: string;
+}
+
+export interface StaffProvisionResponse {
+  user_id: string;
+  staff_id?: string;
+  email: string;
+  full_name: string;
+  role: string;
+  school_id: string;
+  school_name: string;
+  job_title?: string;
+  temporary_credentials: string;
+  invitation_token?: string;
+  message: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  actor_id?: string;
+  actor_name: string;
+  actor_role: string;
+  school_id?: string;
+  school_name?: string;
+  action: string;
+  target_type: string;
+  target_id?: string;
+  target_name?: string;
+  details: string;
+  ip_address?: string;
+}
+
+export interface TrustGovernanceStats {
+  total_schools: number;
+  total_staff: number;
+  total_pupils: number;
+  ehcp_pupils: number;
+  compliance_score: string;
+  audit_events_count: number;
+  lead_trust_admin: string;
+}
+
+export interface DelegationMatrixItem {
+  role_key: string;
+  role_title: string;
+  tier: string;
+  authorities: string[];
+  delegated_responsibilities: string[];
+  safeguarding_scope: string;
+  data_boundary: string;
 }
 

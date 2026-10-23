@@ -21,6 +21,7 @@ import {
   Bell,
   Smartphone,
   Check,
+  Building2,
 } from 'lucide-react';
 
 interface PersonaTourModalProps {
@@ -357,6 +358,65 @@ const PERSONA_SLIDES: PersonaSlide[] = [
       },
     ],
     launchButtonText: '🚀 Explore as Pupil (Phoenix Carter)',
+  },
+  {
+    role: 'admin',
+    name: 'Dr. Alistair Vance',
+    roleTitle: 'MAT Executive & Governance Lead',
+    avatarEmoji: '🏛️',
+    subtitle: 'Multi-Academy Trust Central Office',
+    color: '#3B4261',
+    badgeBg: 'bg-indigo-50',
+    badgeText: 'text-indigo-900',
+    badgeBorder: 'border-indigo-200',
+    icon: Building2,
+    quote: '"Managing SEND compliance across multiple schools without strict data boundaries is a massive legal and safeguarding liability."',
+    realWorldChallenge: 'Multi-school MATs risk catastrophic data leaks if pupil records, clinical notes, or safeguarding files are commingled across schools.',
+    solution: 'Strict tenant isolation per school, delegated school-level leadership to Lead SENCOs, and an immutable audit trail for full GDPR and KCSIE governance.',
+    loopSteps: [
+      {
+        time: '9:00 AM',
+        action: 'Onboard New School Tenant',
+        detail: 'Onboards Highland Park Academy with DfE URN and isolated cryptographic database schema.',
+        overlayBadge: '🏛️ STRICT DATA SEGREGATION',
+        overlayText: 'School tenants operate in sealed silos; School A staff can never query or leak School B pupils.',
+        simType: 'admin_onboard',
+      },
+      {
+        time: '9:30 AM',
+        action: 'Appoint Lead SENCO',
+        detail: 'Provisions Dr Marcus Thorne as Lead SENCO with delegated pupil registration and Section 44 pack authority.',
+        overlayBadge: '🛡️ RESPONSIBILITY DELEGATION',
+        overlayText: 'Operational SEND admissions are delegated to school SENCOs while the Trust retains governance oversight.',
+        simType: 'admin_appoint',
+      },
+      {
+        time: '11:00 AM',
+        action: 'Inspect Compliance Audit Log',
+        detail: 'Reviews immutable, time-stamped audit entries tracking all role provisioning, admissions, and access checks.',
+        overlayBadge: '📜 IMMUTABLE AUDIT TRAIL',
+        overlayText: 'Zero-tamper audit logs satisfy UK Data Protection Act 2018 and DfE statutory compliance.',
+        simType: 'admin_audit',
+      },
+    ],
+    superpowers: [
+      {
+        icon: Building2,
+        title: 'Multi-School Tenant Hub',
+        description: 'Provision discrete school environments with independent URNs, phases, and staff rosters.',
+      },
+      {
+        icon: Users,
+        title: 'Cross-School Role Delegation',
+        description: 'Appoint Lead SENCOs, Teachers, and TAs with least-privilege safeguarding boundaries.',
+      },
+      {
+        icon: FileText,
+        title: 'GDPR & KCSIE Compliance Audit',
+        description: 'Cryptographically ordered audit trail tracking all data access, admissions, and account modifications.',
+      },
+    ],
+    launchButtonText: '🚀 Explore as Admin (Dr. Alistair Vance)',
   },
 ];
 
@@ -800,6 +860,72 @@ export const PersonaTourModal: React.FC<PersonaTourModalProps> = ({
                 <div className="text-xs font-bold text-amber-950">Drew Gradient Triangle Independently</div>
                 <div className="text-[10px] text-amber-800">Ms Johnson praised spatial reasoning in Science & Maths</div>
               </div>
+            </div>
+          </div>
+        );
+
+      case 'admin_onboard':
+        return (
+          <div className="p-4 rounded-2xl bg-white border border-indigo-200 shadow-sm space-y-2.5">
+            <div className="flex items-center justify-between pb-1.5 border-b border-gray-100">
+              <span className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                <Building2 className="w-4 h-4 text-indigo-600" />
+                <span>Onboarding School Tenant · URN: 104523</span>
+              </span>
+              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                ✓ Isolated Boundary
+              </span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
+              <div className="flex justify-between text-gray-700">
+                <span>School Name:</span>
+                <span className="font-bold text-gray-900">Highland Park Academy</span>
+              </div>
+              <div className="flex justify-between text-gray-700">
+                <span>Local Authority:</span>
+                <span className="font-bold text-gray-900">Southwark LA</span>
+              </div>
+              <div className="flex justify-between text-gray-700">
+                <span>Tenant Isolation:</span>
+                <span className="font-mono text-[10px] text-emerald-700 font-bold">100% Sealed</span>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'admin_appoint':
+        return (
+          <div className="p-4 rounded-2xl bg-slate-900 text-white shadow-lg space-y-2.5 border border-indigo-800">
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/10">
+              <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-teal" />
+                <span>Appointing Lead SENCO (School Lead)</span>
+              </span>
+              <span className="text-[10px] text-teal font-bold">Delegated Authority</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 space-y-1 text-xs">
+              <div className="font-bold text-white">Dr Marcus Thorne, Director of Inclusion</div>
+              <p className="text-[10px] text-slate-300">
+                Authority granted: School SEND admissions, parent onboarding invitations, Section 44 pack approvals.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 'admin_audit':
+        return (
+          <div className="p-4 rounded-2xl bg-white border border-gray-200 shadow-sm space-y-2">
+            <div className="flex items-center justify-between pb-1.5 border-b border-gray-100">
+              <span className="text-xs font-bold text-navy flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-indigo-600" />
+                <span>Immutable Governance & Access Audit Log</span>
+              </span>
+              <span className="text-[10px] text-emerald-700 font-bold">✓ Verified</span>
+            </div>
+            <div className="p-2 rounded-xl bg-slate-50 font-mono text-[10px] text-slate-700 space-y-1">
+              <div>[09:00:14] ONBOARD_SCHOOL: Highland Park Academy (URN: 104523) by Dr. Alistair Vance</div>
+              <div>[09:30:22] APPOINT_SENCO: Dr Marcus Thorne at Highland Park Academy</div>
+              <div>[11:00:05] ACCESS_CHECK: Tenant isolation verified. 0 cross-school leaks.</div>
             </div>
           </div>
         );

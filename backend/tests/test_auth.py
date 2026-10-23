@@ -1,5 +1,5 @@
 def test_demo_login_all_roles(client):
-    roles = ["senco", "teacher", "parent", "child", "ta"]
+    roles = ["senco", "teacher", "parent", "child", "ta", "admin"]
     for role in roles:
         resp = client.post("/api/v1/auth/demo-login", json={"role": role})
         assert resp.status_code == 200, f"Failed demo login for role {role}: {resp.text}"
