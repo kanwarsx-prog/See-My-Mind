@@ -48,17 +48,17 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
   return (
     <div className="space-y-6">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-cardBg p-4 sm:p-5 rounded-2xl border border-borderMain shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-navy flex items-center gap-2">
+            <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
               <span>🏫 Room 4 SEND Classroom Matrix</span>
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal font-semibold">
+              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
                 Year 5 · Ms Clara Johnson
               </span>
             </h2>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-textDim dark:text-slate-400 mt-1">
             Whole-class overview of differentiated adaptations, sensory triggers, and today&apos;s readiness signals for all 4 SEND pupils.
           </p>
         </div>
@@ -77,27 +77,27 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
       {/* Cohort Stats Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <div className="stat-card border-teal">
-          <div className="font-serif text-2xl font-bold text-teal">4</div>
-          <div className="text-[11px] text-gray-500 mt-0.5">SEND Learners in Room 4</div>
+          <div className="font-serif text-2xl font-bold text-teal dark:text-teal-300">4</div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">SEND Learners in Room 4</div>
         </div>
-        <div className="stat-card border-purple-dark">
-          <div className="font-serif text-2xl font-bold text-purple-dark">2</div>
-          <div className="text-[11px] text-gray-500 mt-0.5">Statutory EHCPs Active</div>
+        <div className="stat-card border-purple-dark dark:border-purple-500">
+          <div className="font-serif text-2xl font-bold text-purple-dark dark:text-purple-300">2</div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Statutory EHCPs Active</div>
         </div>
-        <div className="stat-card border-amber-dark">
-          <div className="font-serif text-2xl font-bold text-amber-dark">1</div>
-          <div className="text-[11px] text-gray-500 mt-0.5">Arrival Amber Alert (Phoenix ⚠️)</div>
+        <div className="stat-card border-amber-dark dark:border-amber-500">
+          <div className="font-serif text-2xl font-bold text-amber-dark dark:text-amber-300">1</div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Arrival Amber Alert (Phoenix ⚠️)</div>
         </div>
-        <div className="stat-card border-emerald-600">
-          <div className="font-serif text-2xl font-bold text-emerald-700">1-to-1 TA</div>
-          <div className="text-[11px] text-gray-500 mt-0.5">Melissa Grant Assigned</div>
+        <div className="stat-card border-emerald-600 dark:border-emerald-500">
+          <div className="font-serif text-2xl font-bold text-emerald-700 dark:text-emerald-300">1-to-1 TA</div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Melissa Grant Assigned</div>
         </div>
       </div>
 
       {/* Subject Filter Bar */}
-      <div className="card p-3 flex flex-wrap items-center justify-between gap-2 bg-white">
-        <span className="text-xs font-bold text-navy px-2 flex items-center gap-1.5">
-          <BookOpen className="w-4 h-4 text-teal" />
+      <div className="card p-3 flex flex-wrap items-center justify-between gap-2">
+        <span className="text-xs font-bold text-navy dark:text-white px-2 flex items-center gap-1.5">
+          <BookOpen className="w-4 h-4 text-teal dark:text-teal-300" />
           <span>Lesson Focus Filter:</span>
         </span>
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
@@ -107,8 +107,8 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               onClick={() => setSelectedSubject(s.key as any)}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
                 selectedSubject === s.key
-                  ? 'bg-teal text-white shadow-xs'
-                  : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-navy'
+                  ? 'bg-teal text-white shadow-xs font-bold'
+                  : 'bg-cardSubtle border border-borderMain text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
               }`}
             >
               {s.label}
@@ -130,28 +130,28 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               key={pupil.id}
               className={`card p-5 border-l-4 transition-all space-y-4 ${
                 pupil.readiness_level === 'amber'
-                  ? 'border-l-amber-500 bg-amber-50/15'
-                  : 'border-l-teal bg-white'
+                  ? 'border-l-amber-500 bg-amber-50/15 dark:bg-amber-950/20'
+                  : 'border-l-teal'
               }`}
             >
               {/* Card Header */}
-              <div className="flex items-start justify-between gap-2 pb-3 border-b border-gray-100">
+              <div className="flex items-start justify-between gap-2 pb-3 border-b border-borderMain">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-teal/10 flex items-center justify-center font-bold text-teal text-base">
+                  <div className="w-11 h-11 rounded-2xl bg-teal/10 dark:bg-teal-950/60 flex items-center justify-center font-bold text-teal dark:text-teal-300 text-base border border-teal/20">
                     {pupil.name.charAt(0)}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-navy">{pupil.name}</h3>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      <h3 className="text-sm font-bold text-navy dark:text-white">{pupil.name}</h3>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                         pupil.has_ehcp
-                          ? 'bg-purple-light text-purple-dark'
-                          : 'bg-teal/10 text-teal'
+                          ? 'bg-purple-light dark:bg-purple-950/60 text-purple-dark dark:text-purple-300 border-purple-200 dark:border-purple-800/40'
+                          : 'bg-teal/10 dark:bg-teal-950/60 text-teal dark:text-teal-300 border-teal/20 dark:border-teal-800/40'
                       }`}>
                         {pupil.support_tier}
                       </span>
                     </div>
-                    <div className="text-[11px] text-gray-500 mt-0.5">
+                    <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
                       {pupil.primary_need} · {pupil.year_group}
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
                 {onSelectPupil && pupil.name.includes('Phoenix') && (
                   <button
                     onClick={() => onSelectPupil(pupil.id)}
-                    className="text-[11px] font-bold text-teal hover:underline cursor-pointer"
+                    className="text-[11px] font-bold text-teal dark:text-teal-300 hover:underline cursor-pointer"
                   >
                     Focus View →
                   </button>
@@ -170,13 +170,13 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               {/* Today's Readiness Banner */}
               <div className={`p-2.5 rounded-xl border text-xs flex items-center gap-2 ${
                 pupil.readiness_level === 'amber'
-                  ? 'bg-amber-50 border-amber-200 text-amber-900'
-                  : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                  ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/40 text-amber-900 dark:text-amber-200'
+                  : 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/40 text-emerald-900 dark:text-emerald-200'
               }`}>
                 {pupil.readiness_level === 'amber' ? (
-                  <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                 ) : (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 )}
                 <div>
                   <span className="font-bold">Today&apos;s Readiness: </span>
@@ -186,26 +186,26 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
 
               {/* Dynamic Subject Accommodation (when filtered) */}
               {subjectAccommodation && (
-                <div className="p-3 rounded-xl bg-teal-50/50 border border-teal/20 text-xs space-y-1">
-                  <div className="font-bold text-teal flex items-center gap-1.5 uppercase text-[10px] tracking-wider">
-                    <Sparkles className="w-3.5 h-3.5 text-teal" />
+                <div className="p-3 rounded-xl bg-teal-50/50 dark:bg-teal-950/30 border border-teal/20 dark:border-teal-800/40 text-xs space-y-1">
+                  <div className="font-bold text-teal dark:text-teal-300 flex items-center gap-1.5 uppercase text-[10px] tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5 text-teal dark:text-teal-300" />
                     <span>{selectedSubject.toUpperCase()} Adaptation Active:</span>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">{subjectAccommodation}</p>
+                  <p className="text-textSub dark:text-slate-300 leading-relaxed">{subjectAccommodation}</p>
                 </div>
               )}
 
               {/* Triggers & Calming Tools */}
               <div className="space-y-2 text-xs">
                 <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600 mb-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400 mb-1">
                     Primary Triggers to Avoid
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {pupil.primary_triggers.map((t, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-medium"
+                        className="px-2 py-0.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-800 dark:text-rose-300 text-[11px] font-medium"
                       >
                         ⚡ {t}
                       </span>
@@ -214,14 +214,14 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
                 </div>
 
                 <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400 mb-1">
                     Validated Calming Equipment & Strategies
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {pupil.sensory_calming_tools.map((tool, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-lg bg-teal/5 border border-teal/20 text-navy text-[11px] font-medium"
+                        className="px-2 py-0.5 rounded-lg bg-cardSubtle border border-borderMain text-textMain dark:text-white text-[11px] font-medium"
                       >
                         ✓ {tool}
                       </span>
@@ -231,12 +231,12 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
               </div>
 
               {/* Footer Buddy & TA Note */}
-              <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+              <div className="pt-2.5 border-t border-borderMain flex items-center justify-between text-[11px] text-textDim dark:text-slate-400">
                 <span className="flex items-center gap-1">
-                  <HeartHandshake className="w-3.5 h-3.5 text-teal" />
-                  <span>Peer Buddy: <strong className="text-navy">{pupil.buddy_pairing || 'Jake'}</strong></span>
+                  <HeartHandshake className="w-3.5 h-3.5 text-teal dark:text-teal-300" />
+                  <span>Peer Buddy: <strong className="text-navy dark:text-white">{pupil.buddy_pairing || 'Jake'}</strong></span>
                 </span>
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[10px] text-textDim dark:text-slate-400">
                   {pupil.has_ehcp ? 'TA Support Active' : 'Universal Support'}
                 </span>
               </div>
@@ -248,29 +248,29 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
       {/* Supply Teacher 60-Second Briefing Modal */}
       {showSupplyModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-3 sm:pb-4">
+          <div className="bg-cardBg rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-borderMain p-4 sm:p-6 space-y-4 sm:space-y-6 text-textMain">
+            <div className="flex items-center justify-between border-b border-borderMain pb-3 sm:pb-4">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-light text-amber-dark">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-light dark:bg-amber-950/60 text-amber-dark dark:text-amber-300 border border-amber/20 dark:border-amber-800/40">
                   Emergency Cover Protocol
                 </span>
-                <h3 className="text-base sm:text-lg font-serif font-bold text-navy mt-1">
+                <h3 className="text-base sm:text-lg font-serif font-bold text-navy dark:text-white mt-1">
                   Room 4 SEND: 60-Second Cover Briefing Sheet
                 </h3>
-                <p className="text-[11px] sm:text-xs text-gray-500">
+                <p className="text-[11px] sm:text-xs text-textDim dark:text-slate-400">
                   St. Jude&apos;s Academy · Year 5 · Lead Teacher: Ms Clara Johnson · TA: Melissa Grant
                 </p>
               </div>
               <button
                 onClick={() => setShowSupplyModal(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer flex-shrink-0"
+                className="w-8 h-8 rounded-full bg-cardSubtle hover:bg-slate-100 dark:hover:bg-[#1E324A] border border-borderMain flex items-center justify-center text-textDim hover:text-textMain cursor-pointer flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-xs text-amber-900 flex items-start gap-2.5">
-              <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 rounded-2xl text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="block font-bold">Important note for supply / cover teachers:</strong>
                 SEND pupils in Room 4 thrive on predictable routines. Please follow the individual de-escalation tips below before calling on-call behavior support.
@@ -280,49 +280,49 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
             {/* Print Grid of 4 pupils */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {cohort.map((pupil) => (
-                <div key={pupil.id} className="p-4 rounded-2xl border border-gray-200 bg-gray-50/50 space-y-2 text-xs">
-                  <div className="flex items-center justify-between border-b border-gray-200 pb-2">
-                    <span className="font-bold text-navy text-sm">{pupil.name}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-white border border-gray-200 font-bold">
+                <div key={pupil.id} className="p-4 rounded-2xl border border-borderMain bg-cardSubtle space-y-2 text-xs">
+                  <div className="flex items-center justify-between border-b border-borderMain pb-2">
+                    <span className="font-bold text-navy dark:text-white text-sm">{pupil.name}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-cardBg border border-borderMain text-textMain dark:text-white font-bold">
                       {pupil.support_tier}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider block">
                       ⚠️ Never do:
                     </span>
-                    <span className="text-gray-700">
+                    <span className="text-textSub dark:text-slate-300">
                       {pupil.primary_triggers.join(', ')}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
                       ✓ Immediate de-escalation:
                     </span>
-                    <span className="text-gray-700">
+                    <span className="text-textSub dark:text-slate-300">
                       {pupil.sensory_calming_tools.slice(0, 2).join(' · ')}
                     </span>
                   </div>
 
-                  <div className="text-[11px] text-gray-500 pt-1 border-t border-gray-200">
-                    Trusted classmate: <strong className="text-navy">{pupil.buddy_pairing}</strong>
+                  <div className="text-[11px] text-textDim dark:text-slate-400 pt-1 border-t border-borderMain">
+                    Trusted classmate: <strong className="text-navy dark:text-white">{pupil.buddy_pairing}</strong>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-4 border-t border-borderMain">
               <button
                 onClick={() => setShowSupplyModal(false)}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer text-center"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer text-center"
               >
                 Close
               </button>
               <button
                 onClick={() => window.print()}
-                className="w-full sm:w-auto justify-center px-4 py-2 rounded-xl bg-teal hover:bg-teal-medium text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="w-full sm:w-auto justify-center px-4 py-2 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print / Save as PDF</span>

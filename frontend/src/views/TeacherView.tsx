@@ -100,14 +100,14 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Level View Switcher: 1:1 Support Focus vs Room 4 SEND Matrix */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-2.5 rounded-2xl border border-gray-100 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-cardBg p-2.5 rounded-2xl border border-borderMain shadow-xs">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <button
             onClick={() => handleTabChange('focused')}
             className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'focused'
                 ? 'bg-teal text-white shadow-xs'
-                : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
+                : 'bg-cardSubtle text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1A2E44] border border-borderMain'
             }`}
           >
             <span>🧒</span>
@@ -118,8 +118,8 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             onClick={() => handleTabChange('matrix')}
             className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'matrix'
-                ? 'bg-navy text-white shadow-xs'
-                : 'bg-gray-50 text-gray-600 hover:text-navy hover:bg-gray-100'
+                ? 'bg-teal text-white shadow-xs'
+                : 'bg-cardSubtle text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1A2E44] border border-borderMain'
             }`}
           >
             <span>🏫</span>
@@ -127,7 +127,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           </button>
         </div>
 
-        <div className="text-[11px] text-gray-400 font-medium px-2 hidden sm:block">
+        <div className="text-[11px] text-textDim font-medium px-2 hidden sm:block">
           {activeTab === 'focused' ? 'Personalized EHCP interventions' : 'Whole-class differentiated adaptations'}
         </div>
       </div>
@@ -224,42 +224,42 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
       {/* ⭐ PRE-FLIGHT MORNING HANDOVER & OPERATIONAL RISK CARD */}
       <div id="preflight-handover" className={`card p-5 border-l-4 transition-all scroll-mt-6 ${
         !effectiveHandover
-          ? 'border-l-slate-300 bg-slate-50/40'
+          ? 'border-l-slate-300 bg-cardSubtle'
           : effectiveHandover.acknowledged_by_staff
-            ? 'border-l-emerald-600 bg-white'
-            : 'border-l-amber-500 bg-amber-50/30 border-amber-200'
+            ? 'border-l-emerald-600 bg-cardBg'
+            : 'border-l-amber-500 bg-amber-50/30 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/40'
       }`}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-borderMain">
           <div className="flex items-center gap-2.5">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
               !effectiveHandover
-                ? 'bg-slate-100 text-slate-600'
+                ? 'bg-cardSubtle text-textDim'
                 : effectiveHandover.acknowledged_by_staff
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-amber-100 text-amber-800'
+                  ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
+                  : 'bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300'
             }`}>
               <Clock className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-navy">
+                <h3 className="text-sm font-bold text-navy dark:text-white">
                   Pre-Flight Morning Handover · {child.last_name === 'Carter' || !child.last_name ? 'Dana Carter (Mum)' : `${child.preferred_name || child.first_name}'s Home Handover`}
                 </h3>
                 {!effectiveHandover ? (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cardSubtle text-textDim border border-borderMain">
                     ⏳ Awaiting Home Submission
                   </span>
                 ) : effectiveHandover.acknowledged_by_staff ? (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
                     ✓ Read Receipt Delivered
                   </span>
                 ) : (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800/50 shadow-2xs">
                     🔔 Needs Teacher Acknowledgment
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[11px] text-textDim dark:text-slate-400">
                 {effectiveHandover
                   ? 'Submitted at 8:47am · Direct home-to-classroom loop'
                   : 'No morning transition log received yet today · Standing sensory baselines active'}
@@ -268,53 +268,53 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           </div>
 
           {!effectiveHandover ? (
-            <div className="w-full sm:w-auto text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-2 sm:py-1.5 rounded-xl border border-slate-200 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
-              <Clock className="w-4 h-4 text-slate-500" />
+            <div className="w-full sm:w-auto text-xs font-semibold text-textDim bg-cardSubtle px-3 py-2 sm:py-1.5 rounded-xl border border-borderMain flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
+              <Clock className="w-4 h-4 text-textDim" />
               <span>Awaiting Parent Log</span>
             </div>
           ) : !effectiveHandover.acknowledged_by_staff ? (
             <button
               onClick={handleAcknowledge}
               disabled={acknowledging}
-              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 bg-teal hover:bg-teal-dark text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 flex-shrink-0"
             >
               <CheckCircle2 className="w-4 h-4 text-mint" />
               <span>{acknowledging ? 'Acknowledging...' : '✓ Acknowledge Handover — Notify Home'}</span>
             </button>
           ) : (
-            <div className="w-full sm:w-auto text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-2 sm:py-1.5 rounded-xl border border-emerald-200 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="w-full sm:w-auto text-xs font-semibold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-2 sm:py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/50 flex items-center justify-center sm:justify-start gap-1.5 flex-shrink-0">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Acknowledged by Ms Johnson at {ackTimeFormatted}</span>
             </div>
           )}
         </div>
 
         {/* Handover Data Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-b border-gray-100">
-          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Sleep Quality</div>
-            <div className="text-xs font-bold text-navy mt-0.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-3 border-b border-borderMain">
+          <div className="bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400">Sleep Quality</div>
+            <div className="text-xs font-bold text-navy dark:text-white mt-0.5">
               {effectiveHandover?.sleep_quality || 'Restless (woke at 4am)'}
             </div>
           </div>
-          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Morning Mood</div>
-            <div className="text-xs font-bold text-navy mt-0.5">
+          <div className="bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400">Morning Mood</div>
+            <div className="text-xs font-bold text-navy dark:text-white mt-0.5">
               {effectiveHandover?.morning_mood || 'Anxious / Apprehensive'}
             </div>
           </div>
-          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Breakfast Status</div>
+          <div className="bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400">Breakfast Status</div>
             <div className={`text-xs font-bold mt-0.5 ${
-              effectiveHandover?.breakfast_eaten === false ? 'text-rose-700' : 'text-emerald-700'
+              effectiveHandover?.breakfast_eaten === false ? 'text-rose-700 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'
             }`}>
               {effectiveHandover?.breakfast_eaten === false ? '⚠️ Skipped (Dip Risk)' : '🥣 Breakfast Eaten'}
             </div>
           </div>
-          <div className="bg-gray-50/80 p-2.5 rounded-xl border border-gray-100">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-600">Medication</div>
+          <div className="bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400">Medication</div>
             <div className={`text-xs font-bold mt-0.5 ${
-              effectiveHandover?.medication_given ? 'text-teal-800' : 'text-amber-800'
+              effectiveHandover?.medication_given ? 'text-teal dark:text-teal-300' : 'text-amber-800 dark:text-amber-300'
             }`}>
               {effectiveHandover?.medication_given ? '💊 Taken at 8:30am' : '⚠️ Not Taken'}
             </div>
@@ -323,23 +323,23 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
         {/* Parent Notes & Status Note */}
         <div className="pt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-          <div className="text-gray-700">
-            <span className="font-bold text-navy">{child.last_name === 'Carter' || !child.last_name ? "Mum's Note: " : "Home Note: "}</span>
+          <div className="text-textSub dark:text-slate-300">
+            <span className="font-bold text-navy dark:text-white">{child.last_name === 'Carter' || !child.last_name ? "Mum's Note: " : "Home Note: "}</span>
             <span className="italic">
               "{effectiveHandover?.special_notes_for_day || (child.last_name === 'Carter' || !child.last_name ? 'Worried about assembly noise. Noise defenders packed in his bag.' : 'Please ensure sensory toolkit is available during transition.')}"
             </span>
           </div>
 
           {!effectiveHandover ? (
-            <div className="text-[11px] text-gray-500 bg-gray-100 px-2.5 py-1 rounded-lg border border-gray-200 flex-shrink-0">
+            <div className="text-[11px] text-textDim bg-cardSubtle px-2.5 py-1 rounded-lg border border-borderMain flex-shrink-0">
               Standing instruction: Offer sensory movement break at 10:00am
             </div>
           ) : !effectiveHandover.acknowledged_by_staff ? (
-            <div className="text-[11px] text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 flex-shrink-0 font-medium">
+            <div className="text-[11px] text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/40 flex-shrink-0 font-medium">
               💡 {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app will update with a read receipt instantly when acknowledged
             </div>
           ) : (
-            <div className="text-[11px] text-emerald-800 font-semibold flex-shrink-0">
+            <div className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold flex-shrink-0">
               ✓ {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app shows: "Read by Ms Johnson at {ackTimeFormatted}"
             </div>
           )}
@@ -468,19 +468,19 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
                 <p className="text-xs text-gray-400 italic py-4 text-center">No events logged yet.</p>
               ) : (
                 timeline.map((evt) => (
-                  <div key={evt.id} className="p-3 rounded-xl bg-gray-50 border border-gray-100 space-y-1">
+                  <div key={evt.id} className="p-3 rounded-xl bg-cardSubtle border border-borderMain space-y-1">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-bold text-navy">{evt.title}</span>
-                      <span className="text-gray-400 text-[10px]">
+                      <span className="font-bold text-navy dark:text-white">{evt.title}</span>
+                      <span className="text-textDim dark:text-slate-400 text-[10px]">
                         {new Date(evt.event_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-600 leading-relaxed">{evt.summary}</p>
-                    <div className="flex items-center justify-between text-[10px] text-gray-400 pt-1 border-t border-gray-200/60 mt-1.5">
+                    <p className="text-xs text-textSub dark:text-slate-300 leading-relaxed">{evt.summary}</p>
+                    <div className="flex items-center justify-between text-[10px] text-textDim dark:text-slate-400 pt-1 border-t border-borderMain mt-1.5">
                       <span>By {evt.reporter_name || evt.reporter_type}</span>
                       {evt.observation?.strategy_worked !== undefined && (
-                        <span className="flex items-center gap-1 font-semibold text-emerald-700">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-300">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                           <span>Strategy Worked</span>
                         </span>
                       )}

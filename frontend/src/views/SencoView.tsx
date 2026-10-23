@@ -309,24 +309,24 @@ export const SencoView: React.FC<SencoViewProps> = ({
   return (
     <div className="space-y-6">
       {/* SENCO Header Bar & Quick Register Action */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-cardBg p-4 sm:p-5 rounded-2xl border border-borderMain shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-navy flex items-center gap-2">
+            <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
               <span>SEND Coordination & Statutory Compliance</span>
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal font-semibold">
+              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
                 St. Jude&apos;s Academy
               </span>
             </h2>
           </div>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-textDim dark:text-slate-400 mt-0.5">
             Sarah Davies (NASENCo) &bull; Managing 34 SEND pupils, statutory EHCP Annual Reviews & Local Authority panels.
           </p>
         </div>
         {onRegisterChild && (
           <button
             onClick={onRegisterChild}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal to-teal-dark hover:from-teal-dark hover:to-teal text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
           >
             <span>📋</span>
             <span>+ Register SEND Pupil</span>
@@ -334,19 +334,21 @@ export const SencoView: React.FC<SencoViewProps> = ({
         )}
       </div>
 
-      {/* 3-Sub-Tab Navigation Bar */}
-      <div className="bg-white p-1.5 rounded-2xl border border-gray-200/80 flex items-center gap-1.5 overflow-x-auto shadow-2xs">
+      {/* 4-Sub-Tab Navigation Bar */}
+      <div className="bg-cardBg p-1.5 rounded-2xl border border-borderMain flex items-center gap-1.5 overflow-x-auto shadow-2xs">
         <button
           onClick={() => handleTabSelect('review_pack')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'review_pack'
-              ? 'bg-purple-dark text-white shadow-xs'
-              : 'text-gray-600 hover:text-navy hover:bg-gray-100'
+              ? 'bg-teal text-white shadow-xs font-bold'
+              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
           }`}
         >
           <FileText className="w-4 h-4" />
           <span>📑 Statutory Annual Review Pack</span>
-          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono">
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
+            activeTab === 'review_pack' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
+          }`}>
             EHCP Final
           </span>
         </button>
@@ -355,13 +357,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
           onClick={() => handleTabSelect('provision_map')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'provision_map'
-              ? 'bg-teal text-white shadow-xs'
-              : 'text-gray-600 hover:text-navy hover:bg-gray-100'
+              ? 'bg-teal text-white shadow-xs font-bold'
+              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
           }`}
         >
           <Users className="w-4 h-4" />
           <span>📊 Caseload & Provision Mapping</span>
-          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono">
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
+            activeTab === 'provision_map' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
+          }`}>
             34 Pupils
           </span>
         </button>
@@ -370,13 +374,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
           onClick={() => handleTabSelect('staff_team')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'staff_team'
-              ? 'bg-emerald-700 text-white shadow-xs'
-              : 'text-gray-600 hover:text-navy hover:bg-gray-100'
+              ? 'bg-teal text-white shadow-xs font-bold'
+              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
           }`}
         >
           <UserPlus className="w-4 h-4" />
           <span>👥 School Staff & Team</span>
-          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono">
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
+            activeTab === 'staff_team' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
+          }`}>
             {staffList.length > 0 ? `${staffList.length} Staff` : 'Team'}
           </span>
         </button>
@@ -385,11 +391,11 @@ export const SencoView: React.FC<SencoViewProps> = ({
           onClick={() => handleTabSelect('assistant')}
           className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
             activeTab === 'assistant'
-              ? 'bg-navy text-white shadow-xs'
-              : 'text-gray-600 hover:text-navy hover:bg-gray-100'
+              ? 'bg-teal text-white shadow-xs font-bold'
+              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
           }`}
         >
-          <Sparkles className="w-4 h-4 text-mint" />
+          <Sparkles className="w-4 h-4 text-amber-500 dark:text-mint" />
           <span>🔍 AI Evidence & RAG Assistant</span>
         </button>
       </div>
@@ -400,24 +406,24 @@ export const SencoView: React.FC<SencoViewProps> = ({
       {activeTab === 'review_pack' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Pupil Target Bar & Quick Export */}
-          <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-navy text-white p-5 rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-purple-50/90 via-cardBg to-indigo-50/50 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-navy text-textMain dark:text-white p-5 rounded-2xl border border-purple-200/60 dark:border-purple-900/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center text-xl font-bold font-serif text-mint border border-white/10">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold font-serif text-purple-700 dark:text-mint border border-purple-200 dark:border-white/10">
                 PC
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold font-serif text-white">
+                  <h3 className="text-base sm:text-lg font-bold font-serif text-navy dark:text-white">
                     {reviewPack?.child_name || 'Phoenix Carter'}
                   </h3>
-                  <span className="text-[10px] bg-purple-400/20 text-purple-200 border border-purple-400/30 px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-[10px] bg-purple-100 dark:bg-purple-400/20 text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-400/30 px-2 py-0.5 rounded-full font-bold">
                     Statutory EHCP
                   </span>
-                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
                     Review Due in 14 Days
                   </span>
                 </div>
-                <p className="text-xs text-white/70 mt-0.5">
+                <p className="text-xs text-textDim dark:text-white/70 mt-0.5">
                   Year 5 &bull; Primary Need: {reviewPack?.primary_need || 'Autism Spectrum Condition (ASC)'} &bull; {timeline.length} Evidence Events Logged
                 </p>
               </div>
@@ -425,7 +431,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               {loadingPack && (
-                <div className="text-[11px] text-mint font-semibold animate-pulse mr-2">
+                <div className="text-[11px] text-teal dark:text-mint font-semibold animate-pulse mr-2">
                   Synthesizing evidence...
                 </div>
               )}
@@ -495,16 +501,16 @@ export const SencoView: React.FC<SencoViewProps> = ({
                       </p>
                     </div>
 
-                    <div className="p-3 bg-amber-50/40 rounded-xl border border-amber-200 space-y-1">
-                      <div className="font-bold text-navy">
+                    <div className="p-3 bg-amber-50/40 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/40 space-y-1">
+                      <div className="font-bold text-navy dark:text-white">
                         <span>👩‍👦 Dana Carter (Parent Views & Progress):</span>
                       </div>
-                      <p className="text-gray-700 leading-relaxed">
+                      <p className="text-textSub dark:text-slate-300 leading-relaxed">
                         {reviewPack.section_a.parent_views}
                       </p>
                     </div>
 
-                    <div className="text-[11px] text-gray-500 italic bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                    <div className="text-[11px] text-textDim dark:text-slate-400 italic bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
                       <strong>Aspirations: </strong>{reviewPack.section_a.child_aspirations}
                     </div>
                   </div>
@@ -513,14 +519,14 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
               {/* Section E: Target Progress */}
               <div className="card p-5 border-l-4 border-l-emerald-600 space-y-3">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div className="flex items-center justify-between border-b border-borderMain pb-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-md bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">
+                    <span className="w-5 h-5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold text-xs border border-emerald-200/50 dark:border-emerald-800/40">
                       E
                     </span>
-                    <h4 className="text-sm font-bold text-navy">Section E: Measurable Outcomes & Target Progress</h4>
+                    <h4 className="text-sm font-bold text-navy dark:text-white">Section E: Measurable Outcomes & Target Progress</h4>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40 font-bold">
                     Statutory Targets
                   </span>
                 </div>
@@ -528,14 +534,14 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 {reviewPack && (
                   <div className="space-y-2 text-xs">
                     {reviewPack.section_e.map((out) => (
-                      <div key={out.target_id} className="p-2.5 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
+                      <div key={out.target_id} className="p-2.5 bg-cardSubtle rounded-xl border border-borderMain space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-navy">{out.title}</span>
-                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                          <span className="font-bold text-navy dark:text-white">{out.title}</span>
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-800/40">
                             {out.status}
                           </span>
                         </div>
-                        <p className="text-gray-600 text-[11px] leading-snug">{out.evidence_summary}</p>
+                        <p className="text-textSub dark:text-slate-300 text-[11px] leading-snug">{out.evidence_summary}</p>
                       </div>
                     ))}
                   </div>
@@ -547,14 +553,14 @@ export const SencoView: React.FC<SencoViewProps> = ({
             <div className="lg:col-span-6 space-y-4">
               {/* Section B: Special Educational Needs */}
               <div className="card p-5 border-l-4 border-l-purple-dark space-y-3">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div className="flex items-center justify-between border-b border-borderMain pb-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-md bg-purple-light text-purple-dark flex items-center justify-center font-bold text-xs">
+                    <span className="w-5 h-5 rounded-md bg-purple-light dark:bg-purple-950/60 text-purple-dark dark:text-purple-300 flex items-center justify-center font-bold text-xs border border-purple-200/50 dark:border-purple-800/40">
                       B
                     </span>
-                    <h4 className="text-sm font-bold text-navy">Section B: Special Educational Needs (4 Areas)</h4>
+                    <h4 className="text-sm font-bold text-navy dark:text-white">Section B: Special Educational Needs (4 Areas)</h4>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-light text-purple-dark font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-light dark:bg-purple-950/50 text-purple-dark dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40 font-bold">
                     Evidence Verified
                   </span>
                 </div>
@@ -562,15 +568,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 {reviewPack && (
                   <div className="space-y-2.5 text-xs">
                     {reviewPack.section_b.map((need, idx) => (
-                      <div key={idx} className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
+                      <div key={idx} className="p-3 bg-cardSubtle rounded-xl border border-borderMain space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-navy">{need.area_of_need}</span>
-                          <span className="text-[10px] text-teal font-semibold">
+                          <span className="font-bold text-navy dark:text-white">{need.area_of_need}</span>
+                          <span className="text-[10px] text-teal dark:text-teal-300 font-semibold">
                             {need.evidence_count} Live Observations
                           </span>
                         </div>
-                        <p className="text-gray-600 text-[11px] leading-snug">{need.statutory_summary}</p>
-                        <div className="pt-1 text-[10px] text-gray-400">
+                        <p className="text-textSub dark:text-slate-300 text-[11px] leading-snug">{need.statutory_summary}</p>
+                        <div className="pt-1 text-[10px] text-textDim dark:text-slate-400">
                           <strong>Citations: </strong>{need.citations.join(' · ')}
                         </div>
                       </div>
@@ -581,14 +587,14 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
               {/* Section F: Quantified Provision */}
               <div className="card p-5 border-l-4 border-l-indigo-600 space-y-3">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                <div className="flex items-center justify-between border-b border-borderMain pb-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-md bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-xs">
+                    <span className="w-5 h-5 rounded-md bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 flex items-center justify-center font-bold text-xs border border-indigo-200/50 dark:border-indigo-800/40">
                       F
                     </span>
-                    <h4 className="text-sm font-bold text-navy">Section F: Quantified Special Provision Delivered</h4>
+                    <h4 className="text-sm font-bold text-navy dark:text-white">Section F: Quantified Special Provision Delivered</h4>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/50 text-indigo-800 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-800/40 font-bold">
                     100% Tracked
                   </span>
                 </div>
@@ -596,15 +602,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 {reviewPack && (
                   <div className="space-y-2 text-xs">
                     {reviewPack.section_f.map((prov) => (
-                      <div key={prov.provision_id} className="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
+                      <div key={prov.provision_id} className="p-3 bg-cardSubtle rounded-xl border border-borderMain space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-navy">{prov.title}</span>
-                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
+                          <span className="font-bold text-navy dark:text-white">{prov.title}</span>
+                          <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-200/50 dark:border-emerald-800/40 px-2 py-0.5 rounded-md">
                             {prov.evidence_delivery_rate}
                           </span>
                         </div>
-                        <p className="text-purple-dark text-[11px] font-semibold">{prov.quantified_support}</p>
-                        <p className="text-gray-500 text-[10px]">{prov.impact_notes}</p>
+                        <p className="text-purple-dark dark:text-purple-300 text-[11px] font-semibold">{prov.quantified_support}</p>
+                        <p className="text-textDim dark:text-slate-400 text-[10px]">{prov.impact_notes}</p>
                       </div>
                     ))}
                   </div>
@@ -670,8 +676,8 @@ export const SencoView: React.FC<SencoViewProps> = ({
           </div>
 
           {/* Filter Bar */}
-          <div className="card p-3 flex flex-wrap items-center justify-between gap-2 bg-white">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-navy px-2">
+          <div className="card p-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-navy dark:text-white px-2">
               <Filter className="w-3.5 h-3.5 text-teal" />
               <span>Filter Caseload Register:</span>
             </div>
@@ -690,8 +696,8 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   onClick={() => setProvisionFilter(f.key as any)}
                   className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
                     provisionFilter === f.key
-                      ? 'bg-teal text-white shadow-xs'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-teal text-white shadow-xs font-bold'
+                      : 'bg-cardSubtle border border-borderMain text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                   }`}
                 >
                   {f.label}
@@ -701,23 +707,23 @@ export const SencoView: React.FC<SencoViewProps> = ({
           </div>
 
           {/* Provision Table / Cards Container */}
-          <div className="card overflow-hidden bg-white">
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <div className="card overflow-hidden">
+            <div className="p-4 border-b border-borderMain flex items-center justify-between">
               <div>
-                <h3 className="font-serif font-bold text-sm text-navy">
+                <h3 className="font-serif font-bold text-sm text-navy dark:text-white">
                   St. Jude&apos;s Academy Provision & Funding Register (2026/2027)
                 </h3>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[11px] text-textDim dark:text-slate-400">
                   Showing {provisionMatrix ? getFilteredPupils(provisionMatrix.pupils).length : 12} active SEND learners with statutory review dates.
                 </p>
               </div>
-              <span className="text-[10px] px-2.5 py-1 rounded-full bg-teal/10 text-teal font-bold hidden sm:inline">
+              <span className="text-[10px] px-2.5 py-1 rounded-full bg-teal/10 text-teal dark:text-teal-300 border border-teal/20 font-bold hidden sm:inline">
                 DfE SEND Code of Practice Compliant
               </span>
             </div>
 
             {loadingMatrix ? (
-              <div className="p-12 text-center text-gray-400 text-xs">
+              <div className="p-12 text-center text-textDim dark:text-slate-400 text-xs">
                 <div className="w-7 h-7 border-2 border-teal border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                 <span>Loading whole-school provision matrix...</span>
               </div>
@@ -725,7 +731,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-gray-50/80 dark:bg-[#0F1A2A] text-gray-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-gray-100 dark:border-borderMain">
+                    <tr className="bg-cardSubtle text-textDim dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-borderMain">
                       <th className="py-3 px-4">Pupil & Year</th>
                       <th className="py-3 px-3">Support Tier</th>
                       <th className="py-3 px-3">Primary Need</th>
@@ -1015,21 +1021,21 @@ export const SencoView: React.FC<SencoViewProps> = ({
       {activeTab === 'staff_team' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Header Action Banner */}
-          <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-navy text-white p-5 rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-emerald-50/90 via-cardBg to-teal-50/50 dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-navy text-textMain dark:text-white p-5 rounded-2xl border border-emerald-200/60 dark:border-emerald-900/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xs flex items-center justify-center text-xl font-bold font-serif text-mint border border-white/10">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold font-serif text-emerald-800 dark:text-mint border border-emerald-200 dark:border-white/10">
                 👥
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold font-serif text-white">
+                  <h3 className="text-base sm:text-lg font-bold font-serif text-navy dark:text-white">
                     School Staff & Inclusion Team Directory
                   </h3>
-                  <span className="text-[10px] bg-emerald-400/20 text-emerald-200 border border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">
+                  <span className="text-[10px] bg-emerald-100 dark:bg-emerald-400/20 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">
                     St. Jude&apos;s Inclusive Academy
                   </span>
                 </div>
-                <p className="text-xs text-mint/80 mt-1 max-w-2xl">
+                <p className="text-xs text-textDim dark:text-mint/80 mt-1 max-w-2xl">
                   SENCO operational authority: Appoint, provision, and allocate Classroom Teachers, Teaching Assistants, and Specialists within your school tenant.
                 </p>
               </div>
@@ -1039,7 +1045,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
               <button
                 onClick={loadStaff}
                 disabled={loadingStaff}
-                className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all border border-white/15 flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2.5 rounded-xl bg-cardSubtle dark:bg-white/10 hover:bg-slate-100 dark:hover:bg-white/20 text-textMain dark:text-white text-xs font-semibold transition-all border border-borderMain dark:border-white/15 flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 title="Refresh Staff List"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loadingStaff ? 'animate-spin' : ''}`} />
@@ -1047,9 +1053,9 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </button>
               <button
                 onClick={() => setIsAddStaffModalOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-mint hover:from-teal-300 hover:to-mint text-navy text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer"
               >
-                <UserPlus className="w-4 h-4 text-navy" />
+                <UserPlus className="w-4 h-4 text-white" />
                 <span>+ Add Staff Member</span>
               </button>
             </div>
@@ -1057,21 +1063,21 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
           {/* Provisioning Success Notification */}
           {provisionSuccessMsg && (
-            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start justify-between gap-3 shadow-xs">
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-emerald-900 dark:text-emerald-200 flex items-start justify-between gap-3 shadow-xs">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-xs space-y-1">
                   <p className="font-bold">
                     ✓ Successfully appointed and provisioned {provisionSuccessMsg.name} ({provisionSuccessMsg.email})
                   </p>
-                  <p className="text-emerald-700">
-                    Role: <span className="font-semibold uppercase tracking-wider">{provisionSuccessMsg.role}</span> &bull; Initial Password: <code className="bg-emerald-100 px-1.5 py-0.5 rounded font-mono font-bold text-emerald-900">{provisionSuccessMsg.password || 'Welcome2026!'}</code> &bull; Invitation email logged in audit trail.
+                  <p className="text-emerald-700 dark:text-emerald-300">
+                    Role: <span className="font-semibold uppercase tracking-wider">{provisionSuccessMsg.role}</span> &bull; Initial Password: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded font-mono font-bold text-emerald-900 dark:text-emerald-200">{provisionSuccessMsg.password || 'Welcome2026!'}</code> &bull; Invitation email logged in audit trail.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setProvisionSuccessMsg(null)}
-                className="text-emerald-700 hover:text-emerald-900 p-1 cursor-pointer"
+                className="text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 p-1 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1080,60 +1086,60 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
           {/* 4 Summary Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
-              <div className="flex items-center justify-between text-gray-500 mb-1">
+            <div className="bg-cardBg p-4 rounded-2xl border border-borderMain shadow-2xs">
+              <div className="flex items-center justify-between text-textDim dark:text-slate-400 mb-1">
                 <span className="text-xs font-semibold">Total Appointed</span>
                 <Users className="w-4 h-4 text-emerald-600" />
               </div>
-              <div className="text-2xl font-bold font-serif text-navy">
+              <div className="text-2xl font-bold font-serif text-navy dark:text-white">
                 {staffList.length}
               </div>
-              <p className="text-[10px] text-gray-400 mt-0.5">Active School Team</p>
+              <p className="text-[10px] text-textDim dark:text-slate-400 mt-0.5">Active School Team</p>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
-              <div className="flex items-center justify-between text-gray-500 mb-1">
+            <div className="bg-cardBg p-4 rounded-2xl border border-borderMain shadow-2xs">
+              <div className="flex items-center justify-between text-textDim dark:text-slate-400 mb-1">
                 <span className="text-xs font-semibold">Teachers</span>
                 <GraduationCap className="w-4 h-4 text-purple-600" />
               </div>
-              <div className="text-2xl font-bold font-serif text-navy">
+              <div className="text-2xl font-bold font-serif text-navy dark:text-white">
                 {staffList.filter((s) => s.role === 'teacher').length}
               </div>
-              <p className="text-[10px] text-purple-600 font-medium mt-0.5">Classroom & Handover Leads</p>
+              <p className="text-[10px] text-purple-600 dark:text-purple-400 font-medium mt-0.5">Classroom & Handover Leads</p>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
-              <div className="flex items-center justify-between text-gray-500 mb-1">
+            <div className="bg-cardBg p-4 rounded-2xl border border-borderMain shadow-2xs">
+              <div className="flex items-center justify-between text-textDim dark:text-slate-400 mb-1">
                 <span className="text-xs font-semibold">1:1 TAs</span>
                 <Users className="w-4 h-4 text-teal" />
               </div>
-              <div className="text-2xl font-bold font-serif text-navy">
+              <div className="text-2xl font-bold font-serif text-navy dark:text-white">
                 {staffList.filter((s) => s.role === 'ta').length}
               </div>
-              <p className="text-[10px] text-teal font-medium mt-0.5">SEND Transition & Micro-Logs</p>
+              <p className="text-[10px] text-teal dark:text-teal-300 font-medium mt-0.5">SEND Transition & Micro-Logs</p>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-2xs">
-              <div className="flex items-center justify-between text-gray-500 mb-1">
+            <div className="bg-cardBg p-4 rounded-2xl border border-borderMain shadow-2xs">
+              <div className="flex items-center justify-between text-textDim dark:text-slate-400 mb-1">
                 <span className="text-xs font-semibold">Specialists / SENCO</span>
                 <ShieldCheck className="w-4 h-4 text-indigo-600" />
               </div>
-              <div className="text-2xl font-bold font-serif text-navy">
+              <div className="text-2xl font-bold font-serif text-navy dark:text-white">
                 {staffList.filter((s) => s.role === 'specialist' || s.role === 'senco').length}
               </div>
-              <p className="text-[10px] text-indigo-600 font-medium mt-0.5">SaLT, Ed Psych & Leadership</p>
+              <p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">SaLT, Ed Psych & Leadership</p>
             </div>
           </div>
 
           {/* Quick Filter Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-2xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-cardBg p-3 rounded-2xl border border-borderMain shadow-2xs">
             <div className="flex items-center gap-1.5 overflow-x-auto">
               <button
                 onClick={() => setStaffFilter('all')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   staffFilter === 'all'
-                    ? 'bg-navy text-white shadow-xs'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-teal text-white shadow-xs font-bold'
+                    : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                 }`}
               >
                 All Staff ({staffList.length})
@@ -1142,8 +1148,8 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 onClick={() => setStaffFilter('teacher')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   staffFilter === 'teacher'
-                    ? 'bg-purple-600 text-white shadow-xs'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-teal text-white shadow-xs font-bold'
+                    : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                 }`}
               >
                 Classroom Teachers ({staffList.filter((s) => s.role === 'teacher').length})
@@ -1152,8 +1158,8 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 onClick={() => setStaffFilter('ta')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   staffFilter === 'ta'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-teal text-white shadow-xs font-bold'
+                    : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                 }`}
               >
                 Teaching Assistants ({staffList.filter((s) => s.role === 'ta').length})
@@ -1162,15 +1168,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 onClick={() => setStaffFilter('specialist')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   staffFilter === 'specialist'
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-teal text-white shadow-xs font-bold'
+                    : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                 }`}
               >
                 Specialists ({staffList.filter((s) => s.role === 'specialist').length})
               </button>
             </div>
 
-            <div className="text-xs text-gray-400 font-medium flex items-center gap-1.5">
+            <div className="text-xs text-textDim dark:text-slate-400 font-medium flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-teal" />
               <span>Strict School Tenant Boundary Enforced</span>
             </div>
@@ -1178,7 +1184,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
           {/* Staff Grid */}
           {loadingStaff ? (
-            <div className="p-12 text-center text-gray-400 bg-white rounded-2xl border border-gray-100">
+            <div className="p-12 text-center text-textDim dark:text-slate-400 bg-cardBg rounded-2xl border border-borderMain">
               <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-teal" />
               <p className="text-xs">Loading appointed school team...</p>
             </div>
@@ -1195,31 +1201,31 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   const roleConfig = {
                     teacher: {
                       badge: 'Classroom Teacher',
-                      badgeBg: 'bg-purple-100 text-purple-700 border-purple-200',
+                      badgeBg: 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/40',
                       avatarBg: 'bg-purple-600 text-white',
                       duties: 'Pre-Flight Handovers, differentiated pathways & lesson worksheets',
                     },
                     ta: {
                       badge: '1:1 Teaching Assistant',
-                      badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                      badgeBg: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/40',
                       avatarBg: 'bg-emerald-600 text-white',
                       duties: 'High-risk timetable execution, <45s micro-logs & sensory decompression',
                     },
                     specialist: {
                       badge: 'Specialist / Therapist',
-                      badgeBg: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                      badgeBg: 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/40',
                       avatarBg: 'bg-indigo-600 text-white',
                       duties: 'Clinical observations, SaLT therapy programs & diagnostic reports',
                     },
                     senco: {
                       badge: 'Lead SENCO & Inclusion Lead',
-                      badgeBg: 'bg-teal/10 text-teal border-teal/20',
+                      badgeBg: 'bg-teal/10 dark:bg-teal-950/60 text-teal dark:text-teal-300 border-teal/20 dark:border-teal-800/40',
                       avatarBg: 'bg-teal text-white',
                       duties: 'Statutory Section 44 packs, SEND register & staff team management',
                     },
                   }[staff.role] || {
                     badge: staff.role.toUpperCase(),
-                    badgeBg: 'bg-gray-100 text-gray-700 border-gray-200',
+                    badgeBg: 'bg-cardSubtle text-textDim border-borderMain',
                     avatarBg: 'bg-gray-600 text-white',
                     duties: 'Staff operations',
                   };
@@ -1234,7 +1240,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   return (
                     <div
                       key={staff.id}
-                      className="bg-white rounded-2xl border border-gray-100 p-5 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
+                      className="bg-cardBg rounded-2xl border border-borderMain p-5 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-start justify-between gap-3 mb-3">
@@ -1245,12 +1251,12 @@ export const SencoView: React.FC<SencoViewProps> = ({
                               {initials}
                             </div>
                             <div>
-                              <h4 className="font-bold text-navy text-sm leading-tight">
+                              <h4 className="font-bold text-navy dark:text-white text-sm leading-tight">
                                 {staff.full_name}
                               </h4>
                               <a
                                 href={`mailto:${staff.email}`}
-                                className="text-[11px] text-gray-400 hover:text-teal flex items-center gap-1 mt-0.5"
+                                className="text-[11px] text-textDim dark:text-slate-400 hover:text-teal dark:hover:text-teal-300 flex items-center gap-1 mt-0.5"
                               >
                                 <Mail className="w-3 h-3" />
                                 <span>{staff.email}</span>
@@ -1264,52 +1270,52 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           </span>
                         </div>
 
-                        <div className="space-y-1.5 py-3 border-t border-b border-gray-100 my-3 text-xs">
-                          <div className="flex justify-between items-center text-gray-500">
+                        <div className="space-y-1.5 py-3 border-t border-b border-borderMain my-3 text-xs">
+                          <div className="flex justify-between items-center text-textDim dark:text-slate-400">
                             <span>Assigned Tenant:</span>
-                            <span className="font-semibold text-navy">
+                            <span className="font-semibold text-navy dark:text-white">
                               {staff.school_name || "St. Jude's Inclusive Academy"}
                             </span>
                           </div>
-                          <div className="flex justify-between items-center text-gray-500">
+                          <div className="flex justify-between items-center text-textDim dark:text-slate-400">
                             <span>Status:</span>
-                            <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold text-[11px]">
+                            <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300 font-semibold text-[11px]">
                               <UserCheck className="w-3 h-3" />
                               Active & Verified
                             </span>
                           </div>
                         </div>
 
-                        <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-gray-400 block mb-1">
+                        <div className="bg-cardSubtle p-2.5 rounded-xl border border-borderMain">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-textDim dark:text-slate-400 block mb-1">
                             Delegated Responsibilities:
                           </span>
-                          <p className="text-[11px] text-gray-600 leading-relaxed">
+                          <p className="text-[11px] text-textSub dark:text-slate-300 leading-relaxed">
                             {roleConfig.duties}
                           </p>
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-400">
+                      <div className="mt-4 pt-3 border-t border-borderMain flex items-center justify-between text-[11px] text-textDim dark:text-slate-400">
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => handleOpenEdit(staff)}
-                            className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-all"
+                            className="px-2.5 py-1 rounded-lg bg-cardSubtle hover:bg-slate-100 dark:hover:bg-[#1E324A] text-textSub dark:text-slate-300 border border-borderMain font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-all"
                             title="Edit staff profile"
                           >
-                            <Edit3 className="w-3 h-3 text-gray-500" />
+                            <Edit3 className="w-3 h-3 text-textDim dark:text-slate-400" />
                             <span>Edit</span>
                           </button>
                           <button
                             onClick={() => setDeletingStaff(staff)}
-                            className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-all"
+                            className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-300 border border-rose-200/50 dark:border-rose-900/50 font-semibold text-[11px] flex items-center gap-1 cursor-pointer transition-all"
                             title="Delete staff account"
                           >
                             <Trash2 className="w-3 h-3 text-rose-500" />
                             <span>Delete</span>
                           </button>
                         </div>
-                        <span className="text-teal font-semibold">1-Click Connected</span>
+                        <span className="text-teal dark:text-teal-300 font-semibold">1-Click Connected</span>
                       </div>
                     </div>
                   );
@@ -1320,24 +1326,24 @@ export const SencoView: React.FC<SencoViewProps> = ({
           {/* Modal: Add Staff Member */}
           {isAddStaffModalOpen && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
-              <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-150">
-                <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100">
+              <div className="bg-cardBg rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-borderMain text-textMain animate-in zoom-in-95 duration-150">
+                <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-borderMain">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/50 dark:border-emerald-800/40">
                       <UserPlus className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-navy text-base">
+                      <h3 className="font-bold text-navy dark:text-white text-base">
                         Provision School Staff Member
                       </h3>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-textDim dark:text-slate-400">
                         St. Jude&apos;s Inclusive Academy &bull; Recruited under SENCO leadership
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsAddStaffModalOpen(false)}
-                    className="text-gray-400 hover:text-navy p-1 rounded-lg hover:bg-gray-100 cursor-pointer"
+                    className="text-textDim hover:text-textMain p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -1346,7 +1352,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 <form onSubmit={handleProvisionStaff} className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-navy mb-1">
+                      <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                         First Name *
                       </label>
                       <input
@@ -1357,11 +1363,11 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           setStaffForm({ ...staffForm, firstName: e.target.value })
                         }
                         placeholder="e.g. Thomas"
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-navy mb-1">
+                      <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                         Last Name *
                       </label>
                       <input
@@ -1372,13 +1378,13 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           setStaffForm({ ...staffForm, lastName: e.target.value })
                         }
                         placeholder="e.g. Clarke"
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       School Email Address *
                     </label>
                     <input
@@ -1389,12 +1395,12 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         setStaffForm({ ...staffForm, email: e.target.value })
                       }
                       placeholder="e.g. t.clarke@stjudes.sch.uk"
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       Role & Support Tier *
                     </label>
                     <select
@@ -1405,7 +1411,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           role: e.target.value as 'teacher' | 'ta' | 'specialist',
                         })
                       }
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal bg-white cursor-pointer"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal cursor-pointer"
                     >
                       <option value="teacher">Classroom Teacher (Class Lead, Handover recipient)</option>
                       <option value="ta">Teaching Assistant / 1:1 Support (Micro-logs, High-risk transitions)</option>
@@ -1414,7 +1420,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       Class / Room / Specialism Assignment
                     </label>
                     <input
@@ -1424,12 +1430,12 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         setStaffForm({ ...staffForm, jobTitle: e.target.value })
                       }
                       placeholder="e.g. Year 4 Teacher (Room 2) or Autism 1:1 Specialist"
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       Initial Temporary Password (Optional)
                     </label>
                     <input
@@ -1439,25 +1445,25 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         setStaffForm({ ...staffForm, password: e.target.value })
                       }
                       placeholder="Defaults to Welcome2026!"
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal font-mono"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal font-mono"
                     />
-                    <p className="text-[10px] text-gray-400 mt-1">
+                    <p className="text-[10px] text-textDim dark:text-slate-400 mt-1">
                       The user will be prompted to change their password upon first login.
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                  <div className="pt-3 border-t border-borderMain flex items-center justify-end gap-2.5">
                     <button
                       type="button"
                       onClick={() => setIsAddStaffModalOpen(false)}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={submittingStaff}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal text-white text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                      className="px-5 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                     >
                       {submittingStaff ? (
                         <>
@@ -1480,24 +1486,24 @@ export const SencoView: React.FC<SencoViewProps> = ({
           {/* Modal: Edit Staff Member */}
           {editingStaff && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
-              <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-150">
-                <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100">
+              <div className="bg-cardBg rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-borderMain text-textMain animate-in zoom-in-95 duration-150">
+                <div className="flex items-start justify-between gap-3 mb-4 pb-3 border-b border-borderMain">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center border border-purple-200/50 dark:border-purple-800/40">
                       <Edit3 className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-navy text-base">
+                      <h3 className="font-bold text-navy dark:text-white text-base">
                         Edit Staff Member Profile
                       </h3>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-textDim dark:text-slate-400">
                         {editingStaff.full_name} &bull; {editingStaff.school_name || "St. Jude's Inclusive Academy"}
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setEditingStaff(null)}
-                    className="text-gray-400 hover:text-navy p-1 rounded-lg hover:bg-gray-100 cursor-pointer"
+                    className="text-textDim hover:text-textMain p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -1506,7 +1512,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 <form onSubmit={handleSaveEdit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-navy mb-1">
+                      <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                         First Name *
                       </label>
                       <input
@@ -1516,11 +1522,11 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         onChange={(e) =>
                           setEditForm({ ...editForm, firstName: e.target.value })
                         }
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-navy mb-1">
+                      <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                         Last Name *
                       </label>
                       <input
@@ -1530,13 +1536,13 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         onChange={(e) =>
                           setEditForm({ ...editForm, lastName: e.target.value })
                         }
-                        className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       School Email Address *
                     </label>
                     <input
@@ -1546,12 +1552,12 @@ export const SencoView: React.FC<SencoViewProps> = ({
                       onChange={(e) =>
                         setEditForm({ ...editForm, email: e.target.value })
                       }
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       Role & Support Tier *
                     </label>
                     <select
@@ -1562,7 +1568,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           role: e.target.value,
                         })
                       }
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal bg-white cursor-pointer"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal cursor-pointer"
                     >
                       <option value="teacher">Classroom Teacher</option>
                       <option value="ta">Teaching Assistant / 1:1 Support</option>
@@ -1571,7 +1577,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-navy mb-1">
+                    <label className="block text-xs font-bold text-navy dark:text-white mb-1">
                       Class / Room / Specialism Assignment
                     </label>
                     <input
@@ -1581,7 +1587,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         setEditForm({ ...editForm, jobTitle: e.target.value })
                       }
                       placeholder="e.g. Year 5 Class Teacher (Room 4)"
-                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-hidden focus:border-teal"
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                     />
                   </div>
 
@@ -1593,25 +1599,25 @@ export const SencoView: React.FC<SencoViewProps> = ({
                       onChange={(e) =>
                         setEditForm({ ...editForm, isActive: e.target.checked })
                       }
-                      className="rounded border-gray-300 text-teal focus:ring-teal cursor-pointer"
+                      className="rounded border-borderMain text-teal focus:ring-teal cursor-pointer"
                     />
-                    <label htmlFor="edit-is-active" className="text-xs font-semibold text-gray-700 cursor-pointer">
+                    <label htmlFor="edit-is-active" className="text-xs font-semibold text-textSub dark:text-slate-300 cursor-pointer">
                       Active Account (uncheck to suspend access)
                     </label>
                   </div>
 
-                  <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                  <div className="pt-3 border-t border-borderMain flex items-center justify-end gap-2.5">
                     <button
                       type="button"
                       onClick={() => setEditingStaff(null)}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={savingEdit}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal to-teal-dark text-white text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                      className="px-5 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold shadow-sm hover:shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                     >
                       {savingEdit ? (
                         <>
@@ -1634,41 +1640,41 @@ export const SencoView: React.FC<SencoViewProps> = ({
           {/* Modal: Delete Staff Member Confirmation */}
           {deletingStaff && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
-              <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-100 animate-in zoom-in-95 duration-150">
-                <div className="flex items-center gap-3.5 mb-4 text-rose-600">
-                  <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center flex-shrink-0">
-                    <AlertCircle className="w-6 h-6 text-rose-600" />
+              <div className="bg-cardBg rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-200 dark:border-rose-900/50 text-textMain animate-in zoom-in-95 duration-150">
+                <div className="flex items-center gap-3.5 mb-4 text-rose-600 dark:text-rose-400">
+                  <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200/50 dark:border-rose-800/40 flex items-center justify-center flex-shrink-0">
+                    <AlertCircle className="w-6 h-6 text-rose-600 dark:text-rose-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-navy text-base leading-tight">
+                    <h3 className="font-bold text-navy dark:text-white text-base leading-tight">
                       Delete Staff Account?
                     </h3>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-textDim dark:text-slate-400 mt-0.5">
                       This action will revoke access and remove the staff member.
                     </p>
                   </div>
                 </div>
 
-                <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100 text-xs space-y-1.5 mb-4">
+                <div className="p-3.5 bg-cardSubtle rounded-xl border border-borderMain text-xs space-y-1.5 mb-4">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Name:</span>
-                    <span className="font-bold text-navy">{deletingStaff.full_name}</span>
+                    <span className="text-textDim dark:text-slate-400">Name:</span>
+                    <span className="font-bold text-navy dark:text-white">{deletingStaff.full_name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Email:</span>
-                    <span className="font-semibold text-gray-700">{deletingStaff.email}</span>
+                    <span className="text-textDim dark:text-slate-400">Email:</span>
+                    <span className="font-semibold text-textSub dark:text-slate-300">{deletingStaff.email}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Role:</span>
-                    <span className="font-bold text-purple-700 uppercase tracking-wide">{deletingStaff.role}</span>
+                    <span className="text-textDim dark:text-slate-400">Role:</span>
+                    <span className="font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide">{deletingStaff.role}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Tenant:</span>
-                    <span className="font-medium text-gray-600">{deletingStaff.school_name || "St. Jude's Inclusive Academy"}</span>
+                    <span className="text-textDim dark:text-slate-400">Tenant:</span>
+                    <span className="font-medium text-textSub dark:text-slate-300">{deletingStaff.school_name || "St. Jude's Inclusive Academy"}</span>
                   </div>
                 </div>
 
-                <p className="text-[11px] text-gray-500 mb-5 leading-relaxed">
+                <p className="text-[11px] text-textDim dark:text-slate-400 mb-5 leading-relaxed">
                   Historical clinical observations and safeguarding notes previously submitted by this user will be preserved in the audit trail.
                 </p>
 
@@ -1677,7 +1683,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                     type="button"
                     onClick={() => setDeletingStaff(null)}
                     disabled={confirmingDelete}
-                    className="px-4 py-2 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 cursor-pointer disabled:opacity-50"
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A] cursor-pointer disabled:opacity-50"
                   >
                     Cancel
                   </button>

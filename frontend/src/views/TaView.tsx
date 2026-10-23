@@ -53,20 +53,20 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
   return (
     <div className="space-y-6">
       {/* TA Header */}
-      <div id="ta-support-hub" className="card p-5 border-l-4 border-l-green bg-white scroll-mt-6">
+      <div id="ta-support-hub" className="card p-5 border-l-4 border-l-green scroll-mt-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-green-light flex items-center justify-center font-bold text-green text-base shadow-xs">
+            <div className="w-11 h-11 rounded-2xl bg-green-light dark:bg-emerald-950/60 flex items-center justify-center font-bold text-green dark:text-emerald-300 text-base shadow-xs">
               MG
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-navy">Melissa Grant · Teaching Assistant Support</h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-light text-emerald-800">
+                <h2 className="text-base font-bold text-navy dark:text-white">Melissa Grant · Teaching Assistant Support</h2>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-light dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-green/20 dark:border-emerald-800/40">
                   Year 5 Room 4
                 </span>
               </div>
-              <p className="text-xs text-gray-500">1-to-1 Key Worker for {child.full_name || 'Phoenix Carter'} · St. Jude's Academy</p>
+              <p className="text-xs text-textDim dark:text-slate-400">1-to-1 Key Worker for {child.full_name || 'Phoenix Carter'} · St. Jude's Academy</p>
             </div>
           </div>
           <button
@@ -97,64 +97,64 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
         <div className="lg:col-span-6 space-y-5">
           {/* Today's Assigned Pupils */}
           <div className="card p-5 space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+            <div className="flex items-center justify-between border-b border-borderMain pb-2">
               <div>
-                <h3 className="text-sm font-bold text-navy">Today's Assigned Pupils</h3>
-                <p className="text-[10px] text-gray-500">Priority order · with immediate operational actions</p>
+                <h3 className="text-sm font-bold text-navy dark:text-white">Today's Assigned Pupils</h3>
+                <p className="text-[10px] text-textDim dark:text-slate-400">Priority order · with immediate operational actions</p>
               </div>
-              <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 px-2 py-0.5 rounded-md">
                 3 Pupils
               </span>
             </div>
 
             <div className="space-y-2.5 text-xs">
-              <div className="p-3 bg-coral-50/50 border border-coral-200/60 rounded-xl flex items-start justify-between gap-3">
+              <div className="p-3 bg-coral-50/50 dark:bg-coral-950/20 border border-coral-200/60 dark:border-coral-900/40 rounded-xl flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-coral-dark text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
                     PC
                   </div>
                   <div>
-                    <div className="font-bold text-navy">Phoenix Carter — High Priority</div>
-                    <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
+                    <div className="font-bold text-navy dark:text-white">Phoenix Carter — High Priority</div>
+                    <div className="text-[11px] text-textSub dark:text-slate-300 mt-0.5 leading-snug">
                       Skipped breakfast · medication dip 10–10:30am · headphones at door · game design maths today
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-1 rounded-md flex-shrink-0">
+                <span className="text-[10px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 px-2 py-1 rounded-md flex-shrink-0">
                   Act Now
                 </span>
               </div>
 
-              <div className="p-3 bg-amber-50/30 border border-amber-200/50 rounded-xl flex items-start justify-between gap-3">
+              <div className="p-3 bg-amber-50/30 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-900/40 rounded-xl flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-amber-dark text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
                     RP
                   </div>
                   <div>
-                    <div className="font-bold text-navy">Riya Patel — Watch</div>
-                    <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
+                    <div className="font-bold text-navy dark:text-white">Riya Patel — Watch</div>
+                    <div className="text-[11px] text-textSub dark:text-slate-300 mt-0.5 leading-snug">
                       Movement break at step 2 of maths pathway · monitor lunch transition for masking
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2 py-1 rounded-md flex-shrink-0">
+                <span className="text-[10px] font-bold text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 px-2 py-1 rounded-md flex-shrink-0">
                   Watch
                 </span>
               </div>
 
-              <div className="p-3 bg-emerald-50/30 border border-emerald-200/50 rounded-xl flex items-start justify-between gap-3">
+              <div className="p-3 bg-emerald-50/30 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-900/40 rounded-xl flex items-start justify-between gap-3">
                 <div className="flex items-start gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5">
                     JO
                   </div>
                   <div>
-                    <div className="font-bold text-navy">Jake O'Brien — Stable</div>
-                    <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
+                    <div className="font-bold text-navy dark:text-white">Jake O'Brien — Stable</div>
+                    <div className="text-[11px] text-textSub dark:text-slate-300 mt-0.5 leading-snug">
                       Buddy pairing with Phoenix in assembly · settled this week · 82% maths pathway progress
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-md flex-shrink-0">
+                <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/50 border border-emerald-200/60 dark:border-emerald-800/40 px-2 py-1 rounded-md flex-shrink-0">
                   Stable
                 </span>
               </div>
@@ -163,25 +163,25 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
 
           {/* Quick Log (<45 seconds) */}
           <div id="ta-quick-log" className="card p-5 space-y-3.5 scroll-mt-6">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+            <div className="flex items-center justify-between border-b border-borderMain pb-2">
               <div>
-                <h3 className="text-sm font-bold text-navy">Fast Micro-Log (&lt; 45s)</h3>
-                <p className="text-[10px] text-gray-500">Syncs immediately to Ms Johnson & SENCO timeline</p>
+                <h3 className="text-sm font-bold text-navy dark:text-white">Fast Micro-Log (&lt; 45s)</h3>
+                <p className="text-[10px] text-textDim dark:text-slate-400">Syncs immediately to Ms Johnson & SENCO timeline</p>
               </div>
-              <span className="text-[10px] font-bold text-teal bg-mint-pale px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-teal dark:text-teal-300 bg-mint-pale dark:bg-teal-950/50 border border-teal/20 dark:border-teal-800/40 px-2 py-0.5 rounded-md">
                 Live Sync
               </span>
             </div>
 
             {loggedSuccess && (
-              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-emerald-800 text-xs animate-in zoom-in-95">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 rounded-xl flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-xs animate-in zoom-in-95">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Micro-log saved to timeline and synced with Ms Johnson!</span>
               </div>
             )}
 
             <div>
-              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-textDim dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                 Select Pupil
               </label>
               <div className="flex gap-2">
@@ -192,8 +192,8 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                     onClick={() => setSelectedPupil(name)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       selectedPupil === name
-                        ? 'bg-navy text-white shadow-xs'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-teal text-white shadow-xs font-bold'
+                        : 'bg-cardSubtle border border-borderMain text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                     }`}
                   >
                     {name}
@@ -203,7 +203,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">
+              <label className="text-[11px] font-bold text-textDim dark:text-slate-400 uppercase tracking-wider block mb-1.5">
                 What happened?
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -214,8 +214,8 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                     onClick={() => setLogType(tag)}
                     className={`px-2.5 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                       logType === tag
-                        ? 'bg-teal text-white shadow-xs'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-teal text-white shadow-xs font-bold'
+                        : 'bg-cardSubtle border border-borderMain text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
                     }`}
                   >
                     {tag}
@@ -230,7 +230,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                 value={logNotes}
                 onChange={(e) => setLogNotes(e.target.value)}
                 placeholder="e.g. Phoenix drew gradient triangle independently at 10:45 — unprompted. Game design framing worked."
-                className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-teal"
+                className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-none focus:border-teal placeholder:text-textDim"
               />
             </div>
 
@@ -246,24 +246,24 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
 
           {/* Recent Classroom Notes */}
           <div className="card p-5 space-y-3">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+            <div className="flex items-center justify-between border-b border-borderMain pb-2">
               <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-green" />
-                <h3 className="text-sm font-bold text-navy">Recent Classroom Notes for {child.preferred_name || 'Phoenix'}</h3>
+                <MessageSquare className="w-4 h-4 text-green dark:text-emerald-400" />
+                <h3 className="text-sm font-bold text-navy dark:text-white">Recent Classroom Notes for {child.preferred_name || 'Phoenix'}</h3>
               </div>
-              <span className="text-[10px] text-gray-400">Classroom Feed</span>
+              <span className="text-[10px] text-textDim dark:text-slate-400">Classroom Feed</span>
             </div>
 
             <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
               {timeline.slice(0, 3).map((evt) => (
-                <div key={evt.id} className="p-2.5 bg-gray-50 rounded-xl text-xs space-y-1 border border-gray-100">
-                  <div className="flex justify-between font-bold text-navy">
+                <div key={evt.id} className="p-2.5 bg-cardSubtle rounded-xl text-xs space-y-1 border border-borderMain">
+                  <div className="flex justify-between font-bold text-navy dark:text-white">
                     <span>{evt.title}</span>
-                    <span className="text-gray-400 text-[10px]">
+                    <span className="text-textDim dark:text-slate-400 text-[10px]">
                       {new Date(evt.event_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-[11px] leading-relaxed">{evt.summary}</p>
+                  <p className="text-textSub dark:text-slate-300 text-[11px] leading-relaxed">{evt.summary}</p>
                 </div>
               ))}
             </div>
@@ -274,104 +274,104 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
         <div className="lg:col-span-6 space-y-5">
           {/* Today's Schedule — High-Risk Moments Flagged (Prototype v2) */}
           <div id="ta-high-risk-schedule" className="card p-5 space-y-3 scroll-mt-6">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+            <div className="flex items-center justify-between border-b border-borderMain pb-2">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-coral-dark" />
+                <Clock className="w-4 h-4 text-coral-dark dark:text-coral-light" />
                 <div>
-                  <h3 className="text-sm font-bold text-navy">Today's Schedule — High-Risk Moments</h3>
-                  <p className="text-[10px] text-gray-500">What to watch · When · What to do</p>
+                  <h3 className="text-sm font-bold text-navy dark:text-white">Today's Schedule — High-Risk Moments</h3>
+                  <p className="text-[10px] text-textDim dark:text-slate-400">What to watch · When · What to do</p>
                 </div>
               </div>
-              <span className="text-[10px] font-bold text-rose-800 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-bold text-rose-800 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 px-2 py-0.5 rounded-md">
                 SEND Protocol
               </span>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-xl bg-coral-50/40 border border-coral-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-rose-700 text-xs bg-white px-2 py-1 rounded-lg border border-rose-200 shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-coral-50/40 dark:bg-coral-950/20 border border-coral-200/60 dark:border-coral-900/40 flex items-start gap-3">
+                <span className="font-mono font-bold text-rose-700 dark:text-rose-300 text-xs bg-cardBg px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-900/40 shadow-2xs flex-shrink-0">
                   8:55am
                 </span>
                 <div>
-                  <div className="font-bold text-navy flex items-center gap-1.5">
+                  <div className="font-bold text-navy dark:text-white flex items-center gap-1.5">
                     <span>⚡ Door Arrival</span>
-                    <span className="text-[10px] text-rose-800 font-semibold bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">Critical</span>
+                    <span className="text-[10px] text-rose-800 dark:text-rose-300 font-semibold bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/50 px-1.5 py-0.5 rounded">Critical</span>
                   </div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Position at classroom door. Offer Phoenix headphones <em>before</em> he reaches the hall. Don't wait until he is already in the crowd noise.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-50/40 border border-amber-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-amber-800 text-xs bg-white px-2 py-1 rounded-lg border border-amber-200 shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 flex items-start gap-3">
+                <span className="font-mono font-bold text-amber-800 dark:text-amber-300 text-xs bg-cardBg px-2 py-1 rounded-lg border border-amber-200 dark:border-amber-900/40 shadow-2xs flex-shrink-0">
                   9:05am
                 </span>
                 <div>
-                  <div className="font-bold text-navy">Assembly</div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <div className="font-bold text-navy dark:text-white">Assembly</div>
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Stay close to Phoenix. Watch for covering ears, rocking. Exit route: quiet corridor, chair outside room 4. Jake O'Brien is his buddy — keep them seated together.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-mint-pale/50 border border-mint/40 flex items-start gap-3">
-                <span className="font-mono font-bold text-teal text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-mint-pale/50 dark:bg-teal-950/20 border border-mint/40 dark:border-teal-900/40 flex items-start gap-3">
+                <span className="font-mono font-bold text-teal dark:text-teal-300 text-xs bg-cardBg px-2 py-1 rounded-lg border border-borderMain shadow-2xs flex-shrink-0">
                   9:45am
                 </span>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <div className="font-bold text-navy">Maths — Adapted Visual Path Active</div>
+                    <div className="font-bold text-navy dark:text-white">Maths — Adapted Visual Path Active</div>
                     {onOpenWorksheet && (
                       <button
                         type="button"
                         onClick={() => onOpenWorksheet('graphs')}
-                        className="text-[10px] font-bold text-teal hover:underline cursor-pointer"
+                        className="text-[10px] font-bold text-teal dark:text-teal-300 hover:underline cursor-pointer"
                       >
                         Open Worksheet →
                       </button>
                     )}
                   </div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Phoenix doing visual-spatial gradient route (game design hook). Riya needs movement break at step 2. Archie needs verbal walkthrough support.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-coral-50/40 border border-coral-200/60 flex items-start gap-3">
-                <span className="font-mono font-bold text-rose-700 text-xs bg-white px-2 py-1 rounded-lg border border-rose-200 shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-coral-50/40 dark:bg-coral-950/20 border border-coral-200/60 dark:border-coral-900/40 flex items-start gap-3">
+                <span className="font-mono font-bold text-rose-700 dark:text-rose-300 text-xs bg-cardBg px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-900/40 shadow-2xs flex-shrink-0">
                   10:00am
                 </span>
                 <div>
-                  <div className="font-bold text-navy flex items-center gap-1.5">
+                  <div className="font-bold text-navy dark:text-white flex items-center gap-1.5">
                     <span>⚡ Medication Dip Window</span>
-                    <span className="text-[10px] text-rose-800 font-semibold bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">Risk</span>
+                    <span className="text-[10px] text-rose-800 dark:text-rose-300 font-semibold bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900/50 px-1.5 py-0.5 rounded">Risk</span>
                   </div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Have crackers and water ready for Phoenix before 10am. Do not wait for him to ask. Signs: sweating, fidgeting, tummy pain. Do not interpret restlessness as defiance.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 flex items-start gap-3">
-                <span className="font-mono font-bold text-gray-600 text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-cardSubtle border border-borderMain flex items-start gap-3">
+                <span className="font-mono font-bold text-textDim dark:text-slate-400 text-xs bg-cardBg px-2 py-1 rounded-lg border border-borderMain shadow-2xs flex-shrink-0">
                   12:00pm
                 </span>
                 <div>
-                  <div className="font-bold text-navy">Lunch Transition</div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <div className="font-bold text-navy dark:text-white">Lunch Transition</div>
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Monitor Riya at transition — 2 incidents at lunch this week. Watch for masking in classroom vs distress at unstructured times.
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-emerald-50/30 border border-emerald-200/50 flex items-start gap-3">
-                <span className="font-mono font-bold text-emerald-700 text-xs bg-white px-2 py-1 rounded-lg shadow-2xs flex-shrink-0">
+              <div className="p-3 rounded-xl bg-emerald-50/30 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-900/40 flex items-start gap-3">
+                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300 text-xs bg-cardBg px-2 py-1 rounded-lg border border-emerald-200/50 dark:border-emerald-900/40 shadow-2xs flex-shrink-0">
                   3:20pm
                 </span>
                 <div>
-                  <div className="font-bold text-navy">Home Time & Parent Sync</div>
-                  <p className="text-gray-600 mt-1 leading-relaxed text-[11px]">
+                  <div className="font-bold text-navy dark:text-white">Home Time & Parent Sync</div>
+                  <p className="text-textSub dark:text-slate-300 mt-1 leading-relaxed text-[11px]">
                     Brief parent handover for Phoenix. Day summary auto-sent to Dana Carter. Confirm any wins from maths practical.
                   </p>
                 </div>

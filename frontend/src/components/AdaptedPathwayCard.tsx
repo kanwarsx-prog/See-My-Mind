@@ -107,48 +107,48 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
       {/* Header */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition-colors border-b border-gray-100"
+        className="p-4 flex items-center justify-between cursor-pointer hover:bg-cardSubtle transition-colors border-b border-borderMain"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-mint-pale flex items-center justify-center text-teal">
+          <div className="w-8 h-8 rounded-xl bg-mint-pale dark:bg-teal-950/60 flex items-center justify-center text-teal dark:text-teal-300 border border-teal/20">
             <BookOpen className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="text-xs font-bold text-navy">📚 Adapted Learning — This Lesson</h4>
-              <span className="text-[10px] font-bold text-teal bg-mint-pale px-2 py-0.5 rounded-md">
+              <h4 className="text-xs font-bold text-navy dark:text-white">📚 Adapted Learning — This Lesson</h4>
+              <span className="text-[10px] font-bold text-teal dark:text-teal-300 bg-mint-pale dark:bg-teal-950/60 border border-teal/20 px-2 py-0.5 rounded-md">
                 Active Adaptation
               </span>
             </div>
-            <p className="text-[10px] text-gray-500">Maths · Straight Line Graphs · Phoenix's visual-spatial route</p>
+            <p className="text-[10px] text-textDim dark:text-slate-400">Maths · Straight Line Graphs · Phoenix's visual-spatial route</p>
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-textDim dark:text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
       {isOpen && (
         <div className="p-4 space-y-4">
           {/* Spotlight Rationale */}
-          <div className="p-3.5 bg-gradient-to-r from-mint-pale/40 via-mint-pale/20 to-transparent border-l-3 border-teal rounded-xl text-xs space-y-1">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-teal">
+          <div className="p-3.5 bg-gradient-to-r from-mint-pale/40 via-mint-pale/20 to-transparent dark:from-teal-950/40 dark:via-cardBg dark:to-transparent border-l-3 border-teal rounded-xl text-xs space-y-1">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-teal dark:text-teal-300">
               Cognitive Profile & Rationale
             </div>
-            <p className="text-gray-700 leading-relaxed text-[11.5px]">
-              Phoenix is a <strong className="text-navy">visual-spatial learner</strong> with high pattern recognition capacity. Abstract notation ($y = mx + c$) triggers cognitive shutdown. Today's slope is framed as <em>"how fast does the game character move up a hill?"</em> before any equation appears. <strong>Draw first, equation second.</strong>
+            <p className="text-textSub dark:text-slate-300 leading-relaxed text-[11.5px]">
+              Phoenix is a <strong className="text-navy dark:text-white">visual-spatial learner</strong> with high pattern recognition capacity. Abstract notation ($y = mx + c$) triggers cognitive shutdown. Today's slope is framed as <em>"how fast does the game character move up a hill?"</em> before any equation appears. <strong>Draw first, equation second.</strong>
             </p>
           </div>
 
           {/* Interactive 4-Step Pathway */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400">
                 Lesson Pathway — Straight Line Graphs
               </span>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleAdvanceStep}
-                  className="text-[10px] font-semibold text-teal hover:underline cursor-pointer flex items-center gap-1"
+                  className="text-[10px] font-semibold text-teal dark:text-teal-300 hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <span>Advance Step</span>
                   <ArrowRight className="w-3 h-3" />
@@ -162,12 +162,12 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
                   key={st.number}
                   className={`p-2.5 rounded-xl border flex items-start gap-3 transition-all ${
                     st.status === 'done'
-                      ? 'bg-emerald-50/40 border-emerald-200/60'
+                      ? 'bg-emerald-50/40 dark:bg-emerald-950/30 border-emerald-200/60 dark:border-emerald-800/40'
                       : st.status === 'active'
-                      ? 'bg-amber-50/40 border-amber-300 ring-2 ring-amber-200/50'
+                      ? 'bg-amber-50/40 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700/50 ring-2 ring-amber-200/50 dark:ring-amber-900/40'
                       : st.status === 'next'
-                      ? 'bg-gray-50 border-gray-200'
-                      : 'bg-gray-50/50 border-gray-100 opacity-60'
+                      ? 'bg-cardSubtle border-borderMain'
+                      : 'bg-cardSubtle/50 border-borderMain opacity-60'
                   }`}
                 >
                   <div
@@ -177,8 +177,8 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
                         : st.status === 'active'
                         ? 'bg-amber-dark text-white animate-pulse'
                         : st.status === 'next'
-                        ? 'bg-gray-200 text-gray-700'
-                        : 'bg-gray-200 text-gray-400'
+                        ? 'bg-cardSubtle text-textMain border border-borderMain'
+                        : 'bg-cardSubtle text-textDim border border-borderMain'
                     }`}
                   >
                     {st.status === 'done' ? (
@@ -194,20 +194,20 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-navy truncate">{st.title}</span>
+                      <span className="text-xs font-bold text-navy dark:text-white truncate">{st.title}</span>
                       <span
                         className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md flex-shrink-0 ${
                           st.status === 'done'
-                            ? 'bg-emerald-100 text-emerald-800'
+                            ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40'
                             : st.status === 'active'
-                            ? 'bg-amber-100 text-amber-900'
-                            : 'bg-gray-200 text-gray-600'
+                            ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-200/60 dark:border-amber-800/40'
+                            : 'bg-cardSubtle text-textDim border border-borderMain'
                         }`}
                       >
                         {st.badge}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-600 mt-0.5 leading-snug">{st.description}</p>
+                    <p className="text-[11px] text-textSub dark:text-slate-300 mt-0.5 leading-snug">{st.description}</p>
                   </div>
                 </div>
               ))}
@@ -215,10 +215,10 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100">
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-borderMain">
             <button
               onClick={() => onOpenWorksheet('graphs')}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-teal hover:bg-teal-medium text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer active:scale-95 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-teal hover:bg-teal-dark text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer active:scale-95 transition-all"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               <span>Open Interactive Worksheet</span>
@@ -228,7 +228,7 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
               <button
                 onClick={handleLogBreakthrough}
                 disabled={loggingMilestone}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-gold hover:bg-amber-500 text-navy rounded-xl text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gold hover:bg-amber-500 text-navy dark:text-slate-900 rounded-xl text-xs font-bold shadow-xs cursor-pointer active:scale-95 transition-all"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{loggingMilestone ? 'Saving...' : '⭐ Log Milestone Breakthrough'}</span>
@@ -236,15 +236,15 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
             )}
 
             {milestoneLogged && (
-              <span className="text-[11px] font-semibold text-emerald-700 animate-in fade-in">
+              <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 animate-in fade-in">
                 ✓ Milestone logged & shared to Mum's feed!
               </span>
             )}
           </div>
 
           {/* Parallel Peer Adaptations in Room 4 */}
-          <div className="pt-2 border-t border-gray-100 space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+          <div className="pt-2 border-t border-borderMain space-y-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-textDim dark:text-slate-400 block">
               Other Room 4 Pupils — Parallel Adapted Routes
             </span>
 
@@ -252,7 +252,7 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
               {peerAdaptations.map((p) => (
                 <div
                   key={p.name}
-                  className="p-2 bg-gray-50 rounded-xl flex items-center justify-between gap-2 border border-gray-100 text-xs"
+                  className="p-2 bg-cardSubtle rounded-xl flex items-center justify-between gap-2 border border-borderMain text-xs"
                 >
                   <div className="flex items-center gap-2 min-w-0">
                     <div
@@ -261,11 +261,11 @@ export const AdaptedPathwayCard: React.FC<AdaptedPathwayCardProps> = ({
                       {p.initials}
                     </div>
                     <div className="min-w-0">
-                      <div className="font-bold text-navy truncate text-[11px]">{p.name}</div>
-                      <div className="text-[10px] text-gray-500 truncate">{p.need}</div>
+                      <div className="font-bold text-navy dark:text-white truncate text-[11px]">{p.name}</div>
+                      <div className="text-[10px] text-textDim dark:text-slate-400 truncate">{p.need}</div>
                     </div>
                   </div>
-                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-white border border-gray-200 text-gray-700 flex-shrink-0">
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-cardBg border border-borderMain text-textMain dark:text-white flex-shrink-0">
                     {p.method}
                   </span>
                 </div>
