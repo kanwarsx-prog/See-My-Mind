@@ -725,7 +725,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-gray-50/80 text-gray-500 text-[10px] uppercase font-bold tracking-wider border-b border-gray-100">
+                    <tr className="bg-gray-50/80 dark:bg-[#0F1A2A] text-gray-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-gray-100 dark:border-borderMain">
                       <th className="py-3 px-4">Pupil & Year</th>
                       <th className="py-3 px-3">Support Tier</th>
                       <th className="py-3 px-3">Primary Need</th>
@@ -736,48 +736,48 @@ export const SencoView: React.FC<SencoViewProps> = ({
                       <th className="py-3 px-4 text-right">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-gray-100 dark:divide-borderMain">
                     {provisionMatrix &&
                       getFilteredPupils(provisionMatrix.pupils).map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="py-3.5 px-4 font-bold text-navy">
+                        <tr key={p.id} className="hover:bg-slate-100/80 dark:hover:bg-[#1A2E44] transition-colors border-b border-gray-100 dark:border-borderMain">
+                          <td className="py-3.5 px-4 font-bold text-navy dark:text-white">
                             <div className="flex items-center gap-2">
                               <span>{p.name}</span>
-                              <span className="text-[10px] font-normal text-gray-400">({p.year_group})</span>
+                              <span className="text-[10px] font-normal text-gray-400 dark:text-slate-400">({p.year_group})</span>
                             </div>
                           </td>
                           <td className="py-3.5 px-3">
                             <span
-                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
                                 p.support_tier.includes('EHCP')
-                                  ? 'bg-purple-light text-purple-dark'
-                                  : 'bg-teal/10 text-teal'
+                                  ? 'bg-purple-50 text-purple-800 border-purple-200 dark:bg-purple-950/80 dark:text-purple-200 dark:border-purple-700'
+                                  : 'bg-teal-50 text-teal-800 border-teal-200 dark:bg-teal-950/80 dark:text-teal-200 dark:border-teal-700'
                               }`}
                             >
                               {p.support_tier}
                             </span>
                           </td>
-                          <td className="py-3.5 px-3 text-gray-600 max-w-[160px] truncate">
+                          <td className="py-3.5 px-3 text-gray-600 dark:text-slate-300 max-w-[160px] truncate">
                             {p.primary_need}
                           </td>
-                          <td className="py-3.5 px-3 font-semibold text-gray-700">
+                          <td className="py-3.5 px-3 font-semibold text-gray-700 dark:text-slate-200">
                             {p.funding_band}
                           </td>
-                          <td className="py-3.5 px-3 font-bold text-teal">
+                          <td className="py-3.5 px-3 font-bold text-teal dark:text-mint">
                             {p.allocated_ta_hours > 0 ? `${p.allocated_ta_hours}h/wk` : 'Universal'}
                           </td>
-                          <td className="py-3.5 px-3 text-gray-600">
+                          <td className="py-3.5 px-3 text-gray-600 dark:text-slate-300">
                             {p.assigned_ta}
                           </td>
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-1.5">
                               <span
-                                className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${
                                   p.review_status === 'overdue'
-                                    ? 'bg-red-100 text-red-800'
+                                    ? 'bg-rose-50 text-rose-800 border-rose-200 dark:bg-rose-950/80 dark:text-rose-200 dark:border-rose-700'
                                     : p.review_status === 'due_soon'
-                                    ? 'bg-amber-100 text-amber-900'
-                                    : 'bg-gray-100 text-gray-600'
+                                    ? 'bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700'
+                                    : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/80 dark:text-slate-200 dark:border-slate-700'
                                 }`}
                               >
                                 {p.review_status === 'overdue'
@@ -786,7 +786,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                                   ? `⚠️ Due in ${p.days_until_review}d`
                                   : `In ${p.days_until_review}d`}
                               </span>
-                              <span className="text-[11px] text-gray-400">{p.annual_review_due}</span>
+                              <span className="text-[11px] text-gray-400 dark:text-slate-400">{p.annual_review_due}</span>
                             </div>
                           </td>
                           <td className="py-3.5 px-4 text-right">
@@ -795,7 +795,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                                 setActiveTab('review_pack');
                                 setShowPackModal(true);
                               }}
-                              className="text-[11px] font-bold text-purple-dark hover:underline cursor-pointer flex items-center gap-1 justify-end"
+                              className="text-[11px] font-bold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-200 hover:underline cursor-pointer flex items-center gap-1 justify-end ml-auto"
                             >
                               <span>Pack</span>
                               <ArrowRight className="w-3 h-3" />

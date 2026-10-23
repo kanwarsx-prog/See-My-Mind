@@ -621,7 +621,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
                         : 'bg-indigo-50 text-indigo-800 border-indigo-200';
 
                     return (
-                      <tr key={u.id} className="hover:bg-slate-50/60 transition-colors">
+                      <tr key={u.id} className="hover:bg-slate-50/60 dark:hover:bg-[#1A2E44] transition-colors border-b border-gray-100 dark:border-borderMain">
                         <td className="py-3 px-4">
                           <div className="font-semibold text-gray-900">{u.full_name}</div>
                           <div className="text-xs text-gray-500">{u.email}</div>
@@ -812,7 +812,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {filteredAuditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/60 transition-colors">
+                    <tr key={log.id} className="hover:bg-slate-50/60 dark:hover:bg-[#1A2E44] transition-colors border-b border-gray-100 dark:border-borderMain">
                       <td className="py-3 px-4 text-xs text-gray-500 whitespace-nowrap">
                         <div className="font-mono text-gray-800">
                           {new Date(log.timestamp).toLocaleDateString('en-GB')}

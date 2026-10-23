@@ -185,45 +185,60 @@ html.dark textarea::placeholder {
   color: var(--input-placeholder) !important;
 }
 
-/* 7. Status Chips & Badge Softening in Dark Mode */
-html.dark .bg-rose-50 {
-  background-color: rgba(244, 63, 94, 0.16) !important;
-  border-color: rgba(244, 63, 94, 0.4) !important;
+/* 7. Status Chips & Badge Contrast in Dark Mode */
+html.dark .bg-rose-50,
+html.dark .bg-red-50,
+html.dark .bg-red-100 {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+  border-color: rgba(244, 63, 94, 0.5) !important;
   color: #FECDD3 !important;
 }
 
-html.dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.16) !important;
-  border-color: rgba(245, 158, 11, 0.4) !important;
+html.dark .bg-amber-50,
+html.dark .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
   color: #FDE68A !important;
 }
 
-html.dark .bg-emerald-50 {
-  background-color: rgba(16, 185, 129, 0.16) !important;
-  border-color: rgba(16, 185, 129, 0.4) !important;
+html.dark .bg-emerald-50,
+html.dark .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
   color: #A7F3D0 !important;
 }
 
-html.dark .bg-teal-50 {
-  background-color: rgba(45, 212, 191, 0.16) !important;
-  border-color: rgba(45, 212, 191, 0.4) !important;
+html.dark .bg-teal-50,
+html.dark .bg-teal-100 {
+  background-color: rgba(45, 212, 191, 0.22) !important;
+  border-color: rgba(45, 212, 191, 0.5) !important;
   color: #99F6E4 !important;
 }
 
-html.dark .bg-purple-50 {
-  background-color: rgba(147, 51, 234, 0.16) !important;
-  border-color: rgba(147, 51, 234, 0.4) !important;
-  color: #DDD8F0 !important;
+html.dark .bg-purple-50,
+html.dark .bg-purple-100,
+html.dark .bg-purple-light {
+  background-color: rgba(147, 51, 234, 0.25) !important;
+  border-color: rgba(147, 51, 234, 0.5) !important;
+  color: #E9D5FF !important;
 }
 
 html.dark .bg-indigo-50,
-html.dark .bg-blue-50 {
-  background-color: rgba(99, 102, 241, 0.16) !important;
-  border-color: rgba(99, 102, 241, 0.4) !important;
+html.dark .bg-blue-50,
+html.dark .bg-indigo-100 {
+  background-color: rgba(99, 102, 241, 0.22) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
   color: #C7D2FE !important;
 }
 
-/* 8. Table Styling */
+html.dark .bg-gray-100,
+html.dark .bg-slate-100 {
+  background-color: rgba(148, 163, 184, 0.18) !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+  color: #CBD5E1 !important;
+}
+
+/* 8. Table Styling & Dark Mode Hover */
 html.dark tr.border-b,
 html.dark tr {
   border-color: #22374E !important;
@@ -231,6 +246,16 @@ html.dark tr {
 
 html.dark thead {
   background-color: #0F1A2A !important;
+}
+
+html.dark thead tr {
+  background-color: #0F1A2A !important;
+}
+
+html.dark tbody tr:hover,
+html.dark tbody tr:hover td,
+html.dark tr[class*="hover:bg-"]:hover {
+  background-color: #1A2E44 !important;
 }
 
 /* Gentle eye-friendly theme transition */
