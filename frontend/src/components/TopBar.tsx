@@ -41,7 +41,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-white dark:bg-[#111C2D] border-b border-[#EDF2F4] dark:border-[#1E2E42] px-3.5 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors duration-200">
+    <header className="sticky top-0 z-20 bg-white dark:bg-[#0E1A29] border-b border-[#EDF2F4] dark:border-[#22374E] px-3.5 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors duration-200">
       <div className="flex items-center gap-2 sm:gap-4 min-w-0">
         {onToggleMobileMenu && (
           <button
@@ -60,7 +60,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {pupils && pupils.length > 1 && onSelectChild && (
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-[#142234] border border-slate-200 dark:border-[#22374E]">
             <UserCheck className="w-3.5 h-3.5 text-teal flex-shrink-0" />
             <select
               value={selectedChildId}

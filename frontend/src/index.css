@@ -81,45 +81,179 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Neuro-Inclusive Dark Mode Styles */
+/* =========================================================================
+   Neuro-Inclusive Theme Consistency Engine (Light & Dark Consistency)
+   ========================================================================= */
+
 html.dark {
   color-scheme: dark;
 }
 
 html.dark body {
-  background-color: #0B132B;
+  background-color: #0B132B !important;
+  color: #E2E8F0 !important;
+}
+
+/* 1. Global Surface & Card Transformation */
+html.dark .card,
+html.dark .stat-card,
+html.dark .bg-white {
+  background-color: #142234 !important;
+  border-color: #22374E !important;
   color: #E2E8F0;
 }
 
-html.dark .card {
-  background-color: #162436;
-  border-color: #24384E;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  color: #E2E8F0;
+html.dark .bg-gray-50,
+html.dark .bg-slate-50,
+html.dark .bg-slate-100 {
+  background-color: #0F1A2A !important;
+  border-color: #22374E !important;
 }
 
-html.dark .stat-card {
-  background-color: #162436;
-  border-color: #24384E;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  color: #E2E8F0;
+/* 2. Global Text & Heading Inversion */
+html.dark .text-navy {
+  color: #F8FAFC !important;
 }
 
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
+  color: #F1F5F9 !important;
+}
+
+html.dark .text-gray-600,
+html.dark .text-gray-500,
+html.dark .text-slate-600,
+html.dark .text-slate-500 {
+  color: #94A3B8 !important;
+}
+
+html.dark .text-gray-400,
+html.dark .text-slate-400 {
+  color: #94A3B8 !important;
+}
+
+/* 3. Global Border Uniformity */
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300,
+html.dark .border-\[\#EDF2F4\] {
+  border-color: #22374E !important;
+}
+
+/* 4. Interactive Hover States */
+html.dark .hover\:bg-gray-100:hover,
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-slate-100:hover,
+html.dark .hover\:bg-slate-200:hover {
+  background-color: #1E324A !important;
+  color: #F8FAFC !important;
+}
+
+/* 5. Stat Card Values & Metric Highlights in Dark Mode */
+html.dark .text-amber-800,
+html.dark .text-amber-900,
+html.dark .text-amber-dark {
+  color: #FCD34D !important;
+}
+
+html.dark .text-rose-700,
+html.dark .text-rose-800,
+html.dark .text-rose-900 {
+  color: #FDA4AF !important;
+}
+
+html.dark .text-emerald-800,
+html.dark .text-emerald-700,
+html.dark .text-emerald-900 {
+  color: #6EE7B7 !important;
+}
+
+html.dark .text-teal-800,
+html.dark .text-teal {
+  color: #5EEAD4 !important;
+}
+
+html.dark .text-purple-dark,
+html.dark .text-purple-800 {
+  color: #C4B5FD !important;
+}
+
+/* 6. Form Inputs & Selects */
 html.dark input:not([type="checkbox"]):not([type="radio"]),
 html.dark textarea,
 html.dark select {
-  background-color: #111C2D;
-  border-color: #24384E;
-  color: #F8FAFC;
+  background-color: #0F1A2A !important;
+  border-color: #22374E !important;
+  color: #F8FAFC !important;
+}
+
+html.dark select option {
+  background-color: #142234 !important;
+  color: #F8FAFC !important;
 }
 
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-  color: #64748B;
+  color: #64748B !important;
+}
+
+/* 7. Status Chips & Badge Softening in Dark Mode */
+html.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+  border-color: rgba(244, 63, 94, 0.4) !important;
+  color: #FECDD3 !important;
+}
+
+html.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #FDE68A !important;
+}
+
+html.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #A7F3D0 !important;
+}
+
+html.dark .bg-teal-50 {
+  background-color: rgba(45, 212, 191, 0.16) !important;
+  border-color: rgba(45, 212, 191, 0.4) !important;
+  color: #99F6E4 !important;
+}
+
+html.dark .bg-purple-50 {
+  background-color: rgba(147, 51, 234, 0.16) !important;
+  border-color: rgba(147, 51, 234, 0.4) !important;
+  color: #DDD8F0 !important;
+}
+
+html.dark .bg-indigo-50,
+html.dark .bg-blue-50 {
+  background-color: rgba(99, 102, 241, 0.16) !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  color: #C7D2FE !important;
+}
+
+/* 8. Table Styling */
+html.dark tr.border-b,
+html.dark tr {
+  border-color: #22374E !important;
+}
+
+html.dark thead {
+  background-color: #0F1A2A !important;
 }
 
 /* Gentle eye-friendly theme transition */
 body, .card, .stat-card, header, nav, aside {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
+
 

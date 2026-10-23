@@ -385,22 +385,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-navy text-white min-h-screen flex flex-col justify-between border-r border-white/10 shadow-2xl select-none transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:z-30 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 lg:w-64 bg-[#112533] dark:bg-[#070D1E] text-white min-h-screen flex flex-col justify-between border-r border-white/10 dark:border-white/5 shadow-2xl select-none transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:z-30 ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div>
           {/* Brand header */}
-          <div className="p-4 border-b border-white/10 flex items-center justify-between">
+          <div className="p-4 border-b border-white/10 dark:border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-coral via-amber to-mint flex items-center justify-center p-0.5 shadow-sm">
-                <div className="w-full h-full bg-navy rounded-[14px] flex items-center justify-center">
+                <div className="w-full h-full bg-[#112533] dark:bg-[#070D1E] rounded-[14px] flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-mint" />
                 </div>
               </div>
               <div>
                 <div className="font-serif font-bold text-base tracking-wide text-white">See My Mind</div>
-                <div className="text-[10px] text-white/40 tracking-wider uppercase font-medium">
+                <div className="text-[10px] text-white/60 dark:text-white/50 tracking-wider uppercase font-medium">
                   St. Jude&apos;s Academy
                 </div>
               </div>
@@ -419,7 +419,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Current Authenticated Persona Banner */}
-          <div className="p-3.5 mx-3 mt-4 rounded-2xl bg-white/5 border border-white/10">
+          <div className="p-3.5 mx-3 mt-4 rounded-2xl bg-white/5 dark:bg-white/[0.04] border border-white/10 dark:border-white/[0.08]">
             <div className="flex items-center gap-2.5">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-sm flex-shrink-0"
@@ -429,24 +429,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-xs font-bold text-white truncate">{personaMeta.name}</div>
-                <div className="text-[10px] text-teal flex items-center gap-1 font-semibold truncate">
+                <div className="text-[10px] text-mint flex items-center gap-1 font-semibold truncate">
                   <RoleIcon className="w-3 h-3 flex-shrink-0" />
                   <span>{personaMeta.roleTitle}</span>
                 </div>
               </div>
             </div>
-            <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-white/50">
+            <div className="mt-2 pt-2 border-t border-white/10 dark:border-white/[0.08] flex items-center justify-between text-[10px] text-white/60">
               <span>{personaMeta.sub}</span>
-              <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 font-bold text-[9px]">
+              <span className="px-1.5 py-0.2 rounded bg-emerald-500/25 text-emerald-300 font-bold text-[9px]">
                 Active Role
               </span>
             </div>
           </div>
 
-
           {/* Role-Locked Navigation Items */}
           <div className="px-3 py-2">
-            <div className="text-[9px] font-bold tracking-widest text-white/30 uppercase px-3 mb-2">
+            <div className="text-[10px] font-bold tracking-widest text-white/60 dark:text-white/50 uppercase px-3 mb-2">
               {personaMeta.roleTitle} Workspace
             </div>
 
@@ -464,10 +463,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
                       active
                         ? 'bg-teal text-white shadow-sm font-bold'
-                        : 'text-white/60 hover:text-white hover:bg-white/5'
+                        : 'text-white/70 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <ItemIcon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-mint/80'}`} />
+                    <ItemIcon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-mint'}`} />
                     <span>{item.label}</span>
                   </button>
                 );
@@ -477,7 +476,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer: User Profile & Session Logout */}
-        <div className="p-3 border-t border-white/10 bg-black/20 space-y-2">
+        <div className="p-3 border-t border-white/10 dark:border-white/5 bg-black/20 dark:bg-black/40 space-y-2">
           {onOpenTour && (
             <button
               onClick={() => {
@@ -497,7 +496,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onSwitchPersona();
               onCloseMobile?.();
             }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-xs font-semibold transition-all cursor-pointer border border-white/5"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/90 hover:text-white text-xs font-semibold transition-all cursor-pointer border border-white/10"
             title="Switch to another persona for testing"
           >
             <Repeat className="w-3.5 h-3.5 text-amber flex-shrink-0" />
