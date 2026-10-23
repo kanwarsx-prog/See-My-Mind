@@ -7,7 +7,12 @@ from app import models
 from app.api.deps import get_current_user
 from app.core.database import get_db
 from app.core.security import create_access_token, get_password_hash, verify_password
-from app.schemas.auth import AuthTokenResponse, DemoLoginRequest, LoginRequest
+from app.schemas.auth import (
+    AuthTokenResponse,
+    DemoLoginRequest,
+    LoginRequest,
+    ThemePreferenceRequest,
+)
 from app.schemas.registration import UserResponse
 
 router = APIRouter()
@@ -244,6 +249,7 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
                 "child_id": str(user.child_id) if user.child_id else None,
                 "avatar_emoji": child_acc.avatar_emoji,
                 "username": child_acc.username,
+                "theme_preference": getattr(user, "theme_preference", "system") or "system",
             },
         )
 
@@ -277,6 +283,7 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
             "full_name": user.full_name,
             "role": user.role,
             "child_id": str(user.child_id) if user.child_id else None,
+            "theme_preference": getattr(user, "theme_preference", "system") or "system",
         },
     )
 
@@ -328,6 +335,7 @@ def demo_login(body: DemoLoginRequest, db: Session = Depends(get_db)):
             "full_name": user.full_name,
             "role": user.role,
             "child_id": str(user.child_id) if user.child_id else None,
+            "theme_preference": getattr(user, "theme_preference", "system") or "system",
         },
     )
 
@@ -349,5 +357,26 @@ def get_me(current_user: models.User = Depends(get_current_user)):
         child_id=current_user.child_id,
         guardian_id=current_user.guardian_id,
         school_id=current_user.school_id,
+        theme_preference=getattr(current_user, "theme_preference", "system") or "system",
         created_at=current_user.created_at or datetime.now(UTC),
     )
+
+
+@router.patch(
+    "/theme",
+    summary="Update authenticated user theme preference",
+)
+def update_theme_preference(
+    payload: ThemePreferenceRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Persist the user's UI theme choice ('light', 'dark', 'system') in PostgreSQL."""
+    current_user.theme_preference = payload.theme
+    db.commit()
+    db.refresh(current_user)
+    return {
+        "status": "updated",
+        "theme_preference": current_user.theme_preference,
+    }
+

@@ -14,3 +14,8 @@ class AuthTokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: dict
+
+
+class ThemePreferenceRequest(BaseModel):
+    theme: str = Field(..., pattern="^(light|dark|system)$", description="UI theme preference")
+

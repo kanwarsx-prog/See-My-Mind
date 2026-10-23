@@ -93,4 +93,5 @@ class UserResponse(BaseModel):
     child_id: UUID | None = None
     guardian_id: UUID | None = None
     school_id: UUID | None = None
+    theme_preference: str = "system"
     created_at: datetime

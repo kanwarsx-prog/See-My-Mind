@@ -226,6 +226,22 @@ export const api = {
     }
   },
 
+  async updateTheme(theme: 'light' | 'dark' | 'system'): Promise<{ status: string; theme_preference: string }> {
+    if (!activeToken) return { status: 'skipped', theme_preference: theme };
+    try {
+      const res = await fetch(`${API_BASE}/auth/theme`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ theme }),
+      });
+      if (!res.ok) throw new Error('Failed to update theme preference');
+      return await res.json();
+    } catch (e) {
+      console.warn('Could not persist theme to server:', e);
+      return { status: 'offline', theme_preference: theme };
+    }
+  },
+
   // Timeline / Events
   async getTimeline(childId: string): Promise<ChildEvent[]> {
     const res = await fetch(`${API_BASE}/timeline/children/${childId}/events`, {

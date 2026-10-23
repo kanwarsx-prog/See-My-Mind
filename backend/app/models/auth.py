@@ -16,6 +16,7 @@ class User(TimestampedUUIDModel):
     )  # "senco", "teacher", "ta", "parent", "child", "admin"
     is_active = Column(Boolean, default=True, nullable=False)
     is_verified = Column(Boolean, default=False, nullable=False)
+    theme_preference = Column(String(20), default="system", nullable=False)  # "light", "dark", "system"
 
     # Optional foreign keys linking to specific persona identities
     staff_id = Column(

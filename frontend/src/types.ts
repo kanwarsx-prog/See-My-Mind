@@ -254,6 +254,7 @@ export interface UserProfile {
   child_id?: string;
   username?: string;
   avatar_emoji?: string;
+  theme_preference?: 'light' | 'dark' | 'system';
 }
 
 export interface ClassroomPupilSummary {

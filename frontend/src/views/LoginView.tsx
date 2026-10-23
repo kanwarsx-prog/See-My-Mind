@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { api } from '../api';
 import { UserProfile } from '../types';
 import { Sparkles, GraduationCap, ShieldCheck, HeartHandshake, User, Users, Lock, ArrowRight, KeyRound, Building2 } from 'lucide-react';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 interface LoginViewProps {
   onLoginSuccess: (user: UserProfile) => void;
@@ -170,6 +171,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
+
           {onOpenTour && (
             <button
               onClick={onOpenTour}

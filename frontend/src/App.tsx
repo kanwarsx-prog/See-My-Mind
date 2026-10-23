@@ -28,9 +28,11 @@ import { TaView } from './views/TaView';
 import { ParentPlusView } from './views/ParentPlusView';
 import { AdminView } from './views/AdminView';
 import { PersonaTourModal } from './components/PersonaTourModal';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Plus } from 'lucide-react';
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { syncUserTheme } = useTheme();
   // Authentication & Session State
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [authChecking, setAuthChecking] = useState<boolean>(true);
@@ -73,6 +75,7 @@ export const App: React.FC = () => {
         const user = await api.getCurrentUser();
         if (user) {
           setCurrentUser(user);
+          if (user.theme_preference) syncUserTheme(user.theme_preference);
           setActiveView(user.role as RoleView);
           setApiRole(user.role === 'parentplus' ? 'parent' : user.role);
           initNavForRole(user.role as RoleView);
@@ -197,6 +200,7 @@ export const App: React.FC = () => {
 
   const handleLoginSuccess = (user: UserProfile) => {
     setCurrentUser(user);
+    if (user.theme_preference) syncUserTheme(user.theme_preference);
     handleViewChange(user.role as RoleView);
   };
 
@@ -521,7 +525,7 @@ export const App: React.FC = () => {
   }[activeView];
 
   return (
-    <div className="min-h-screen bg-[#F7FAFB] text-[#1A3A4A] flex font-sans">
+    <div className="min-h-screen bg-[#F7FAFB] dark:bg-[#0B132B] text-[#1A3A4A] dark:text-[#E2E8F0] flex font-sans transition-colors duration-200">
       <Sidebar
         activeView={activeView}
         currentUser={currentUser}
@@ -537,7 +541,7 @@ export const App: React.FC = () => {
         onOpenTour={() => setIsTourModalOpen(true)}
       />
 
-      <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden">
+      <main className="ml-0 lg:ml-64 min-h-screen flex flex-col flex-1 w-full overflow-x-hidden bg-[#F7FAFB] dark:bg-[#0B132B] transition-colors duration-200">
         <InvitationNotificationBanner
           onOpenInvitation={handleOpenParentOnboarding}
           latestInvitation={latestInvitation}
@@ -688,6 +692,14 @@ export const App: React.FC = () => {
         initialRole={activeView}
       />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 };
 

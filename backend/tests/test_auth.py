@@ -78,3 +78,43 @@ def test_pupil_voice_pin_login(client):
     )
     assert resp_wrong.status_code == 401
     assert "Incorrect 4-digit PIN" in resp_wrong.json()["detail"]
+
+
+def test_theme_preference_persistence(client):
+    # 1. Login as teacher
+    login_resp = client.post("/api/v1/auth/demo-login", json={"role": "teacher"})
+    assert login_resp.status_code == 200
+    token = login_resp.json()["access_token"]
+    assert login_resp.json()["user"]["theme_preference"] in ["system", "light", "dark"]
+
+    # 2. Update theme to dark
+    patch_resp = client.patch(
+        "/api/v1/auth/theme",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"theme": "dark"},
+    )
+    assert patch_resp.status_code == 200
+    assert patch_resp.json()["theme_preference"] == "dark"
+
+    # 3. Verify /me reflects dark theme
+    me_resp = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me_resp.status_code == 200
+    assert me_resp.json()["theme_preference"] == "dark"
+
+    # 4. Update theme to light
+    patch_resp2 = client.patch(
+        "/api/v1/auth/theme",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"theme": "light"},
+    )
+    assert patch_resp2.status_code == 200
+    assert patch_resp2.json()["theme_preference"] == "light"
+
+    # 5. Invalid theme rejected
+    bad_resp = client.patch(
+        "/api/v1/auth/theme",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"theme": "neon-glow"},
+    )
+    assert bad_resp.status_code == 422
+
