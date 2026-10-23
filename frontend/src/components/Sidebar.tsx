@@ -476,14 +476,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Footer: User Profile & Session Logout */}
-        <div className="p-3 border-t border-sidebarBorder bg-slate-50/70 dark:bg-black/40 space-y-2">
+        <div className="p-3 border-t border-sidebarBorder bg-black/[0.03] dark:bg-black/30 space-y-2">
           {onOpenTour && (
             <button
               onClick={() => {
                 onOpenTour();
                 onCloseMobile?.();
               }}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-teal/10 hover:bg-teal/20 text-teal-800 dark:text-teal-200 text-xs font-bold transition-all cursor-pointer border border-teal-300 dark:border-teal-700/50 shadow-2xs"
+              className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-teal/15 hover:bg-teal/25 text-teal-900 dark:text-teal-200 text-xs font-bold transition-all cursor-pointer border border-teal-300/80 dark:border-teal-700/50 shadow-2xs"
               title="Interactive Persona Tour & Walkthrough"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber animate-pulse flex-shrink-0" />
@@ -496,7 +496,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onSwitchPersona();
               onCloseMobile?.();
             }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-white/90 text-xs font-semibold transition-all cursor-pointer border border-slate-200 dark:border-white/10 shadow-2xs"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/70 hover:bg-white dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-white/90 text-xs font-semibold transition-all cursor-pointer border border-slate-300/70 dark:border-white/10 shadow-2xs"
             title="Switch to another persona for testing"
           >
             <Repeat className="w-3.5 h-3.5 text-amber-600 dark:text-amber flex-shrink-0" />
@@ -508,7 +508,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onLogout();
               onCloseMobile?.();
             }}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-200 dark:border-rose-500/20"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-800 dark:text-rose-300 text-xs font-semibold transition-all cursor-pointer border border-rose-300/70 dark:border-rose-500/20"
           >
             <LogOut className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
             <span>Sign Out</span>

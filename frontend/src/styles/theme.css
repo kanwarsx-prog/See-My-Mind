@@ -23,13 +23,13 @@
   /* -----------------------------------------------------------------------
      3. Left Navigation Sidebar (Light Mode)
      ----------------------------------------------------------------------- */
-  --sidebar-bg: #FFFFFF;                /* Crisp clean white sidebar */
-  --sidebar-border: #E2E8F0;            /* Subtle structural divider */
-  --sidebar-text-primary: #1A3A4A;      /* Heading and active titles (Deep Slate) */
-  --sidebar-text-secondary: #475569;    /* Inactive nav links (Slate-600) */
-  --sidebar-text-muted: #64748B;        /* Sub-headers and section labels (Slate-500) */
-  --sidebar-hover-bg: #F1F5F9;          /* Subtle hover highlight */
-  --sidebar-badge-bg: #F8FAFC;          /* Profile badge surface */
+  --sidebar-bg: #E4EEF5;                /* Subtle pale variation of deep navy #112533 */
+  --sidebar-border: #CDDCE5;            /* Harmonious subtle divider */
+  --sidebar-text-primary: #112533;      /* Deep navy titles and active labels */
+  --sidebar-text-secondary: #2C4A5E;    /* Inactive nav links */
+  --sidebar-text-muted: #536E80;        /* Sub-headers and section labels */
+  --sidebar-hover-bg: #D4E3ED;          /* Subtle hover highlight */
+  --sidebar-badge-bg: #F0F6FA;          /* Profile badge surface */
   --sidebar-active-bg: #2A6B62;         /* Active tab highlight (Teal) */
   --sidebar-active-text: #FFFFFF;       /* Active tab text */
 
@@ -90,13 +90,13 @@ html.dark {
   /* -----------------------------------------------------------------------
      3. Left Navigation Sidebar (Dark Mode)
      ----------------------------------------------------------------------- */
-  --sidebar-bg: #070D1E;                /* Deepest midnight structural anchor */
-  --sidebar-border: rgba(255, 255, 255, 0.05);
-  --sidebar-text-primary: #F8FAFC;
+  --sidebar-bg: #112533;                /* Original deep navy structural anchor */
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-text-primary: #FFFFFF;
   --sidebar-text-secondary: rgba(255, 255, 255, 0.75);
-  --sidebar-text-muted: rgba(255, 255, 255, 0.5);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.55);
   --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-  --sidebar-badge-bg: rgba(255, 255, 255, 0.04);
+  --sidebar-badge-bg: rgba(255, 255, 255, 0.05);
   --sidebar-active-bg: #2A6B62;
   --sidebar-active-text: #FFFFFF;
 
