@@ -20,6 +20,31 @@ async def lifespan(app: FastAPI):
     print(f"Starting {settings.PROJECT_NAME} in [{settings.APP_ENV}] mode...")
     if settings.APP_ENV != "test":
         Base.metadata.create_all(bind=engine)
+        # Ensure migration columns exist on existing tables
+        try:
+            from sqlalchemy import text
+
+            with engine.begin() as conn:
+                conn.execute(
+                    text("ALTER TABLE schools ADD COLUMN IF NOT EXISTS urn_number VARCHAR(20);")
+                )
+                conn.execute(
+                    text(
+                        "ALTER TABLE schools ADD COLUMN IF NOT EXISTS phase VARCHAR(50) DEFAULT 'Primary';"
+                    )
+                )
+                conn.execute(
+                    text(
+                        "ALTER TABLE schools ADD COLUMN IF NOT EXISTS local_authority VARCHAR(100);"
+                    )
+                )
+                conn.execute(
+                    text(
+                        "ALTER TABLE schools ADD COLUMN IF NOT EXISTS lead_senco_name VARCHAR(140);"
+                    )
+                )
+        except Exception as e:
+            print(f"Schema migration startup note: {e}")
     yield
     # Shutdown
     print(f"Stopping {settings.PROJECT_NAME}...")
