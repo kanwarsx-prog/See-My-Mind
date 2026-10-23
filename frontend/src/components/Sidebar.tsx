@@ -443,16 +443,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          {/* Platform Spine Status */}
-          <div className="px-3 py-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-white/70 bg-white/5 text-[11px] font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-amber" />
-              <span>NOYA Intelligence Engine</span>
-              <span className="ml-auto bg-mint/20 text-mint text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                v2.0
-              </span>
-            </div>
-          </div>
 
           {/* Role-Locked Navigation Items */}
           <div className="px-3 py-2">
