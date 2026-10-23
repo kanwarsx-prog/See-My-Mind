@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { api } from '../api';
 import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
+import { AbcTooltip } from '../components/AbcTooltip';
 
 export type SencoTab = 'review_pack' | 'provision_map' | 'assistant' | 'staff_team';
 
@@ -941,6 +942,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 <div className="flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-coral" />
                   <h3 className="text-sm font-bold text-navy">ABC Incidents ({incidents.length})</h3>
+                  <AbcTooltip />
                 </div>
                 {onOpenIncidentModal && (
                   <button

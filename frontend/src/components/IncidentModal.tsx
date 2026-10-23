@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { IncidentSubmission } from '../types';
+import { AbcTooltip } from './AbcTooltip';
 
 interface IncidentModalProps {
   isOpen: boolean;
@@ -72,7 +73,10 @@ export const IncidentModal: React.FC<IncidentModalProps> = ({
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-navy text-sm sm:text-base">Record ABC Incident</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-serif font-bold text-navy text-sm sm:text-base">Record ABC Incident</h3>
+                <AbcTooltip variant="badge" />
+              </div>
               <p className="text-[11px] sm:text-xs text-gray-500">Structured Antecedent-Behaviour-Consequence log for {childName}</p>
             </div>
           </div>

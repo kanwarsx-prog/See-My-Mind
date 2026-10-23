@@ -4,6 +4,7 @@ import { Sparkles, RefreshCw, AlertTriangle, CheckCircle2, ChevronDown, Plus, Cl
 import { AdaptedPathwayCard } from '../components/AdaptedPathwayCard';
 import { DeEscalationPalette } from '../components/DeEscalationPalette';
 import { ClassSendMatrix } from '../components/ClassSendMatrix';
+import { AbcTooltip } from '../components/AbcTooltip';
 
 interface TeacherViewProps {
   child: Child;
@@ -448,12 +449,15 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
               <h3 className="text-xs font-bold text-navy uppercase tracking-wider">Live Pupil Timeline</h3>
               <div className="flex items-center gap-2">
                 {onOpenIncidentModal && (
-                  <button
-                    onClick={onOpenIncidentModal}
-                    className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200 rounded-lg hover:bg-rose-100 cursor-pointer transition-all"
-                  >
-                    <span>+ Log ABC</span>
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={onOpenIncidentModal}
+                      className="flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200 rounded-lg hover:bg-rose-100 cursor-pointer transition-all"
+                    >
+                      <span>+ Log ABC</span>
+                    </button>
+                    <AbcTooltip align="right" />
+                  </div>
                 )}
                 <span className="text-[10px] text-gray-400">Synced to Supabase</span>
               </div>
