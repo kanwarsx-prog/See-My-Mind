@@ -12,9 +12,11 @@ from app.schemas.analytics import (
     StrategyEfficacyResponse,
     TriggersReportResponse,
 )
+from app.schemas.classroom_provision import ClassroomProvisionSummary
 from app.schemas.clinical_dossier import CamhsClinicalDossierResponse
 from app.schemas.sen_report import SenInformationReportResponse
 from app.services.analytics_service import AnalyticsService
+from app.services.classroom_provision_service import ClassroomProvisionService
 from app.services.clinical_dossier_service import ClinicalDossierService
 from app.services.sen_report_service import SenReportService
 
@@ -107,6 +109,17 @@ def get_camhs_clinical_dossier(
         return ClinicalDossierService.generate_camhs_dossier(db=db, child_id=child_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/classroom-provision/{room_name}", response_model=ClassroomProvisionSummary)
+def get_classroom_provision_map(
+    room_name: str,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_roles(["teacher", "senco", "admin", "ta"])),
+):
+    """Generates the whole-classroom provision map and APDR graduated response review under SEND CoP 6.44-6.56."""
+    return ClassroomProvisionService.generate_classroom_provision_map(db=db, room_name=room_name)
+
 
 
 

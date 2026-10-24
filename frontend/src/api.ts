@@ -36,6 +36,7 @@ import {
   ProvisionAuditResponse,
   SenInformationReportResponse,
   CamhsClinicalDossierResponse,
+  ClassroomProvisionSummary,
 } from './types';
 
 const API_BASE =
@@ -626,6 +627,14 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to fetch CAMHS clinical dossier');
+    return res.json();
+  },
+
+  async getClassroomProvisionMap(roomName: string = 'Room 4'): Promise<ClassroomProvisionSummary> {
+    const res = await fetch(`${API_BASE}/analytics/classroom-provision/${encodeURIComponent(roomName)}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch classroom provision map');
     return res.json();
   },
 };

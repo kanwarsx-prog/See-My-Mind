@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ClassroomMatrixData } from '../types';
+import { ClassroomMatrixData, ClassroomProvisionSummary } from '../types';
 import { api } from '../api';
 import { Sparkles, AlertTriangle, CheckCircle2, Printer, X, BookOpen, HeartHandshake } from 'lucide-react';
+import { ClassroomProvisionMapModal } from './ClassroomProvisionMapModal';
 
 interface ClassSendMatrixProps {
   onSelectPupil?: (pupilId: string) => void;
@@ -12,6 +13,23 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedSubject, setSelectedSubject] = useState<'all' | 'maths' | 'english' | 'science' | 'assembly'>('all');
   const [showSupplyModal, setShowSupplyModal] = useState<boolean>(false);
+  const [provisionSummary, setProvisionSummary] = useState<ClassroomProvisionSummary | null>(null);
+  const [showProvisionModal, setShowProvisionModal] = useState<boolean>(false);
+  const [loadingProvision, setLoadingProvision] = useState<boolean>(false);
+
+  const handleOpenProvisionMap = async () => {
+    try {
+      setLoadingProvision(true);
+      const data = await api.getClassroomProvisionMap('Room 4');
+      setProvisionSummary(data);
+      setShowProvisionModal(true);
+    } catch (err) {
+      console.error('Failed to load classroom provision map:', err);
+      alert('Failed to load classroom provision map: ' + err);
+    } finally {
+      setLoadingProvision(false);
+    }
+  };
 
   useEffect(() => {
     api.getClassMatrix('room-4')
@@ -63,7 +81,21 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
           </p>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+          <button
+            onClick={handleOpenProvisionMap}
+            disabled={loadingProvision}
+            className="w-full sm:w-auto justify-center px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer flex-shrink-0 disabled:opacity-60"
+            title="SEND Code of Practice CoP 6.44-6.56 Termly Graduated Response Review"
+          >
+            {loadingProvision ? (
+              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <BookOpen className="w-4 h-4 text-white" />
+            )}
+            <span>Termly Provision Map & APDR</span>
+          </button>
+
           <button
             onClick={() => setShowSupplyModal(true)}
             className="w-full sm:w-auto justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-navy to-slate-800 hover:from-slate-800 hover:to-navy text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer flex-shrink-0"
@@ -330,6 +362,15 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
             </div>
           </div>
         </div>
+      )}
+
+      {/* Whole-Classroom Provision Map & APDR Review Modal */}
+      {showProvisionModal && (
+        <ClassroomProvisionMapModal
+          isOpen={showProvisionModal}
+          onClose={() => setShowProvisionModal(false)}
+          summary={provisionSummary}
+        />
       )}
     </div>
   );

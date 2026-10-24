@@ -829,6 +829,41 @@ export interface CamhsClinicalDossierResponse {
   compiled_at: string;
 }
 
+// Teacher Classroom Provision Map & Graduated Response Review (CoP 6.44-6.56)
+export interface GraduatedResponseItem {
+  pupil_id: string;
+  name: string;
+  preferred_name: string;
+  support_tier: string;
+  primary_need: string;
+  assigned_ta: string;
+  weekly_ta_hours: number;
+  assess_notes: string;
+  plan_targets: string[];
+  do_provisions: string[];
+  review_efficacy: string;
+  review_outcome: 'Target Met' | 'Significant Progress' | 'Needs Revision' | 'Escalate to EHCP' | string;
+  breakthrough_milestones: string[];
+  recommended_next_steps: string;
+}
+
+export interface ClassroomProvisionSummary {
+  room_name: string;
+  year_group: string;
+  class_teacher_name: string;
+  primary_ta_name: string;
+  review_period: string;
+  total_send_pupils: number;
+  ehcp_count: number;
+  sen_support_count: number;
+  total_weekly_ta_hours: number;
+  overall_class_win_rate: number;
+  graduated_responses: GraduatedResponseItem[];
+  statutory_declaration: string;
+  generated_at: string;
+}
+
+
 
 
 
