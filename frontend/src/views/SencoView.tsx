@@ -45,7 +45,7 @@ export type SencoTab = 'review_pack' | 'provision_map' | 'staff_team' | 'assista
 
 
 interface SencoViewProps {
-  child: Child;
+  child?: Child | null;
   timeline: ChildEvent[];
   currentUser?: UserProfile | null;
   pupils?: Child[];
@@ -305,6 +305,10 @@ export const SencoView: React.FC<SencoViewProps> = ({
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
+    if (!child?.id) {
+      alert('Please register or select a pupil first.');
+      return;
+    }
     setLoading(true);
     try {
       const resp = await api.askNoya(child.id, query);

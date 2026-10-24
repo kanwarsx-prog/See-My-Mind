@@ -69,7 +69,18 @@ const AppContent: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Check existing session token on startup
+  // Check existing session token or onboarding link on startup
   useEffect(() => {
+    // 1. Detect onboarding token from URL query params
+    const searchParams = new URLSearchParams(window.location.search);
+    const token = searchParams.get('token');
+    if (token) {
+      setOnboardingToken(token);
+      setIsParentOnboardingOpen(true);
+      setAuthChecking(false);
+      return;
+    }
+
     async function checkSession() {
       try {
         const user = await api.getCurrentUser();
@@ -189,6 +200,11 @@ const AppContent: React.FC = () => {
           if (recentInvites && recentInvites.length > 0) {
             setLatestInvitation(recentInvites[0]);
           }
+        } else {
+          setChild(null);
+          setTimeline([]);
+          setBriefing(null);
+          setLatestHandover(null);
         }
       } catch (err) {
         console.error('Error connecting to backend:', err);
@@ -246,12 +262,36 @@ const AppContent: React.FC = () => {
     setIsParentOnboardingOpen(true);
   };
 
+  const handleCloseParentOnboarding = () => {
+    setIsParentOnboardingOpen(false);
+    setOnboardingToken(null);
+    try {
+      window.history.replaceState({}, document.title, window.location.pathname.replace('/onboard', '/') || '/');
+    } catch (_) {}
+  };
+
   const handleOnboardingCompleted = async (childId?: string, activatedRole?: string) => {
-    if (childId) {
-      await handleChildSelect(childId);
-    }
-    if (activatedRole) {
-      handleViewChange(activatedRole as RoleView);
+    setIsParentOnboardingOpen(false);
+    setOnboardingToken(null);
+    try {
+      window.history.replaceState({}, document.title, window.location.pathname.replace('/onboard', '/') || '/');
+    } catch (_) {}
+    try {
+      setLoading(true);
+      const user = await api.getCurrentUser();
+      if (user) {
+        handleLoginSuccess(user);
+        if (childId) {
+          await handleChildSelect(childId);
+        }
+        if (activatedRole) {
+          handleViewChange(activatedRole as RoleView);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to reload user post-onboarding:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -428,7 +468,7 @@ const AppContent: React.FC = () => {
         <ParentOnboardingModal
           isOpen={isParentOnboardingOpen}
           token={onboardingToken}
-          onClose={() => setIsParentOnboardingOpen(false)}
+          onClose={handleCloseParentOnboarding}
           onCompleted={handleOnboardingCompleted}
         />
       </>
@@ -436,12 +476,18 @@ const AppContent: React.FC = () => {
   }
 
   // 3. Authenticated: Render Single-Persona View
-  if (loading || !child) {
+  if (loading || (!child && activeView !== 'senco' && activeView !== 'admin')) {
     return (
       <div className="min-h-screen bg-canvas text-textMain flex flex-col items-center justify-center space-y-3">
         <div className="w-12 h-12 rounded-full border-4 border-teal border-t-transparent animate-spin" />
         <div className="text-sm font-bold text-textHead font-serif">Connecting to See My Mind & NOYA AI...</div>
         <div className="text-xs text-textDim">Loading {currentUser.full_name}&apos;s Workspace</div>
+        <ParentOnboardingModal
+          isOpen={isParentOnboardingOpen}
+          token={onboardingToken}
+          onClose={handleCloseParentOnboarding}
+          onCompleted={handleOnboardingCompleted}
+        />
       </div>
     );
   }
@@ -483,17 +529,17 @@ const AppContent: React.FC = () => {
       },
     },
     parent: {
-      title: `${child.preferred_name || child.first_name} ${child.last_name} · Parent Hub`,
+      title: `${child?.preferred_name || child?.first_name || 'Pupil'} ${child?.last_name || ''} · Parent Hub`,
       subtitle: `${currentUser.full_name}${currentUser.school_name ? ` · ${currentUser.school_name}` : ""}`,
       pills: [
         isHandoverAcknowledged
-          ? { label: '✓ Read by Ms Johnson', color: 'green' as const }
+          ? { label: '✓ Read by Teacher', color: 'green' as const }
           : { label: '⏳ Handover Sent · Awaiting Check-In', color: 'amber' as const },
         { label: '🎧 Noise Defenders in Bag', color: 'teal' as const },
       ],
     },
     child: {
-      title: `My Day · ${child.preferred_name || child.first_name} ⭐`,
+      title: `My Day · ${child?.preferred_name || child?.first_name || 'Pupil'} ⭐`,
       subtitle: `${currentUser.school_name || "Inclusive School"} · Pupil Voice`,
       pills: [{ label: '😊 Feeling Great', color: 'green' as const }],
     },
@@ -501,7 +547,7 @@ const AppContent: React.FC = () => {
       title: `Teaching Assistant View · ${currentUser.full_name}`,
       subtitle: `1-to-1 Support Focus${currentUser.school_name ? ` · ${currentUser.school_name}` : ""}`,
       pills: [
-        { label: `⚡ ${child.preferred_name || child.first_name}: High Priority`, color: 'red' as const },
+        { label: `⚡ ${child?.preferred_name || child?.first_name || 'Pupil'}: High Priority`, color: 'red' as const },
         { label: '🎧 Headphones at Door (8:55am)', color: 'amber' as const },
       ],
       actionButton: {
@@ -554,7 +600,7 @@ const AppContent: React.FC = () => {
           pills={topBarConfig.pills}
           actionButton={topBarConfig.actionButton}
           pupils={currentUser.role === 'senco' || currentUser.role === 'teacher' ? pupils : undefined}
-          selectedChildId={child.id}
+          selectedChildId={child?.id}
           onSelectChild={handleChildSelect}
           onToggleMobileMenu={() => setMobileMenuOpen(true)}
           onOpenTour={() => setIsTourModalOpen(true)}
@@ -563,7 +609,7 @@ const AppContent: React.FC = () => {
         <div className="p-3.5 sm:p-5 lg:p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
           {activeView === 'teacher' && (
             <TeacherView
-              child={child}
+              child={child!}
               timeline={timeline}
               briefing={briefing}
               latestHandover={latestHandover}
@@ -584,7 +630,7 @@ const AppContent: React.FC = () => {
 
           {activeView === 'parent' && (
             <ParentView
-              child={child}
+              child={child!}
               timeline={timeline}
               latestHandover={latestHandover}
               activeTab={parentSubTab}
@@ -615,7 +661,7 @@ const AppContent: React.FC = () => {
 
           {activeView === 'child' && (
             <ChildView
-              child={child}
+              child={child!}
               onCheckIn={handleChildCheckIn}
               onOpenWorksheet={handleOpenWorksheet}
             />
@@ -623,7 +669,7 @@ const AppContent: React.FC = () => {
 
           {activeView === 'ta' && (
             <TaView
-              child={child}
+              child={child!}
               timeline={timeline}
               onOpenObservationModal={() => setIsObsModalOpen(true)}
               onDirectLog={handleDirectLog}
@@ -631,7 +677,7 @@ const AppContent: React.FC = () => {
             />
           )}
 
-          {activeView === 'parentplus' && <ParentPlusView child={child} />}
+          {activeView === 'parentplus' && <ParentPlusView child={child!} />}
 
           {activeView === 'admin' && (
             <AdminView
@@ -649,22 +695,22 @@ const AppContent: React.FC = () => {
         isOpen={isObsModalOpen}
         onClose={() => setIsObsModalOpen(false)}
         onSubmit={handleLogObservation}
-        childName={child.preferred_name || child.first_name}
+        childName={child?.preferred_name || child?.first_name || 'Pupil'}
       />
 
       <IncidentModal
         isOpen={isIncidentModalOpen}
         onClose={() => setIsIncidentModalOpen(false)}
         onSubmit={handleLogIncident}
-        childName={child.preferred_name || child.first_name}
-        childId={child.id}
+        childName={child?.preferred_name || child?.first_name || 'Pupil'}
+        childId={child?.id || ''}
       />
 
       <DocumentUploadModal
         isOpen={isDocModalOpen}
         onClose={() => setIsDocModalOpen(false)}
         onSubmit={handleUploadDocument}
-        childName={child.preferred_name || child.first_name}
+        childName={child?.preferred_name || child?.first_name || 'Pupil'}
       />
 
       <WorksheetModal
@@ -684,7 +730,7 @@ const AppContent: React.FC = () => {
       <ParentOnboardingModal
         isOpen={isParentOnboardingOpen}
         token={onboardingToken}
-        onClose={() => setIsParentOnboardingOpen(false)}
+        onClose={handleCloseParentOnboarding}
         onCompleted={handleOnboardingCompleted}
       />
 
