@@ -187,7 +187,10 @@ def seed_demo_data():
             )
 
         print("\n" + "=" * 60)
-        print("SEEDING COMPLETE!")
+        print("8. Seeding complete 30-day longitudinal Room 4 telemetry & cohort...")
+        from app.services.seeder_service import SeederService
+        res = SeederService.seed_longitudinal_demo_data(db)
+        print(f"Longitudinal Telemetry Seeded! Total Events: {res['total_events']}")
         print(f"School ID: {school.id}")
         print(f"Child ID:  {child.id} ({child.full_name})")
         print("=" * 60)

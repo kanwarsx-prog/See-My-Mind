@@ -9,13 +9,15 @@ from app.models.ai_noya import (
 from app.models.audit import AuditLog
 from app.models.auth import ChildAccount, Invitation, User
 from app.models.base import TimestampedUUIDModel
-from app.models.organisation import AcademicYear, School, StaffMember, StaffSchoolAssignment
+from app.models.organisation import AcademicYear, School, StaffMember, StaffPupilAllocation, StaffSchoolAssignment
 from app.models.pupil import Child, ChildGuardianLink, ChildSchoolEnrolment, Guardian
 from app.models.support import (
     ChildDistressIndicator,
     ChildSupportProfile,
     ChildSupportStrategy,
     ChildTrigger,
+    MedicationRegimen,
+    PupilTarget,
     SupportStrategy,
 )
 from app.models.timeline import (
@@ -48,14 +50,18 @@ __all__ = [
     "FollowUpAction",
     "Guardian",
     "Invitation",
+    "MedicationRegimen",
     "Observation",
+    "PupilTarget",
     "RAGChunkIndex",
     "RAGSourceDocument",
     "School",
     "StaffMember",
+    "StaffPupilAllocation",
     "StaffSchoolAssignment",
     "SupportStrategy",
     "TimestampedUUIDModel",
     "TransitionLog",
     "User",
 ]
+

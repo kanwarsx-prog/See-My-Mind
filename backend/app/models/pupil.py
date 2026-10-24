@@ -15,6 +15,7 @@ class Child(TimestampedUUIDModel):
     date_of_birth = Column(Date, nullable=False)
     sex = Column(String(20), nullable=False)  # "Male", "Female", "Other", "Prefer not to say"
     year_group = Column(String(50), nullable=True)  # e.g. "Year 4", "Year 10"
+    room_name = Column(String(50), default=None, nullable=True, index=True)
     school_id = Column(
         UUID(as_uuid=True), ForeignKey("schools.id", ondelete="SET NULL"), nullable=True, index=True
     )
@@ -33,6 +34,9 @@ class Child(TimestampedUUIDModel):
     )
     events = relationship("ChildEvent", back_populates="child", cascade="all, delete-orphan")
     ai_insights = relationship("AIInsight", back_populates="child", cascade="all, delete-orphan")
+    targets = relationship("PupilTarget", back_populates="child", cascade="all, delete-orphan")
+    medication_regimens = relationship("MedicationRegimen", back_populates="child", cascade="all, delete-orphan")
+    staff_allocations = relationship("StaffPupilAllocation", back_populates="child", cascade="all, delete-orphan")
 
 
 class Guardian(TimestampedUUIDModel):

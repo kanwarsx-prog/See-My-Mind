@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Date, ForeignKey, String
+from sqlalchemy import Boolean, Column, Date, Float, ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -59,6 +59,9 @@ class StaffMember(TimestampedUUIDModel):
     assignments = relationship(
         "StaffSchoolAssignment", back_populates="staff_member", cascade="all, delete-orphan"
     )
+    pupil_allocations = relationship(
+        "StaffPupilAllocation", back_populates="staff_member", cascade="all, delete-orphan"
+    )
 
 
 class StaffSchoolAssignment(TimestampedUUIDModel):
@@ -79,3 +82,34 @@ class StaffSchoolAssignment(TimestampedUUIDModel):
 
     staff_member = relationship("StaffMember", back_populates="assignments")
     school = relationship("School", back_populates="staff_assignments")
+
+
+class StaffPupilAllocation(TimestampedUUIDModel):
+    __tablename__ = "staff_pupil_allocations"
+
+    staff_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("staff_members.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    child_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("children.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    academic_year_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("academic_years.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    role_type = Column(String(50), nullable=False, default="1:1 TA")  # "1:1 TA", "Key Worker", "Class Teacher"
+    weekly_allocated_hours = Column(Float, nullable=False, default=15.0)
+    weekly_delivered_hours = Column(Float, nullable=False, default=15.0)
+    funding_source = Column(String(100), nullable=True)  # "High-Needs Band 3 EHCP", "Notional SEN"
+    active = Column(Boolean, default=True, nullable=False)
+
+    staff_member = relationship("StaffMember", back_populates="pupil_allocations")
+    child = relationship("Child", back_populates="staff_allocations")
+

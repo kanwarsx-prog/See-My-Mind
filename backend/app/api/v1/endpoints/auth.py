@@ -14,6 +14,7 @@ from app.schemas.auth import (
     ThemePreferenceRequest,
 )
 from app.schemas.registration import UserResponse
+from app.services.seeder_service import SeederService
 
 router = APIRouter()
 
@@ -191,6 +192,9 @@ def _ensure_demo_entities(db: Session) -> tuple[models.School, models.Child]:
         )
         db.add_all([log1, log2, log3])
         db.flush()
+
+    # Ensure longitudinal multi-pupil telemetry and Room 4 allocations exist
+    SeederService.seed_longitudinal_demo_data(db)
 
     return school, child
 

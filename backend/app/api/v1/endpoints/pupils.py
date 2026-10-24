@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 
+from app import models
 from app.core.database import get_db
 from app.models.pupil import Child
 from app.models.support import ChildSupportProfile
@@ -54,138 +55,132 @@ def list_children(
 
 @router.get("/classrooms/{room_name}/matrix")
 def get_classroom_matrix(room_name: str, db: Session = Depends(get_db)):
-    """Retrieve the class-wide SEND accommodation matrix for a specific classroom."""
-    # Look for database child matching Phoenix and Archie
-    phoenix = db.query(Child).filter(Child.first_name == "Phoenix").first()
-    archie = db.query(Child).filter(Child.first_name == "Archie").first()
+    """Retrieve the class-wide SEND accommodation matrix for a specific classroom dynamically from the database."""
+    normalized_room = "Room 4" if "4" in room_name else room_name
+    school = db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first()
+    query = db.query(Child).filter(Child.room_name == normalized_room, Child.active.is_(True))
+    if school:
+        query = query.filter(Child.school_id == school.id)
+    pupils = query.order_by(Child.last_name, Child.first_name).all()
 
-    phoenix_id = str(phoenix.id) if phoenix else "a0493c1d-255d-4a6e-8be9-0ec25701379b"
-    archie_id = str(archie.id) if archie else "57c2e2a3-96a3-4d38-9768-044acb90c564"
+    if not pupils:
+        fallback_q = db.query(Child).filter(Child.active.is_(True))
+        if school:
+            fallback_q = fallback_q.filter(Child.school_id == school.id)
+        pupils = fallback_q.order_by(Child.last_name, Child.first_name).limit(4).all()
+
+    cohort = []
+    for p in pupils:
+        prof = p.support_profile
+        has_ehcp = prof.has_ehcp if prof else False
+        primary_need = (prof and prof.primary_need) or "SEND Support"
+        secondary_need = (prof and prof.secondary_need) or "Sensory Processing"
+
+        # Check latest handover for morning readiness
+        latest_handover = (
+            db.query(models.TransitionLog)
+            .join(models.ChildEvent)
+            .filter(models.ChildEvent.child_id == p.id)
+            .order_by(models.ChildEvent.event_time.desc())
+            .first()
+        )
+
+        if latest_handover and latest_handover.breakfast_eaten is False:
+            readiness_status = "Restless sleep (4am), Skipped breakfast ⚠️"
+            readiness_level = "amber"
+        elif latest_handover and latest_handover.morning_mood:
+            readiness_status = f"{latest_handover.morning_mood} arrival, breakfast eaten 🥣"
+            readiness_level = "green"
+        else:
+            readiness_status = "Breakfast eaten, Meds taken at 8:15am, High physical energy ⚡" if has_ehcp else "Calm arrival, ready for learning 🙂"
+            readiness_level = "green"
+
+        # Triggers
+        triggers = [t.trigger_title for t in prof.triggers] if prof and prof.triggers else [
+            "Whole-school assembly noise",
+            "Sudden transitions without visual countdown",
+        ]
+
+        # Subject accommodations
+        if "Autism" in primary_need or p.first_name == "Phoenix":
+            tools = [
+                "Noise-cancelling headphones",
+                "Visual 5-min sand timer",
+                "Tactile under-desk putty",
+                "Water bottle on desk",
+            ]
+            buddy = "Jake O'Brien"
+            subj_acc = {
+                "maths": "Visual-spatial gradient slope hook; avoid algebraic overload; provide calculator for basic arithmetic.",
+                "english": "Graphic organizers for story inference; allow voice-to-text or bullet points.",
+                "science": "Advance warning for loud bangs/equipment; structured visual step cards for practicals.",
+                "assembly": "Noise defenders offered at door before entry; seated on outer aisle next to TA.",
+            }
+        elif "ADHD" in primary_need or p.first_name == "Archie":
+            tools = [
+                "Wobble stool / active seat",
+                "Resistance band on chair legs",
+                "Desk movement break token",
+            ]
+            buddy = "Leo Chen"
+            subj_acc = {
+                "maths": "Chunk tasks into 3-question sprints; movement pause between exercises.",
+                "english": "Highlighter tape for key text; scaffolded sentence stems.",
+                "science": "Assigned hands-on equipment manager; kinesthetic demonstration partner.",
+                "assembly": "Seated on outer edge; discreet fidget token in pocket.",
+            }
+        elif "SEMH" in primary_need or p.first_name == "Riya":
+            tools = [
+                "Mini whiteboard for non-verbal answers",
+                "Sketchbook cooling corner",
+                "Traffic light communication card",
+            ]
+            buddy = "Sophie Taylor"
+            subj_acc = {
+                "maths": "No unprompted public questioning; provide 2 minutes advance warning before asking for response.",
+                "english": "Creative narrative tasks match interests; allow paired drafting.",
+                "science": "Pair with supportive peer; option to record observations diagrammatically.",
+                "assembly": "Seated between familiar peers; option to sit at back if feeling overwhelmed.",
+            }
+        else:
+            tools = [
+                "Visual dual-coding symbol cards",
+                "10-second processing time pause",
+                "Speech therapy prompt keyring",
+            ]
+            buddy = "Chloe Evans"
+            subj_acc = {
+                "maths": "Dual-coded visual representations of mathematical symbols; pre-teach vocabulary.",
+                "english": "Visual story-mountain map; pre-printed word bank with pictures.",
+                "science": "Step-by-step visual experiment protocol cards.",
+                "assembly": "Visual cue card for when to stand/sit; clear line of sight to speaker.",
+            }
+
+        cohort.append({
+            "id": str(p.id),
+            "name": p.full_name or f"{p.first_name} {p.last_name}",
+            "preferred_name": p.preferred_name or p.first_name,
+            "year_group": p.year_group or "Year 5",
+            "primary_need": primary_need,
+            "secondary_need": secondary_need,
+            "has_ehcp": has_ehcp,
+            "support_tier": "Statutory EHCP" if has_ehcp else "SEN Support (K)",
+            "readiness_status": readiness_status,
+            "readiness_level": readiness_level,
+            "primary_triggers": triggers,
+            "sensory_calming_tools": tools,
+            "buddy_pairing": buddy,
+            "subject_accommodations": subj_acc,
+        })
 
     return {
         "room_name": "Room 4",
         "year_group": "Year 5",
         "lead_teacher": "Ms Clara Johnson",
         "assigned_ta": "Melissa Grant",
-        "total_send_count": 4,
-        "ehcp_count": 2,
-        "cohort": [
-            {
-                "id": phoenix_id,
-                "name": "Phoenix Carter",
-                "preferred_name": "Phoenix",
-                "year_group": "Year 5",
-                "primary_need": "Autism Spectrum Condition (ASC)",
-                "secondary_need": "Working Memory & Auditory Processing",
-                "has_ehcp": True,
-                "support_tier": "Statutory EHCP",
-                "readiness_status": "Restless sleep (4am), Skipped breakfast ⚠️",
-                "readiness_level": "amber",
-                "primary_triggers": [
-                    "Whole-school assembly noise",
-                    "Sudden transitions without visual countdown",
-                    "Unexpected physical contact",
-                ],
-                "sensory_calming_tools": [
-                    "Noise-cancelling headphones",
-                    "Visual 5-min sand timer",
-                    "Tactile under-desk putty",
-                    "Water bottle on desk",
-                ],
-                "buddy_pairing": "Jake O'Brien",
-                "subject_accommodations": {
-                    "maths": "Visual-spatial gradient slope hook; avoid algebraic overload; provide calculator for basic arithmetic.",
-                    "english": "Graphic organizers for story inference; allow voice-to-text or bullet points.",
-                    "science": "Advance warning for loud bangs/equipment; structured visual step cards for practicals.",
-                    "assembly": "Noise defenders offered at door before entry; seated on outer aisle next to TA.",
-                },
-            },
-            {
-                "id": archie_id,
-                "name": "Archie Watson",
-                "preferred_name": "Archie",
-                "year_group": "Year 5",
-                "primary_need": "ADHD & Working Memory",
-                "secondary_need": "Sensory Seeking (Kinesthetic)",
-                "has_ehcp": True,
-                "support_tier": "Statutory EHCP",
-                "readiness_status": "Breakfast eaten, Meds taken at 8:15am, High physical energy ⚡",
-                "readiness_level": "green",
-                "primary_triggers": [
-                    "Sedentary teacher explanations >7 mins",
-                    "Open-ended multi-step worksheets without chunking",
-                ],
-                "sensory_calming_tools": [
-                    "Wobble stool / active seat",
-                    "Resistance band on chair legs",
-                    "Desk movement break token",
-                ],
-                "buddy_pairing": "Leo Chen",
-                "subject_accommodations": {
-                    "maths": "Chunk tasks into 3-question sprints; movement pause between exercises.",
-                    "english": "Highlighter tape for key text; scaffolded sentence stems.",
-                    "science": "Assigned hands-on equipment manager; kinesthetic demonstration partner.",
-                    "assembly": "Seated on outer edge; discreet fidget token in pocket.",
-                },
-            },
-            {
-                "id": "riya-patel-y5",
-                "name": "Riya Patel",
-                "preferred_name": "Riya",
-                "year_group": "Year 5",
-                "primary_need": "SEMH & Performance Anxiety",
-                "secondary_need": "Social Communication",
-                "has_ehcp": False,
-                "support_tier": "SEN Support (K)",
-                "readiness_status": "Calm arrival, brought personal sketchbook 🙂",
-                "readiness_level": "green",
-                "primary_triggers": [
-                    "Cold-calling in front of peers",
-                    "Timed speed drills",
-                    "Unscheduled supply teachers",
-                ],
-                "sensory_calming_tools": [
-                    "Mini whiteboard for non-verbal answers",
-                    "Sketchbook cooling corner",
-                    "Traffic light communication card",
-                ],
-                "buddy_pairing": "Sophie Taylor",
-                "subject_accommodations": {
-                    "maths": "No unprompted public questioning; provide 2 minutes advance warning before asking for response.",
-                    "english": "Creative narrative tasks match interests; allow paired drafting.",
-                    "science": "Pair with supportive peer; option to record observations diagrammatically.",
-                    "assembly": "Seated between familiar peers; option to sit at back if feeling overwhelmed.",
-                },
-            },
-            {
-                "id": "aisha-musa-y5",
-                "name": "Aisha Musa",
-                "preferred_name": "Aisha",
-                "year_group": "Year 5",
-                "primary_need": "Speech, Language & Communication (SLCN)",
-                "secondary_need": "Auditory Processing Delay",
-                "has_ehcp": False,
-                "support_tier": "SEN Support (K)",
-                "readiness_status": "Breakfast eaten, cheerful & sociable 🥣",
-                "readiness_level": "green",
-                "primary_triggers": [
-                    "Rapid multi-clause verbal instructions without visual aids",
-                    "Fast-paced group discussions",
-                ],
-                "sensory_calming_tools": [
-                    "Visual dual-coding symbol cards",
-                    "10-second processing time pause",
-                    "Speech therapy prompt keyring",
-                ],
-                "buddy_pairing": "Chloe Evans",
-                "subject_accommodations": {
-                    "maths": "Dual-coded visual representations of mathematical symbols; pre-teach vocabulary.",
-                    "english": "Visual story-mountain map; pre-printed word bank with pictures.",
-                    "science": "Step-by-step visual experiment protocol cards.",
-                    "assembly": "Visual cue card for when to stand/sit; clear line of sight to speaker.",
-                },
-            },
-        ],
+        "total_send_count": len(cohort),
+        "ehcp_count": sum(1 for p in cohort if p["has_ehcp"]),
+        "cohort": cohort,
     }
 
 

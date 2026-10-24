@@ -107,3 +107,57 @@ class ChildDistressIndicator(TimestampedUUIDModel):
     recommended_staff_action = Column(Text, nullable=True)
 
     profile = relationship("ChildSupportProfile", back_populates="distress_indicators")
+
+
+class PupilTarget(TimestampedUUIDModel):
+    __tablename__ = "pupil_targets"
+
+    child_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("children.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    academic_year_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("academic_years.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    term = Column(String(50), nullable=False, default="Spring 2026")
+    target_area = Column(String(100), nullable=False)  # e.g. "Curriculum & Maths", "Sensory Regulation", "Communication"
+    smart_target = Column(Text, nullable=False)
+    success_criteria = Column(Text, nullable=True)
+    apdr_stage = Column(String(50), nullable=False, default="Review")  # "Assess", "Plan", "Do", "Review"
+    review_outcome = Column(String(50), nullable=False, default="Significant Progress")  # "Target Met", "Significant Progress", "Needs Revision", "Escalate to EHCP"
+    review_notes = Column(Text, nullable=True)
+    breakthrough_notes = Column(Text, nullable=True)
+    active = Column(Boolean, default=True, nullable=False)
+
+    child = relationship("Child", back_populates="targets")
+
+
+class MedicationRegimen(TimestampedUUIDModel):
+    __tablename__ = "medication_regimens"
+
+    child_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("children.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    medication_name = Column(String(140), nullable=False)
+    dosage = Column(String(100), nullable=False)
+    formulation = Column(String(140), nullable=True)
+    prescribed_schedule = Column(String(100), nullable=False)
+    administration_route = Column(String(50), default="Oral", nullable=False)
+    prescribing_clinician = Column(String(140), nullable=True)
+    clinical_service = Column(String(200), nullable=True)
+    peak_window_start = Column(String(20), default="09:00 AM", nullable=True)
+    peak_window_end = Column(String(20), default="10:15 AM", nullable=True)
+    trough_window_start = Column(String(20), default="10:15 AM", nullable=True)
+    trough_window_end = Column(String(20), default="10:45 AM", nullable=True)
+    co_administration_rules = Column(Text, nullable=True)
+    active = Column(Boolean, default=True, nullable=False)
+
+    child = relationship("Child", back_populates="medication_regimens")
+
