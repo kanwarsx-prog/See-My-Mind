@@ -48,6 +48,16 @@ async def lifespan(app: FastAPI):
                         "ALTER TABLE users ADD COLUMN IF NOT EXISTS theme_preference VARCHAR(20) DEFAULT 'system';"
                     )
                 )
+                conn.execute(
+                    text(
+                        "ALTER TABLE children ADD COLUMN IF NOT EXISTS room_name VARCHAR(50);"
+                    )
+                )
+                conn.execute(
+                    text(
+                        "CREATE INDEX IF NOT EXISTS ix_children_room_name ON children (room_name);"
+                    )
+                )
         except Exception as e:
             print(f"Schema migration startup note: {e}")
     yield
