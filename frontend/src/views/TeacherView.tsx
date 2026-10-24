@@ -162,9 +162,9 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         </div>
 
         <div className="stat-card border border-gray-100 border-l-4 border-l-teal">
-          <div className="font-serif text-2xl font-bold text-teal-800">Year 5</div>
+          <div className="font-serif text-2xl font-bold text-teal-800">{child.year_group || "Year 5"}</div>
           <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
-            St. Jude's Inclusive Academy · Room 4
+            {child.room_name || "Room 4"} · Differentiated Cohort
           </div>
         </div>
       </div>

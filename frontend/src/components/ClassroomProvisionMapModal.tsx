@@ -104,7 +104,7 @@ export const ClassroomProvisionMapModal: React.FC<ClassroomProvisionMapModalProp
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <div className="px-2.5 py-1 bg-teal-700 text-white text-[11px] font-black rounded tracking-widest uppercase">
-                    St. Jude&apos;s Inclusive Academy
+                    {summary.school_name || "Inclusive Academy"}
                   </div>
                   <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                     SEND Code of Practice Chapter 6

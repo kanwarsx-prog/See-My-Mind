@@ -34,3 +34,4 @@ class ClassroomProvisionSummary(BaseModel):
     graduated_responses: list[GraduatedResponseItem]
     statutory_declaration: str
     generated_at: datetime
+    school_name: str | None = None

@@ -471,10 +471,10 @@ const AppContent: React.FC = () => {
     },
     senco: {
       title: `Inclusion & SEND Caseload · ${currentUser.full_name}`,
-      subtitle: 'St. Jude’s Inclusive Academy · Autumn Term 2026',
+      subtitle: `${currentUser.school_name || "Assigned School"} · Academic Year 2026/2027`,
       pills: [
         { label: `${pupils.length} Pupils on Caseload`, color: 'teal' as const },
-        { label: '12 Active EHCPs', color: 'purple' as const },
+        { label: `${pupils.filter(p => p.support_profile?.has_ehcp).length} Active EHCPs`, color: 'purple' as const },
       ],
       actionButton: {
         label: '+ Register SEND Pupil',
@@ -484,7 +484,7 @@ const AppContent: React.FC = () => {
     },
     parent: {
       title: `${child.preferred_name || child.first_name} ${child.last_name} · Parent Hub`,
-      subtitle: `${currentUser.full_name} · St. Jude’s Inclusive Academy`,
+      subtitle: `${currentUser.full_name}${currentUser.school_name ? ` · ${currentUser.school_name}` : ""}`,
       pills: [
         isHandoverAcknowledged
           ? { label: '✓ Read by Ms Johnson', color: 'green' as const }
@@ -494,12 +494,12 @@ const AppContent: React.FC = () => {
     },
     child: {
       title: `My Day · ${child.preferred_name || child.first_name} ⭐`,
-      subtitle: 'St. Jude’s Inclusive Academy · Pupil Voice',
+      subtitle: `${currentUser.school_name || "Inclusive School"} · Pupil Voice`,
       pills: [{ label: '😊 Feeling Great', color: 'green' as const }],
     },
     ta: {
       title: `Teaching Assistant View · ${currentUser.full_name}`,
-      subtitle: `1-to-1 Support Focus · ${child.preferred_name || child.first_name}`,
+      subtitle: `1-to-1 Support Focus${currentUser.school_name ? ` · ${currentUser.school_name}` : ""}`,
       pills: [
         { label: `⚡ ${child.preferred_name || child.first_name}: High Priority`, color: 'red' as const },
         { label: '🎧 Headphones at Door (8:55am)', color: 'amber' as const },
@@ -600,6 +600,8 @@ const AppContent: React.FC = () => {
             <SencoView
               child={child}
               timeline={timeline}
+              currentUser={currentUser}
+              pupils={pupils}
               activeTab={sencoSubTab}
               onTabChange={(tab) => {
                 setSencoSubTab(tab);

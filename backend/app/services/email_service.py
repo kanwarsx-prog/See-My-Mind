@@ -159,7 +159,7 @@ class EmailService:
       </p>
     </div>
     <div class="footer">
-      Sent with care by St. Jude's Academy & See My Mind Platform<br>
+      Sent with care by {school_name} & See My Mind Platform<br>
       UK SEND Code of Practice & GDPR Compliant
     </div>
   </div>

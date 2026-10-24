@@ -287,10 +287,10 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
                   Emergency Cover Protocol
                 </span>
                 <h3 className="text-base sm:text-lg font-serif font-bold text-navy dark:text-white mt-1">
-                  Room 4 SEND: 60-Second Cover Briefing Sheet
+                  {matrixData?.room_name || "Classroom"} SEND: 60-Second Cover Briefing Sheet
                 </h3>
                 <p className="text-[11px] sm:text-xs text-textDim dark:text-slate-400">
-                  St. Jude&apos;s Academy · Year 5 · Lead Teacher: Ms Clara Johnson · TA: Melissa Grant
+                  {matrixData ? `${matrixData.year_group} · Lead Teacher: ${matrixData.lead_teacher} · TA: ${matrixData.assigned_ta}` : "Statutory classroom SEND cover details"}
                 </p>
               </div>
               <button

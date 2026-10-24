@@ -80,14 +80,14 @@ export const AnnualReviewPackModal: React.FC<AnnualReviewPackModalProps> = ({
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-navy to-slate-800 text-mint flex items-center justify-center text-xl font-bold font-serif shadow-xs">
-                  SJ
+                  {pack.school_name ? pack.school_name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() : 'SC'}
                 </div>
                 <div>
                   <h1 className="text-lg font-serif font-bold text-navy">
-                    St. Jude&apos;s Inclusive Academy
+                    {pack.school_name || "Inclusive Academy"}
                   </h1>
                   <p className="text-xs text-gray-500">
-                    Special Educational Needs & Disabilities Coordination Department &bull; NASENCo Certified
+                    Special Educational Needs &amp; Disabilities Coordination Department &bull; NASENCo Certified
                   </p>
                 </div>
               </div>
@@ -346,8 +346,8 @@ export const AnnualReviewPackModal: React.FC<AnnualReviewPackModalProps> = ({
 
             <div className="pt-3 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-500">
               <div>
-                <span className="font-bold text-navy block">Sarah Davies (NASENCo, NPQSL)</span>
-                <span>Special Educational Needs Coordinator &bull; St. Jude&apos;s Inclusive Academy</span>
+                <span className="font-bold text-navy block">{pack.senco_name || "Sarah Davies (NASENCo, NPQSL)"}</span>
+                <span>Special Educational Needs Coordinator &bull; {pack.school_name || "Inclusive Academy"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] px-2.5 py-1 rounded-full bg-purple-light text-purple-dark font-bold">

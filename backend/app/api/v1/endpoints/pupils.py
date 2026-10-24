@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 
 from app import models
+from app.api.deps import get_current_user
 from app.core.database import get_db
 from app.models.pupil import Child
 from app.models.support import ChildSupportProfile
@@ -45,28 +46,46 @@ def create_child(child_in: ChildCreate, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[ChildResponse])
 def list_children(
-    school_id: UUID | None = None, skip: int = 0, limit: int = 50, db: Session = Depends(get_db)
+    school_id: UUID | None = None,
+    skip: int = 0,
+    limit: int = 50,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     query = db.query(Child).options(joinedload(Child.support_profile))
-    if school_id:
-        query = query.filter(Child.school_id == school_id)
+    # If explicit school_id passed (e.g. by admin), use it
+    target_school_id = school_id
+    if not target_school_id and current_user.role != "admin" and current_user.school_id:
+        target_school_id = current_user.school_id
+
+    if target_school_id:
+        query = query.filter(Child.school_id == target_school_id)
     return query.offset(skip).limit(limit).all()
 
 
 @router.get("/classrooms/{room_name}/matrix")
-def get_classroom_matrix(room_name: str, db: Session = Depends(get_db)):
+def get_classroom_matrix(
+    room_name: str,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     """Retrieve the class-wide SEND accommodation matrix for a specific classroom dynamically from the database."""
     normalized_room = "Room 4" if "4" in room_name else room_name
-    school = db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first()
+    target_school = None
+    if current_user.school_id:
+        target_school = db.query(models.School).filter(models.School.id == current_user.school_id).first()
+    if not target_school:
+        target_school = db.query(models.School).filter(models.School.school_reference == "SCH-STJUDES").first() or db.query(models.School).first()
+
     query = db.query(Child).filter(Child.room_name == normalized_room, Child.active.is_(True))
-    if school:
-        query = query.filter(Child.school_id == school.id)
+    if target_school:
+        query = query.filter(Child.school_id == target_school.id)
     pupils = query.order_by(Child.last_name, Child.first_name).all()
 
     if not pupils:
         fallback_q = db.query(Child).filter(Child.active.is_(True))
-        if school:
-            fallback_q = fallback_q.filter(Child.school_id == school.id)
+        if target_school:
+            fallback_q = fallback_q.filter(Child.school_id == target_school.id)
         pupils = fallback_q.order_by(Child.last_name, Child.first_name).limit(4).all()
 
     cohort = []
@@ -185,9 +204,12 @@ def get_classroom_matrix(room_name: str, db: Session = Depends(get_db)):
 
 
 @router.get("/school/provision-matrix", response_model=SchoolProvisionMatrixResponse)
-def get_school_provision_matrix(db: Session = Depends(get_db)):
+def get_school_provision_matrix(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     """Retrieve the whole-school SEND provision and funding distribution matrix."""
-    return AnnualReviewService.get_school_provision_matrix(db)
+    return AnnualReviewService.get_school_provision_matrix(db, school_id=current_user.school_id)
 
 
 @router.get("/{child_id}/annual-review-pack", response_model=AnnualReviewPackResponse)

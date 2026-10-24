@@ -257,8 +257,8 @@ ${dossier.clinical_recommendations.map((r) => `• [${r.category}] ${r.recommend
                 <thead className="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider text-[10px] print:bg-slate-100">
                   <tr>
                     <th className="py-3 px-3.5">Diagnostic Domain</th>
-                    <th className="py-3 px-3.5">Home Presentation (Dana Carter)</th>
-                    <th className="py-3 px-3.5">School Presentation (St. Jude's)</th>
+                    <th className="py-3 px-3.5">Home Presentation ({dossier.patient_header.parent_carer_name || "Home"})</th>
+                    <th className="py-3 px-3.5">School Presentation ({dossier.patient_header.school_name || "School"})</th>
                     <th className="py-3 px-3 text-center">Concordance Status</th>
                   </tr>
                 </thead>

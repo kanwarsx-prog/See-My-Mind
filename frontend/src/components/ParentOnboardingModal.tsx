@@ -149,7 +149,7 @@ export const ParentOnboardingModal: React.FC<ParentOnboardingModalProps> = ({
                 Parent & Pupil Onboarding
               </h2>
               <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
-                {valInfo?.school_name || "St. Jude's Inclusive Academy"}
+                {valInfo?.school_name || "Special Educational Needs Coordination"}
               </p>
             </div>
           </div>

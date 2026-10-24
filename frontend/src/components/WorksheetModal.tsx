@@ -81,7 +81,7 @@ export const WorksheetModal: React.FC<WorksheetModalProps> = ({
               </h2>
             </div>
             <p className="text-[11px] sm:text-xs text-white/60 mt-0.5">
-              Adapted visual-spatial route · St. Jude's Inclusive Academy
+              Adapted visual-spatial route · SEND Tier 2/3 Provision
             </p>
           </div>
 

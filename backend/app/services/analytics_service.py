@@ -59,8 +59,11 @@ class AnalyticsService:
             else 91.4
         )
 
+        school = db.query(models.School).filter(models.School.id == school_id).first() if school_id else db.query(models.School).first()
+        school_name = school.school_name if school else "St. Jude's Inclusive Academy"
+
         return SchoolAnalyticsOverview(
-            school_name="St. Jude's Inclusive Academy",
+            school_name=school_name,
             total_send_pupils=total_pupils,
             ehcp_count=ehcp_count,
             sen_support_count=sen_support_count,
@@ -383,8 +386,11 @@ class AnalyticsService:
             ),
         ]
 
+        school = db.query(models.School).filter(models.School.id == school_id).first() if school_id else db.query(models.School).first()
+        school_name = school.school_name if school else "St. Jude's Inclusive Academy"
+
         return ProvisionAuditResponse(
-            school_name="St. Jude's Inclusive Academy",
+            school_name=school_name,
             academic_year="2024 / 2025",
             total_high_needs_funding="£148,600",
             total_allocated_ta_hours=185.0,
@@ -400,10 +406,12 @@ class AnalyticsService:
         writer = csv.writer(output)
 
         now_str = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
+        school = db.query(models.School).filter(models.School.id == school_id).first() if school_id else db.query(models.School).first()
+        school_name = school.school_name if school else "St. Jude's Inclusive Academy"
 
         if report_type == "provision":
             writer.writerow(["SEE MY MIND - STATUTORY PROVISION & HIGH NEEDS FUNDING AUDIT"])
-            writer.writerow(["School", "St. Jude's Inclusive Academy"])
+            writer.writerow(["School", school_name])
             writer.writerow(["Generated At", now_str])
             writer.writerow(["Statutory Baseline", "Children and Families Act 2014 (Section 44 / Section F)"])
             writer.writerow([])
@@ -440,7 +448,7 @@ class AnalyticsService:
 
         elif report_type == "strategies":
             writer.writerow(["SEE MY MIND - DE-ESCALATION STRATEGY EFFICACY AUDIT"])
-            writer.writerow(["School", "St. Jude's Inclusive Academy"])
+            writer.writerow(["School", school_name])
             writer.writerow(["Generated At", now_str])
             writer.writerow([])
             writer.writerow([
@@ -466,7 +474,7 @@ class AnalyticsService:
 
         else:  # incidents / triggers
             writer.writerow(["SEE MY MIND - ANTECEDENT TRIGGER & VULNERABILITY AUDIT"])
-            writer.writerow(["School", "St. Jude's Inclusive Academy"])
+            writer.writerow(["School", school_name])
             writer.writerow(["Generated At", now_str])
             writer.writerow([])
             writer.writerow([

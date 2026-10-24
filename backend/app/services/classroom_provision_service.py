@@ -176,6 +176,11 @@ class ClassroomProvisionService:
             else 92.4
         )
         total_ta_hours = sum(r.weekly_ta_hours for r in responses)
+        school_name = (
+            pupils[0].school.school_name
+            if (pupils and pupils[0].school)
+            else None
+        )
 
         return ClassroomProvisionSummary(
             room_name=room_name,
@@ -195,4 +200,5 @@ class ClassroomProvisionService:
                 "and Families Act 2014. Evaluated jointly by Classroom Teacher and Lead SENCO."
             ),
             generated_at=datetime.now(UTC),
+            school_name=school_name,
         )

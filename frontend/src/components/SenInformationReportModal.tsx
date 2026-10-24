@@ -57,7 +57,7 @@ export const SenInformationReportModal: React.FC<SenInformationReportModalProps>
                 </span>
               </div>
               <p className="text-[11px] text-white/70">
-                Children & Families Act 2014 (Section 69) &bull; Schedule 1 &bull; St. Jude&apos;s Inclusive Academy
+                Children &amp; Families Act 2014 (Section 69) &bull; Schedule 1 &bull; {report.header.school_name}
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ export const SenInformationReportModal: React.FC<SenInformationReportModalProps>
                 </span>
                 <div className="font-bold text-navy dark:text-white mt-0.5">{report.header.send_governor}</div>
                 <div className="text-[10px] text-textDim dark:text-slate-400 mt-0.5 leading-tight">
-                  St. Jude&apos;s Academy Governing Body
+                  {report.header.school_name} Governing Body
                 </div>
               </div>
             </div>

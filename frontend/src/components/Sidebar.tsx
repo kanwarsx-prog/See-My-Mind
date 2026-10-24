@@ -236,7 +236,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       av: currentUser?.avatar_emoji || '🧒',
       name: currentUser?.full_name || 'Phoenix Carter',
       roleTitle: 'Pupil Voice',
-      sub: 'Year 5 · St. Jude’s',
+      sub: currentUser?.school_name || 'Pupil Voice',
       bg: '#C5503E',
       icon: User,
       navItems: [
@@ -410,7 +410,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div>
                 <div className="font-serif font-bold text-base tracking-wide text-sidebarPrimary">See My Mind</div>
                 <div className="text-[10px] text-sidebarMuted tracking-wider uppercase font-medium">
-                  St. Jude&apos;s Academy
+                  {currentUser?.school_name || "SEND Inclusive Education"}
                 </div>
               </div>
             </div>

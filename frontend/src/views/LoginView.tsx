@@ -166,7 +166,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onOpenInvi
           </div>
           <div>
             <div className="font-serif font-bold text-base sm:text-lg tracking-wide text-white">See My Mind</div>
-            <div className="text-[10px] sm:text-[11px] text-slate-400 font-medium">St. Jude&apos;s Inclusive Academy</div>
+            <div className="text-[10px] sm:text-[11px] text-slate-400 font-medium">SEND Inclusive Education Platform</div>
           </div>
         </div>
 

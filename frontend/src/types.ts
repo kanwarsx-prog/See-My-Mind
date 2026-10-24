@@ -19,6 +19,7 @@ export interface Child {
   date_of_birth: string;
   sex: string;
   year_group?: string;
+  room_name?: string;
   school_id?: string;
   active: boolean;
   support_profile?: SupportProfile;
@@ -251,6 +252,8 @@ export interface UserProfile {
   email: string;
   full_name: string;
   role: string;
+  school_id?: string;
+  school_name?: string;
   child_id?: string;
   username?: string;
   avatar_emoji?: string;
@@ -861,6 +864,7 @@ export interface ClassroomProvisionSummary {
   graduated_responses: GraduatedResponseItem[];
   statutory_declaration: string;
   generated_at: string;
+  school_name?: string;
 }
 
 

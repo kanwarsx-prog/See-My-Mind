@@ -67,7 +67,7 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                   Year 5 Room 4
                 </span>
               </div>
-              <p className="text-xs text-textDim dark:text-slate-400">1-to-1 Key Worker for {child.full_name || 'Phoenix Carter'} · St. Jude's Academy</p>
+              <p className="text-xs text-textDim dark:text-slate-400">1-to-1 Key Worker for {child.full_name || 'Pupil'}</p>
             </div>
           </div>
           <button

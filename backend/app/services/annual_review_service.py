@@ -3,6 +3,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session, joinedload
 
+from app import models
 from app.models.pupil import Child
 from app.models.timeline import ChildEvent
 from app.schemas.annual_review import (
@@ -269,14 +270,18 @@ class AnnualReviewService:
             "No amendments to primary diagnosis required; targets in Section E updated to reflect accomplished self-regulation milestones."
         )
 
+        school = db.query(models.School).filter(models.School.id == child.school_id).first() if child.school_id else None
+        school_name = school.school_name if school else "Inclusive Academy"
+        senco_name = (school and school.lead_senco_name) or "Lead SENCO"
+
         return AnnualReviewPackResponse(
             child_id=child.id,
             child_name=child_name,
             date_of_birth=dob_str,
             year_group=year_group,
             primary_need=primary_need,
-            school_name="St. Jude's Inclusive Academy",
-            senco_name="Sarah Davies (NASENCo)",
+            school_name=school_name,
+            senco_name=senco_name,
             review_date=datetime.now(UTC).strftime("%d %B %Y"),
             statutory_status="Statutory Annual Review Pack · Final Panel Evidence",
             metrics=metrics,
@@ -288,16 +293,40 @@ class AnnualReviewService:
         )
 
     @staticmethod
-    def get_school_provision_matrix(db: Session) -> SchoolProvisionMatrixResponse:
+    def get_school_provision_matrix(
+        db: Session, school_id: UUID | None = None
+    ) -> SchoolProvisionMatrixResponse:
         """Returns the whole-school provision and funding distribution matrix for all SEND learners."""
-        phoenix = db.query(Child).filter(Child.first_name == "Phoenix").first()
-        archie = db.query(Child).filter(Child.first_name == "Archie").first()
+        school = None
+        if school_id:
+            school = db.query(models.School).filter(models.School.id == school_id).first()
+        if not school:
+            school = db.query(models.School).first()
 
-        phoenix_id = str(phoenix.id) if phoenix else "a0493c1d-255d-4a6e-8be9-0ec25701379b"
-        archie_id = str(archie.id) if archie else "57c2e2a3-96a3-4d38-9768-044acb90c564"
+        school_name = school.school_name if school else "Inclusive Academy"
+        lead_senco = (school and school.lead_senco_name) or "Lead SENCO"
 
-        # Comprehensive 12-pupil high-priority sample of St. Jude's 34-learner SEND caseload
-        pupils = [
+        # Check for registered active pupils for this school in DB
+        db_pupils = []
+        if school:
+            db_pupils = (
+                db.query(Child)
+                .options(joinedload(Child.support_profile))
+                .filter(Child.school_id == school.id, Child.active.is_(True))
+                .order_by(Child.last_name, Child.first_name)
+                .all()
+            )
+
+        # For St. Jude's or initial demo, provide the rich canonical sample
+        is_demo_school = not school or school.school_reference == "SCH-STJUDES" or "Jude" in school.school_name
+        if is_demo_school:
+            phoenix = next((p for p in db_pupils if p.first_name == "Phoenix"), None)
+            archie = next((p for p in db_pupils if p.first_name == "Archie"), None)
+
+            phoenix_id = str(phoenix.id) if phoenix else "a0493c1d-255d-4a6e-8be9-0ec25701379b"
+            archie_id = str(archie.id) if archie else "57c2e2a3-96a3-4d38-9768-044acb90c564"
+
+            pupils = [
             ProvisionMapPupil(
                 id=phoenix_id,
                 name="Phoenix Carter",
@@ -456,18 +485,76 @@ class AnnualReviewService:
             ),
         ]
 
-        total_ta_hours = sum(p.allocated_ta_hours for p in pupils)
-        reviews_soon = sum(1 for p in pupils if 0 <= p.days_until_review <= 30)
+            total_ta_hours = sum(p.allocated_ta_hours for p in pupils)
+            reviews_soon = sum(1 for p in pupils if 0 <= p.days_until_review <= 30)
 
-        return SchoolProvisionMatrixResponse(
-            school_name="St. Jude's Inclusive Academy",
-            academic_year="2026/2027",
-            lead_senco="Sarah Davies (NASENCo)",
-            total_send_count=34,
-            ehcp_count=12,
-            sen_support_count=22,
-            total_ta_hours_weekly=total_ta_hours + 42.5,  # inclusive of remaining caseload
-            high_needs_funding_total="£148,600",
-            reviews_due_next_30_days=reviews_soon + 1,
-            pupils=pupils,
-        )
+            return SchoolProvisionMatrixResponse(
+                school_name=school_name,
+                academic_year="2026/2027",
+                lead_senco=lead_senco,
+                total_send_count=34,
+                ehcp_count=12,
+                sen_support_count=22,
+                total_ta_hours_weekly=total_ta_hours + 42.5,  # inclusive of remaining caseload
+                high_needs_funding_total="£148,600",
+                reviews_due_next_30_days=reviews_soon + 1,
+                pupils=pupils,
+            )
+        else:
+            # Dynamic aggregation for any other school tenant (e.g. Poverest Primary School)
+            mapped_pupils = []
+            total_ta = 0.0
+            reviews_soon = 0
+            for child in db_pupils:
+                prof = child.support_profile
+                has_ehcp = prof.has_ehcp if prof else False
+                tier = "Statutory EHCP" if has_ehcp else "SEN Support (K)"
+                alloc = (
+                    db.query(models.StaffPupilAllocation)
+                    .filter(
+                        models.StaffPupilAllocation.child_id == child.id,
+                        models.StaffPupilAllocation.active.is_(True),
+                    )
+                    .first()
+                )
+                ta_hours = alloc.weekly_allocated_hours if alloc else (15.0 if has_ehcp else 4.0)
+                ta_name = (
+                    f"{alloc.staff_member.first_name} {alloc.staff_member.last_name}"
+                    if alloc and alloc.staff_member
+                    else ("Dedicated TA" if has_ehcp else "Universal Class Differentiation")
+                )
+                funding = (
+                    alloc.funding_source
+                    if alloc and alloc.funding_source
+                    else ("Band 3 High Needs (£12,500)" if has_ehcp else "Universal SEN (£0)")
+                )
+                total_ta += ta_hours
+                mapped_pupils.append(
+                    ProvisionMapPupil(
+                        id=str(child.id),
+                        name=child.full_name or f"{child.first_name} {child.last_name}",
+                        year_group=child.year_group or "Year 5",
+                        primary_need=prof.primary_need if prof and prof.primary_need else "SEND Support",
+                        support_tier=tier,
+                        funding_band=funding,
+                        allocated_ta_hours=ta_hours,
+                        assigned_ta=ta_name,
+                        annual_review_due="15 Jan 2027",
+                        days_until_review=85,
+                        review_status="scheduled",
+                    )
+                )
+            ehcp_count = len([p for p in mapped_pupils if "EHCP" in p.support_tier])
+            sen_count = len([p for p in mapped_pupils if "SEN Support" in p.support_tier])
+            return SchoolProvisionMatrixResponse(
+                school_name=school_name,
+                academic_year="2026/2027",
+                lead_senco=lead_senco,
+                total_send_count=len(mapped_pupils),
+                ehcp_count=ehcp_count,
+                sen_support_count=sen_count,
+                total_ta_hours_weekly=total_ta,
+                high_needs_funding_total=f"£{int(ehcp_count * 12500):,}" if ehcp_count > 0 else "£0",
+                reviews_due_next_30_days=reviews_soon,
+                pupils=mapped_pupils,
+            )

@@ -242,6 +242,7 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
             db.refresh(user)
 
         token = create_access_token(subject=user.id)
+        child_school = db.query(models.School).filter(models.School.id == user.school_id).first() if user.school_id else None
         return AuthTokenResponse(
             access_token=token,
             token_type="bearer",
@@ -250,6 +251,8 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
                 "email": user.email,
                 "full_name": user.full_name,
                 "role": "child",
+                "school_id": str(user.school_id) if user.school_id else None,
+                "school_name": child_school.school_name if child_school else None,
                 "child_id": str(user.child_id) if user.child_id else None,
                 "avatar_emoji": child_acc.avatar_emoji,
                 "username": child_acc.username,
@@ -277,6 +280,7 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
             detail="Account is deactivated. Please contact your school administrator.",
         )
 
+    user_school = db.query(models.School).filter(models.School.id == user.school_id).first() if user.school_id else None
     token = create_access_token(subject=user.id)
     return AuthTokenResponse(
         access_token=token,
@@ -286,6 +290,8 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
             "email": user.email,
             "full_name": user.full_name,
             "role": user.role,
+            "school_id": str(user.school_id) if user.school_id else None,
+            "school_name": user_school.school_name if user_school else None,
             "child_id": str(user.child_id) if user.child_id else None,
             "theme_preference": getattr(user, "theme_preference", "system") or "system",
         },
@@ -329,6 +335,7 @@ def demo_login(body: DemoLoginRequest, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(user)
 
+    user_school = db.query(models.School).filter(models.School.id == user.school_id).first() if user.school_id else None
     token = create_access_token(subject=user.id)
     return AuthTokenResponse(
         access_token=token,
@@ -338,6 +345,8 @@ def demo_login(body: DemoLoginRequest, db: Session = Depends(get_db)):
             "email": user.email,
             "full_name": user.full_name,
             "role": user.role,
+            "school_id": str(user.school_id) if user.school_id else None,
+            "school_name": user_school.school_name if user_school else None,
             "child_id": str(user.child_id) if user.child_id else None,
             "theme_preference": getattr(user, "theme_preference", "system") or "system",
         },
@@ -349,8 +358,9 @@ def demo_login(body: DemoLoginRequest, db: Session = Depends(get_db)):
     response_model=UserResponse,
     summary="Get authenticated current user profile",
 )
-def get_me(current_user: models.User = Depends(get_current_user)):
+def get_me(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Return the profile and role of the currently logged-in user."""
+    user_school = db.query(models.School).filter(models.School.id == current_user.school_id).first() if current_user.school_id else None
     return UserResponse(
         id=current_user.id,
         email=current_user.email,
@@ -361,6 +371,7 @@ def get_me(current_user: models.User = Depends(get_current_user)):
         child_id=current_user.child_id,
         guardian_id=current_user.guardian_id,
         school_id=current_user.school_id,
+        school_name=user_school.school_name if user_school else None,
         theme_preference=getattr(current_user, "theme_preference", "system") or "system",
         created_at=current_user.created_at or datetime.now(UTC),
     )

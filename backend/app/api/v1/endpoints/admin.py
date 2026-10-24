@@ -543,11 +543,21 @@ def delete_staff_persona(
     school_id = target_user.school_id
     staff_id = target_user.staff_id
 
-    # If this was the school's appointed lead senco, clear it
+    # If this was the school's appointed lead senco, update or clear it
     if target_role == "senco" and school_id:
         school = db.query(models.School).filter(models.School.id == school_id).first()
         if school and school.lead_senco_name == full_name:
-            school.lead_senco_name = None
+            other_senco = (
+                db.query(models.User)
+                .filter(
+                    models.User.school_id == school_id,
+                    models.User.role == "senco",
+                    models.User.id != target_user.id,
+                    models.User.is_active == True,
+                )
+                .first()
+            )
+            school.lead_senco_name = other_senco.full_name if other_senco else None
             db.flush()
 
     # Delete User first

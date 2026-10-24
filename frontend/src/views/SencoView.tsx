@@ -10,6 +10,7 @@ import {
   ProvisionMapPupil,
   AdminUserItem,
   CamhsClinicalDossierResponse,
+  UserProfile,
 } from '../types';
 import {
   ShieldCheck,
@@ -46,6 +47,8 @@ export type SencoTab = 'review_pack' | 'provision_map' | 'staff_team' | 'assista
 interface SencoViewProps {
   child: Child;
   timeline: ChildEvent[];
+  currentUser?: UserProfile | null;
+  pupils?: Child[];
   activeTab?: SencoTab;
   onTabChange?: (tab: SencoTab) => void;
   onOpenDocModal?: () => void;
@@ -56,6 +59,8 @@ interface SencoViewProps {
 export const SencoView: React.FC<SencoViewProps> = ({
   child,
   timeline,
+  currentUser,
+  pupils = [],
   activeTab: propActiveTab,
   onTabChange,
   onOpenDocModal,
@@ -345,12 +350,12 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 {activeTab === 'reports_analytics' && 'SEND Operational Reports & Evidence Analytics'}
               </span>
               <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
-                St. Jude&apos;s Academy
+                {currentUser?.school_name || provisionMatrix?.school_name || "School Inclusion"}
               </span>
             </h2>
           </div>
           <p className="text-xs text-textDim dark:text-slate-400 mt-0.5">
-            {activeTab === 'provision_map' && 'Sarah Davies (NASENCo) • 34 SEND pupils, £148,600 High Needs Funding, 185.0 weekly 1:1 TA hours.'}
+            {activeTab === 'provision_map' && `${provisionMatrix?.lead_senco || currentUser?.full_name || 'Lead SENCO'} • ${provisionMatrix?.total_send_count ?? pupils.length} SEND pupils, ${provisionMatrix?.high_needs_funding_total || '£0'} High Needs Funding, ${provisionMatrix?.total_ta_hours_weekly ?? 0} weekly 1:1 TA hours.`}
             {activeTab === 'staff_team' && 'Directly recruit and manage classroom teachers, 1:1 TAs, and specialists assigned to SEND pupils.'}
             {activeTab === 'review_pack' && `Statutory Section 44 longitudinal evidence synthesis for ${reviewPack?.child_name || 'Phoenix Carter'}.`}
             {activeTab === 'assistant' && 'Query longitudinal observation history, morning handovers, and provision records with verifiable citations.'}
@@ -712,10 +717,10 @@ export const SencoView: React.FC<SencoViewProps> = ({
             <div className="p-4 border-b border-borderMain flex items-center justify-between">
               <div>
                 <h3 className="font-serif font-bold text-sm text-navy dark:text-white">
-                  St. Jude&apos;s Academy Provision & Funding Register (2026/2027)
+                  {currentUser?.school_name || provisionMatrix?.school_name || "Whole School"} Provision &amp; Funding Register (2026/2027)
                 </h3>
                 <p className="text-[11px] text-textDim dark:text-slate-400">
-                  Showing {provisionMatrix ? getFilteredPupils(provisionMatrix.pupils).length : 12} active SEND learners with statutory review dates.
+                  Showing {provisionMatrix ? getFilteredPupils(provisionMatrix.pupils).length : 0} active SEND learners with statutory review dates.
                 </p>
               </div>
               <span className="text-[10px] px-2.5 py-1 rounded-full bg-teal/10 text-teal dark:text-teal-300 border border-teal/20 font-bold hidden sm:inline">
@@ -733,7 +738,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-cardSubtle text-textDim dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-borderMain">
-                      <th className="py-3 px-4">Pupil & Year</th>
+                      <th className="py-3 px-4">Pupil &amp; Year</th>
                       <th className="py-3 px-3">Support Tier</th>
                       <th className="py-3 px-3">Primary Need</th>
                       <th className="py-3 px-3">High Needs Funding Band</th>
@@ -744,6 +749,14 @@ export const SencoView: React.FC<SencoViewProps> = ({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-borderMain">
+                    {provisionMatrix && getFilteredPupils(provisionMatrix.pupils).length === 0 && (
+                      <tr>
+                        <td colSpan={8} className="py-12 text-center text-textDim dark:text-slate-400">
+                          <p className="font-semibold text-sm mb-1 text-navy dark:text-white">No pupils in current register</p>
+                          <p className="text-xs">No active SEND learners registered yet for {currentUser?.school_name || "this school"}.</p>
+                        </td>
+                      </tr>
+                    )}
                     {provisionMatrix &&
                       getFilteredPupils(provisionMatrix.pupils).map((p) => (
                         <tr key={p.id} className="hover:bg-slate-100/80 dark:hover:bg-[#1A2E44] transition-colors border-b border-gray-100 dark:border-borderMain">
@@ -1033,7 +1046,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                     School Staff & Inclusion Team Directory
                   </h3>
                   <span className="text-[10px] bg-emerald-100 dark:bg-emerald-400/20 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-400/30 px-2 py-0.5 rounded-full font-bold">
-                    St. Jude&apos;s Inclusive Academy
+                    {currentUser?.school_name || "Assigned School"}
                   </span>
                 </div>
                 <p className="text-xs text-textDim dark:text-mint/80 mt-1 max-w-2xl">
@@ -1275,7 +1288,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           <div className="flex justify-between items-center text-textDim dark:text-slate-400">
                             <span>Assigned Tenant:</span>
                             <span className="font-semibold text-navy dark:text-white">
-                              {staff.school_name || "St. Jude's Inclusive Academy"}
+                              {staff.school_name || currentUser?.school_name || "Assigned School"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center text-textDim dark:text-slate-400">
@@ -1338,7 +1351,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         Provision School Staff Member
                       </h3>
                       <p className="text-xs text-textDim dark:text-slate-400">
-                        St. Jude&apos;s Inclusive Academy &bull; Recruited under SENCO leadership
+                        {currentUser?.school_name || "School"} &bull; Recruited under SENCO leadership
                       </p>
                     </div>
                   </div>
@@ -1395,7 +1408,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                       onChange={(e) =>
                         setStaffForm({ ...staffForm, email: e.target.value })
                       }
-                      placeholder="e.g. t.clarke@stjudes.sch.uk"
+                      placeholder="e.g. teacher@school.sch.uk"
                       className="w-full text-xs px-3 py-2 rounded-xl border border-borderMain bg-cardBg text-textMain focus:outline-hidden focus:border-teal"
                     />
                   </div>
@@ -1498,7 +1511,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                         Edit Staff Member Profile
                       </h3>
                       <p className="text-xs text-textDim dark:text-slate-400">
-                        {editingStaff.full_name} &bull; {editingStaff.school_name || "St. Jude's Inclusive Academy"}
+                        {editingStaff.full_name} &bull; {editingStaff.school_name || currentUser?.school_name || "Assigned School"}
                       </p>
                     </div>
                   </div>
@@ -1671,7 +1684,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-textDim dark:text-slate-400">Tenant:</span>
-                    <span className="font-medium text-textSub dark:text-slate-300">{deletingStaff.school_name || "St. Jude's Inclusive Academy"}</span>
+                    <span className="font-medium text-textSub dark:text-slate-300">{deletingStaff.school_name || currentUser?.school_name || "Assigned School"}</span>
                   </div>
                 </div>
 

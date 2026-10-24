@@ -339,10 +339,11 @@ class ParentHubService:
             ),
         ]
 
+        child_school = child.school.school_name if child and child.school else "School"
         summary_text = (
             "CLINICAL SUMMARY FOR CAMHS / CONSULTANT PEDIATRICIAN:\n"
             f"Patient: {child.full_name} | DOB: {child.date_of_birth or '12/04/2015'} | Diagnosis: ASC & Sensory Sensitivity\n"
-            "Observation Period: 30 School Days | Data Source: Multi-Agency Real-Time Log (St. Jude's Academy & Home Handover)\n\n"
+            f"Observation Period: 30 School Days | Data Source: Multi-Agency Real-Time Log ({child_school} & Home Handover)\n\n"
             "1. Medication Bioavailability: Equasym XL demonstrates high efficacy when co-administered with caloric food (protein/carbohydrate).\n"
             "2. Mid-Morning Vulnerability: When breakfast is missed, autonomic arousal markers spike between 10:15 - 10:45 AM.\n"
             "3. Masking & Decompression: Disrupted sleep strongly correlates with masked compliance at school followed by post-school emotional collapse.\n"

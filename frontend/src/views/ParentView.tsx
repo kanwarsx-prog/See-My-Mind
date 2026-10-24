@@ -191,7 +191,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
               <h2 className="text-xl font-serif font-bold text-navy dark:text-white">Welcome, Dana Carter</h2>
             </div>
             <p className="text-xs text-textSub dark:text-slate-300 mt-1">
-              Direct connection with Ms Johnson & St. Jude's Academy for {child.full_name || 'Phoenix'}
+              Direct connection with school inclusion team for {child.full_name || 'your child'}
             </p>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-950/40 text-teal-800 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/40">
@@ -364,7 +364,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
           {/* 4-Stage Mood Arc */}
           <div className="p-5 rounded-2xl overflow-hidden relative shadow-sm border border-borderMain bg-gradient-to-br from-indigo-50/50 via-cardBg to-teal-50/40 dark:from-[#142234] dark:via-[#1B2F44] dark:to-[#142234] text-textMain dark:text-white">
             <div className="font-serif text-base font-bold text-navy dark:text-white mb-1">{childName}'s Day at a Glance</div>
-            <p className="text-[11px] text-textDim dark:text-white/60 mb-4">Adult-observed emotional progression · St. Jude's Academy</p>
+            <p className="text-[11px] text-textDim dark:text-white/60 mb-4">Adult-observed emotional progression · School Day</p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <div className="bg-cardBg dark:bg-white/10 backdrop-blur-xs p-3 rounded-xl text-center border border-borderMain dark:border-white/10 shadow-2xs">
@@ -672,7 +672,7 @@ export const ParentView: React.FC<ParentViewProps> = ({
                 </pre>
                 <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-borderMain">
                   <span className="text-[11px] text-textDim dark:text-slate-400">
-                    Need the complete formal report with St. Jude's letterhead, medication graph, and signature blocks?
+                    Need the complete formal report with official school letterhead, medication graph, and signature blocks?
                   </span>
                   <button
                     onClick={handleOpenCamhsModal}

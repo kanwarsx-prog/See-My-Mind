@@ -149,7 +149,7 @@ export const DecompressionBridgeCard: React.FC<DecompressionBridgeCardProps> = (
           </div>
           <div className="flex-1">
             <h3 className="text-sm font-bold text-navy dark:text-white flex items-center gap-2">
-              <span>Understanding Today's Masking at St. Jude's</span>
+              <span>Understanding Today&apos;s Masking at School</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300">
                 Restraint Collapse Decoder
               </span>
