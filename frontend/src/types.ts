@@ -587,3 +587,86 @@ export interface DelegationMatrixItem {
   data_boundary: string;
 }
 
+// Reporting & Analytics Suite Types
+export interface SchoolAnalyticsOverview {
+  school_name: string;
+  total_send_pupils: number;
+  ehcp_count: number;
+  sen_support_count: number;
+  total_weekly_ta_hours_allocated: number;
+  total_weekly_ta_hours_delivered: number;
+  provision_delivery_rate: number;
+  overall_de_escalation_win_rate: number;
+  total_incidents_this_term: number;
+  peak_vulnerability_window: string;
+  annual_reviews_on_track_rate: number;
+}
+
+export interface HeatmapPeriodSlot {
+  period_id: string;
+  period_label: string;
+  time_window: string;
+  incident_counts: Record<string, number>;
+  total_count: number;
+  intensity: 'none' | 'low' | 'medium' | 'high';
+}
+
+export interface IncidentHeatmapResponse {
+  days: string[];
+  day_keys: string[];
+  periods: HeatmapPeriodSlot[];
+  total_incidents: number;
+  peak_window: string;
+}
+
+export interface TriggerCategoryMetric {
+  category: string;
+  label: string;
+  count: number;
+  percentage: number;
+  primary_antecedent_examples: string[];
+}
+
+export interface TriggersReportResponse {
+  total_recorded_triggers: number;
+  triggers: TriggerCategoryMetric[];
+}
+
+export interface StrategyWinRateMetric {
+  strategy_id: string;
+  title: string;
+  category: string;
+  total_attempts: number;
+  successful_resolutions: number;
+  win_rate_percentage: number;
+  avg_recovery_minutes: number;
+  recommended_for: string[];
+}
+
+export interface StrategyEfficacyResponse {
+  overall_win_rate: number;
+  total_strategies_evaluated: number;
+  strategies: StrategyWinRateMetric[];
+}
+
+export interface FundingBandBreakdown {
+  band: string;
+  annual_amount_per_pupil: string;
+  pupil_count: number;
+  total_funding: string;
+  weekly_ta_hours_allocated: number;
+  weekly_ta_hours_delivered: number;
+  delivery_compliance_percentage: number;
+}
+
+export interface ProvisionAuditResponse {
+  school_name: string;
+  academic_year: string;
+  total_high_needs_funding: string;
+  total_allocated_ta_hours: number;
+  total_delivered_ta_hours: number;
+  overall_compliance_rate: number;
+  bands: FundingBandBreakdown[];
+}
+
+

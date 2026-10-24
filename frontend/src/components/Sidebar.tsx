@@ -19,6 +19,7 @@ import {
   Pill,
   X,
   Building2,
+  BarChart3,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -177,6 +178,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           icon: Sparkles,
           action: () => {
             onSelectNav?.('assistant');
+          },
+        },
+        {
+          id: 'reports_analytics',
+          label: 'Reports & Analytics',
+          icon: BarChart3,
+          action: () => {
+            onSelectNav?.('reports_analytics');
           },
         },
       ],

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Child, ChildEvent } from '../types';
-import { Plus, Sparkles, Clock, CheckCircle2, MessageSquare } from 'lucide-react';
+import { Plus, Sparkles, Clock, CheckCircle2, MessageSquare, TrendingUp } from 'lucide-react';
+
 
 interface TaViewProps {
   child: Child;
@@ -375,6 +376,68 @@ export const TaView: React.FC<TaViewProps> = ({ child, timeline, onOpenObservati
                     Brief parent handover for Phoenix. Day summary auto-sent to Dana Carter. Confirm any wins from maths practical.
                   </p>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Frontline Strategy Efficacy Analytics Card */}
+          <div className="card p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-borderMain pb-2">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <div>
+                  <h3 className="text-sm font-bold text-navy dark:text-white">Frontline Strategy Efficacy (Room 4)</h3>
+                  <p className="text-[10px] text-textDim dark:text-slate-400">Proven de-escalation win rates from classroom micro-logs</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 px-2 py-0.5 rounded-md font-mono">
+                91.4% Avg
+              </span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-cardSubtle border border-borderMain flex items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="font-bold text-textMain dark:text-white flex items-center gap-1.5">
+                    <span>🏃 Purposeful Movement / Errand</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 font-bold">94%</span>
+                  </div>
+                  <p className="text-[10px] text-textDim dark:text-slate-400">Pairs with Jake · 4m avg reset · Best for motor restlessness</p>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300">✓ Primary</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-cardSubtle border border-borderMain flex items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="font-bold text-textMain dark:text-white flex items-center gap-1.5">
+                    <span>🎧 Acoustic Shelter + Sand Timer</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 font-bold">93%</span>
+                  </div>
+                  <p className="text-[10px] text-textDim dark:text-slate-400">Blue sand timer · Pause questions · Pre-empt corridor noise</p>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300">✓ Sensory</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-cardSubtle border border-borderMain flex items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="font-bold text-textMain dark:text-white flex items-center gap-1.5">
+                    <span>🎮 Visual-Spatial Task Shift</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-200 font-bold">91%</span>
+                  </div>
+                  <p className="text-[10px] text-textDim dark:text-slate-400">Swaps abstract equations for Game Slope coordinate cards</p>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300">✓ Learning</span>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 flex items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="font-bold text-rose-900 dark:text-rose-200 flex items-center gap-1.5">
+                    <span>⚠️ Direct Verbal Demands / Questioning</span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-200/80 dark:bg-rose-900/60 text-rose-900 dark:text-rose-200 font-bold">33%</span>
+                  </div>
+                  <p className="text-[10px] text-rose-700 dark:text-rose-400">Escalates fight-or-flight when dysregulated — use visual cards instead</p>
+                </div>
+                <span className="text-[10px] font-bold text-rose-800 dark:text-rose-300">Avoid</span>
               </div>
             </div>
           </div>

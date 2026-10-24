@@ -29,6 +29,11 @@ import {
   AuditLogEntry,
   TrustGovernanceStats,
   DelegationMatrixItem,
+  SchoolAnalyticsOverview,
+  IncidentHeatmapResponse,
+  TriggersReportResponse,
+  StrategyEfficacyResponse,
+  ProvisionAuditResponse,
 } from './types';
 
 const API_BASE =
@@ -548,5 +553,63 @@ export const api = {
     if (!res.ok) throw new Error('Failed to fetch delegation matrix');
     return res.json();
   },
+
+  // Reporting & Analytics Suite
+  async getAnalyticsOverview(): Promise<SchoolAnalyticsOverview> {
+    const res = await fetch(`${API_BASE}/analytics/overview`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch analytics overview');
+    return res.json();
+  },
+
+  async getIncidentHeatmap(): Promise<IncidentHeatmapResponse> {
+    const res = await fetch(`${API_BASE}/analytics/incidents/heatmap`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch incident heatmap');
+    return res.json();
+  },
+
+  async getTriggerFrequencies(): Promise<TriggersReportResponse> {
+    const res = await fetch(`${API_BASE}/analytics/incidents/triggers`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch trigger frequencies');
+    return res.json();
+  },
+
+  async getStrategyWinRates(): Promise<StrategyEfficacyResponse> {
+    const res = await fetch(`${API_BASE}/analytics/strategies/win-rates`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch strategy win rates');
+    return res.json();
+  },
+
+  async getProvisionAudit(): Promise<ProvisionAuditResponse> {
+    const res = await fetch(`${API_BASE}/analytics/provision/audit`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch provision audit');
+    return res.json();
+  },
+
+  async downloadAnalyticsCsv(reportType: 'provision' | 'strategies' | 'triggers'): Promise<void> {
+    const res = await fetch(`${API_BASE}/analytics/export/csv?report_type=${reportType}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error(`Failed to export ${reportType} CSV`);
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `seemy-mind-${reportType}-audit.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  },
 };
+
 

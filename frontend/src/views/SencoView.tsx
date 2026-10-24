@@ -32,12 +32,15 @@ import {
   Edit3,
   Trash2,
   AlertCircle,
+  BarChart3,
 } from 'lucide-react';
 import { api } from '../api';
 import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
 import { AbcTooltip } from '../components/AbcTooltip';
+import { AnalyticsReportsDashboard } from '../components/AnalyticsReportsDashboard';
 
-export type SencoTab = 'review_pack' | 'provision_map' | 'assistant' | 'staff_team';
+export type SencoTab = 'review_pack' | 'provision_map' | 'staff_team' | 'assistant' | 'reports_analytics';
+
 
 interface SencoViewProps {
   child: Child;
@@ -397,6 +400,23 @@ export const SencoView: React.FC<SencoViewProps> = ({
         >
           <Sparkles className="w-4 h-4 text-amber-500 dark:text-mint" />
           <span>🔍 AI Evidence & RAG Assistant</span>
+        </button>
+
+        <button
+          onClick={() => handleTabSelect('reports_analytics')}
+          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
+            activeTab === 'reports_analytics'
+              ? 'bg-teal text-white shadow-xs font-bold'
+              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span>📊 Reports & Analytics</span>
+          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
+            activeTab === 'reports_analytics' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
+          }`}>
+            Live
+          </span>
         </button>
       </div>
 
@@ -1709,6 +1729,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* TAB 5: SEND OPERATIONAL REPORTS & EVIDENCE ANALYTICS           */}
+      {/* ============================================================== */}
+      {activeTab === 'reports_analytics' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          <AnalyticsReportsDashboard />
         </div>
       )}
     </div>

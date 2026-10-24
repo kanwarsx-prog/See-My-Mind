@@ -22,7 +22,7 @@ import { InvitationNotificationBanner } from './components/InvitationNotificatio
 import { LoginView } from './views/LoginView';
 import { TeacherView } from './views/TeacherView';
 import { ParentView } from './views/ParentView';
-import { SencoView } from './views/SencoView';
+import { SencoView, SencoTab } from './views/SencoView';
 import { ChildView } from './views/ChildView';
 import { TaView } from './views/TaView';
 import { ParentPlusView } from './views/ParentPlusView';
@@ -58,7 +58,7 @@ const AppContent: React.FC = () => {
   const [activeNavId, setActiveNavId] = useState<string>('');
   const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('focused');
   const [parentSubTab, setParentSubTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
-  const [sencoSubTab, setSencoSubTab] = useState<'review_pack' | 'provision_map' | 'assistant' | 'staff_team'>('provision_map');
+  const [sencoSubTab, setSencoSubTab] = useState<SencoTab>('provision_map');
   const [adminSubTab, setAdminSubTab] = useState<'schools' | 'staff' | 'delegation' | 'audit'>('schools');
 
   // Registration & Onboarding state
@@ -122,6 +122,7 @@ const AppContent: React.FC = () => {
       if (navId === 'staff_team') setSencoSubTab('staff_team');
       if (navId === 'review_pack') setSencoSubTab('review_pack');
       if (navId === 'assistant') setSencoSubTab('assistant');
+      if (navId === 'reports_analytics') setSencoSubTab('reports_analytics');
     }
 
     if (activeView === 'parent') {

@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
     admin,
+    analytics,
     auth,
     documents,
     health,
@@ -35,3 +36,7 @@ api_router.include_router(noya.router, prefix="/noya", tags=["NOYA AI & RAG Engi
 api_router.include_router(
     registration.router, prefix="/registration", tags=["Child Registration & Onboarding"]
 )
+api_router.include_router(
+    analytics.router, prefix="/analytics", tags=["Reporting & Analytics"]
+)
+
