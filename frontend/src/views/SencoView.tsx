@@ -32,7 +32,6 @@ import {
   Edit3,
   Trash2,
   AlertCircle,
-  BarChart3,
 } from 'lucide-react';
 import { api } from '../api';
 import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
@@ -311,113 +310,50 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* SENCO Header Bar & Quick Register Action */}
+      {/* SENCO Dynamic Header Bar & Contextual Action */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-cardBg p-4 sm:p-5 rounded-2xl border border-borderMain shadow-xs">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
-              <span>SEND Coordination & Statutory Compliance</span>
+              <span>
+                {activeTab === 'provision_map' && 'Inclusion Caseload & Provision Mapping'}
+                {activeTab === 'staff_team' && 'School Staff & Provisioning Directory'}
+                {activeTab === 'review_pack' && 'Statutory EHCP Annual Review Pack'}
+                {activeTab === 'assistant' && 'NOYA AI Evidence & Longitudinal Search'}
+                {activeTab === 'reports_analytics' && 'SEND Operational Reports & Evidence Analytics'}
+              </span>
               <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
                 St. Jude&apos;s Academy
               </span>
             </h2>
           </div>
           <p className="text-xs text-textDim dark:text-slate-400 mt-0.5">
-            Sarah Davies (NASENCo) &bull; Managing 34 SEND pupils, statutory EHCP Annual Reviews & Local Authority panels.
+            {activeTab === 'provision_map' && 'Sarah Davies (NASENCo) • 34 SEND pupils, £148,600 High Needs Funding, 185.0 weekly 1:1 TA hours.'}
+            {activeTab === 'staff_team' && 'Directly recruit and manage classroom teachers, 1:1 TAs, and specialists assigned to SEND pupils.'}
+            {activeTab === 'review_pack' && `Statutory Section 44 longitudinal evidence synthesis for ${reviewPack?.child_name || 'Phoenix Carter'}.`}
+            {activeTab === 'assistant' && 'Query longitudinal observation history, morning handovers, and provision records with verifiable citations.'}
+            {activeTab === 'reports_analytics' && 'Empirical longitudinal analytics for Local Authority panels, Ofsted compliance, and multi-agency CAMHS evidence.'}
           </p>
         </div>
-        {onRegisterChild && (
-          <button
-            onClick={onRegisterChild}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
-          >
-            <span>📋</span>
-            <span>+ Register SEND Pupil</span>
-          </button>
-        )}
-      </div>
-
-      {/* 4-Sub-Tab Navigation Bar */}
-      <div className="bg-cardBg p-1.5 rounded-2xl border border-borderMain flex items-center gap-1.5 overflow-x-auto shadow-2xs">
-        <button
-          onClick={() => handleTabSelect('review_pack')}
-          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
-            activeTab === 'review_pack'
-              ? 'bg-teal text-white shadow-xs font-bold'
-              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
-          }`}
-        >
-          <FileText className="w-4 h-4" />
-          <span>📑 Statutory Annual Review Pack</span>
-          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
-            activeTab === 'review_pack' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
-          }`}>
-            EHCP Final
-          </span>
-        </button>
-
-        <button
-          onClick={() => handleTabSelect('provision_map')}
-          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
-            activeTab === 'provision_map'
-              ? 'bg-teal text-white shadow-xs font-bold'
-              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
-          }`}
-        >
-          <Users className="w-4 h-4" />
-          <span>📊 Caseload & Provision Mapping</span>
-          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
-            activeTab === 'provision_map' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
-          }`}>
-            34 Pupils
-          </span>
-        </button>
-
-        <button
-          onClick={() => handleTabSelect('staff_team')}
-          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
-            activeTab === 'staff_team'
-              ? 'bg-teal text-white shadow-xs font-bold'
-              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
-          }`}
-        >
-          <UserPlus className="w-4 h-4" />
-          <span>👥 School Staff & Team</span>
-          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
-            activeTab === 'staff_team' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
-          }`}>
-            {staffList.length > 0 ? `${staffList.length} Staff` : 'Team'}
-          </span>
-        </button>
-
-        <button
-          onClick={() => handleTabSelect('assistant')}
-          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
-            activeTab === 'assistant'
-              ? 'bg-teal text-white shadow-xs font-bold'
-              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
-          }`}
-        >
-          <Sparkles className="w-4 h-4 text-amber-500 dark:text-mint" />
-          <span>🔍 AI Evidence & RAG Assistant</span>
-        </button>
-
-        <button
-          onClick={() => handleTabSelect('reports_analytics')}
-          className={`flex-1 min-w-[200px] py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap ${
-            activeTab === 'reports_analytics'
-              ? 'bg-teal text-white shadow-xs font-bold'
-              : 'text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1E324A]'
-          }`}
-        >
-          <BarChart3 className="w-4 h-4" />
-          <span>📊 Reports & Analytics</span>
-          <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-mono ${
-            activeTab === 'reports_analytics' ? 'bg-white/20 text-white' : 'bg-cardSubtle text-textDim border border-borderMain'
-          }`}>
-            Live
-          </span>
-        </button>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          {activeTab === 'staff_team' ? (
+            <button
+              onClick={() => setIsAddStaffModalOpen(true)}
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>+ Add Staff Member</span>
+            </button>
+          ) : onRegisterChild ? (
+            <button
+              onClick={onRegisterChild}
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal hover:bg-teal-dark text-white text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer flex-shrink-0"
+            >
+              <span>📋</span>
+              <span>+ Register SEND Pupil</span>
+            </button>
+          ) : null}
+        </div>
       </div>
 
       {/* ============================================================== */}
@@ -818,7 +754,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                           <td className="py-3.5 px-4 text-right">
                             <button
                               onClick={() => {
-                                setActiveTab('review_pack');
+                                handleTabSelect('review_pack');
                                 setShowPackModal(true);
                               }}
                               className="text-[11px] font-bold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-200 hover:underline cursor-pointer flex items-center gap-1 justify-end ml-auto"
