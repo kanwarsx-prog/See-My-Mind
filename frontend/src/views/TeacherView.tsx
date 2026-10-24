@@ -7,12 +7,13 @@ import { ClassSendMatrix } from '../components/ClassSendMatrix';
 import { AbcTooltip } from '../components/AbcTooltip';
 
 interface TeacherViewProps {
-  child: Child;
+  child?: Child | null;
   timeline: ChildEvent[];
   briefing: MorningBriefing | null;
   latestHandover?: TransitionLogDetail | null;
   activeSubView?: 'focused' | 'matrix';
   onSubViewChange?: (view: 'focused' | 'matrix') => void;
+  onSelectPupil?: (pupilId: string) => void;
   onRefreshBriefing: () => Promise<void>;
   onAcknowledgeHandover?: (transitionId: string) => Promise<void>;
   onOpenObservationModal: () => void;
@@ -34,6 +35,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   latestHandover,
   activeSubView,
   onSubViewChange,
+  onSelectPupil,
   onRefreshBriefing,
   onAcknowledgeHandover,
   onOpenObservationModal,
@@ -42,7 +44,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
   onLogMilestone,
   onLogDeEscalation,
 }) => {
-  const [activeTab, setActiveTab] = useState<'focused' | 'matrix'>(activeSubView || 'focused');
+  const [activeTab, setActiveTab] = useState<'focused' | 'matrix'>(activeSubView || 'matrix');
   const [refreshing, setRefreshing] = useState(false);
   const [acknowledging, setAcknowledging] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(true);
@@ -99,21 +101,9 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Level View Switcher: 1:1 Support Focus vs Room 4 SEND Matrix */}
+      {/* Top Level View Switcher: Classroom Hub vs 1:1 Support Focus */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-cardBg p-2.5 rounded-2xl border border-borderMain shadow-xs">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-          <button
-            onClick={() => handleTabChange('focused')}
-            className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              activeTab === 'focused'
-                ? 'bg-teal text-white shadow-xs'
-                : 'bg-cardSubtle text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1A2E44] border border-borderMain'
-            }`}
-          >
-            <span>🧒</span>
-            <span>{child.preferred_name || child.first_name || 'Phoenix'} {child.last_name || ''} · 1:1 Focus</span>
-          </button>
-
           <button
             onClick={() => handleTabChange('matrix')}
             className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
@@ -123,19 +113,55 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             }`}
           >
             <span>🏫</span>
-            <span>Room 4 SEND Matrix (4 Pupils)</span>
+            <span>{child?.room_name || 'Room 4'} Classroom Hub</span>
+          </button>
+
+          <button
+            onClick={() => handleTabChange('focused')}
+            className={`px-3.5 py-2.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              activeTab === 'focused'
+                ? 'bg-teal text-white shadow-xs'
+                : 'bg-cardSubtle text-textDim hover:text-textMain hover:bg-slate-100 dark:hover:bg-[#1A2E44] border border-borderMain'
+            }`}
+          >
+            <span>🧒</span>
+            <span>{child?.preferred_name || child?.first_name || 'Pupil'} {child?.last_name || ''} · 1:1 Focus</span>
           </button>
         </div>
 
         <div className="text-[11px] text-textDim font-medium px-2 hidden sm:block">
-          {activeTab === 'focused' ? 'Personalized EHCP interventions' : 'Whole-class differentiated adaptations'}
+          {activeTab === 'matrix' ? 'Whole-class differentiated adaptations' : 'Personalized EHCP interventions'}
         </div>
       </div>
 
       {activeTab === 'matrix' ? (
-        <ClassSendMatrix onSelectPupil={() => handleTabChange('focused')} />
+        <ClassSendMatrix
+          onSelectPupil={(pupilId) => {
+            if (onSelectPupil) {
+              onSelectPupil(pupilId);
+            }
+            handleTabChange('focused');
+          }}
+        />
       ) : (
         <>
+          {/* Breadcrumb Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-cardBg p-3.5 rounded-2xl border border-borderMain shadow-xs">
+            <button
+              onClick={() => handleTabChange('matrix')}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cardSubtle hover:bg-slate-100 dark:hover:bg-[#1E324A] text-navy dark:text-white border border-borderMain text-xs font-bold transition-all cursor-pointer w-fit shadow-2xs active:scale-95"
+            >
+              <span>←</span>
+              <span>Back to {child?.room_name || 'Room 4'} Classroom Hub</span>
+            </button>
+            <div className="flex items-center gap-2 text-xs text-textDim dark:text-slate-400">
+              <span>Viewing 1:1 Profile:</span>
+              <strong className="text-navy dark:text-white">{child?.preferred_name || child?.first_name || 'Pupil'} {child?.last_name || ''}</strong>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
+                {child?.year_group || 'Year 5'}
+              </span>
+            </div>
+          </div>
           {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
         <div className="stat-card border border-gray-100 border-l-4 border-l-rose-500">
@@ -162,9 +188,9 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         </div>
 
         <div className="stat-card border border-gray-100 border-l-4 border-l-teal">
-          <div className="font-serif text-2xl font-bold text-teal-800">{child.year_group || "Year 5"}</div>
+          <div className="font-serif text-2xl font-bold text-teal-800">{child?.year_group || "Year 5"}</div>
           <div className="text-[11px] text-gray-600 mt-0.5 leading-snug">
-            {child.room_name || "Room 4"} · Differentiated Cohort
+            {child?.room_name || "Room 4"} · Differentiated Cohort
           </div>
         </div>
       </div>
@@ -177,16 +203,16 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-serif font-bold text-navy">{child.full_name || `${child.first_name || 'Phoenix'} ${child.last_name || 'Carter'}`}</h2>
+              <h2 className="text-xl font-serif font-bold text-navy">{child?.full_name || (child ? `${child.first_name || 'Phoenix'} ${child.last_name || 'Carter'}` : 'SEND Pupil')}</h2>
               <span className="bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
                 EHCP Active
               </span>
             </div>
             <p className="text-xs text-gray-700 mt-0.5 font-medium">
-              Year {child.year_group || '5'} · {child.support_profile?.primary_need || 'Autism Spectrum Condition'} · Communication: Visual Task Cards
+              Year {child?.year_group || '5'} · {child?.support_profile?.primary_need || 'Autism Spectrum Condition'} · Communication: Visual Task Cards
             </p>
             <p className="text-[11px] text-gray-500 mt-0.5">
-              Emergency Contact: {child.last_name === 'Carter' || !child.last_name ? 'Mum (Dana Carter) · 07700 900123' : `Parent/Guardian · ${child.first_name}'s Contact`}
+              Emergency Contact: {child?.last_name === 'Carter' || !child?.last_name ? 'Mum (Dana Carter) · 07700 900123' : `Parent/Guardian · ${child?.first_name || 'Pupil'}'s Contact`}
             </p>
           </div>
         </div>
@@ -243,7 +269,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-navy dark:text-white">
-                  Pre-Flight Morning Handover · {child.last_name === 'Carter' || !child.last_name ? 'Dana Carter (Mum)' : `${child.preferred_name || child.first_name}'s Home Handover`}
+                  Pre-Flight Morning Handover · {child?.last_name === 'Carter' || !child?.last_name ? 'Dana Carter (Mum)' : `${child?.preferred_name || child?.first_name || 'Pupil'}'s Home Handover`}
                 </h3>
                 {!effectiveHandover ? (
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cardSubtle text-textDim border border-borderMain">
@@ -324,9 +350,9 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
         {/* Parent Notes & Status Note */}
         <div className="pt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="text-textSub dark:text-slate-300">
-            <span className="font-bold text-navy dark:text-white">{child.last_name === 'Carter' || !child.last_name ? "Mum's Note: " : "Home Note: "}</span>
+            <span className="font-bold text-navy dark:text-white">{child?.last_name === 'Carter' || !child?.last_name ? "Mum's Note: " : "Home Note: "}</span>
             <span className="italic">
-              "{effectiveHandover?.special_notes_for_day || (child.last_name === 'Carter' || !child.last_name ? 'Worried about assembly noise. Noise defenders packed in his bag.' : 'Please ensure sensory toolkit is available during transition.')}"
+              "{effectiveHandover?.special_notes_for_day || (child?.last_name === 'Carter' || !child?.last_name ? 'Worried about assembly noise. Noise defenders packed in his bag.' : 'Please ensure sensory toolkit is available during transition.')}"
             </span>
           </div>
 
@@ -336,11 +362,11 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
             </div>
           ) : !effectiveHandover.acknowledged_by_staff ? (
             <div className="text-[11px] text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/40 flex-shrink-0 font-medium">
-              💡 {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app will update with a read receipt instantly when acknowledged
+              💡 {child?.last_name === 'Carter' || !child?.last_name ? "Dana's" : "Parent's"} app will update with a read receipt instantly when acknowledged
             </div>
           ) : (
             <div className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold flex-shrink-0">
-              ✓ {child.last_name === 'Carter' || !child.last_name ? "Dana's" : "Parent's"} app shows: "Read by Ms Johnson at {ackTimeFormatted}"
+              ✓ {child?.last_name === 'Carter' || !child?.last_name ? "Dana's" : "Parent's"} app shows: "Read by Ms Johnson at {ackTimeFormatted}"
             </div>
           )}
         </div>
@@ -429,7 +455,7 @@ export const TeacherView: React.FC<TeacherViewProps> = ({
 
           {/* Real-Time Sensory De-Escalation Palette */}
           <DeEscalationPalette
-            pupilName={child.preferred_name || child.first_name || 'Phoenix'}
+            pupilName={child?.preferred_name || child?.first_name || 'Phoenix'}
             onLogStrategyResult={handleLogStrategyResult}
           />
 

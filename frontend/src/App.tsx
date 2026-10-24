@@ -56,7 +56,7 @@ const AppContent: React.FC = () => {
 
   // Sub-Navigation state per persona
   const [activeNavId, setActiveNavId] = useState<string>('');
-  const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('focused');
+  const [teacherSubView, setTeacherSubView] = useState<'focused' | 'matrix'>('matrix');
   const [parentSubTab, setParentSubTab] = useState<'bridge' | 'handover' | 'correlation' | 'wins'>('bridge');
   const [sencoSubTab, setSencoSubTab] = useState<SencoTab>('provision_map');
   const [adminSubTab, setAdminSubTab] = useState<'schools' | 'staff' | 'delegation' | 'audit'>('schools');
@@ -114,6 +114,9 @@ const AppContent: React.FC = () => {
     setActiveView(view);
     const backendRole = view === 'parentplus' ? 'parent' : view;
     setApiRole(backendRole);
+    if (view === 'teacher') {
+      setTeacherSubView('matrix');
+    }
     initNavForRole(view);
   };
 
@@ -476,7 +479,7 @@ const AppContent: React.FC = () => {
   }
 
   // 3. Authenticated: Render Single-Persona View
-  if (loading || (!child && activeView !== 'senco' && activeView !== 'admin')) {
+  if (loading || (!child && activeView !== 'senco' && activeView !== 'admin' && activeView !== 'teacher')) {
     return (
       <div className="min-h-screen bg-canvas text-textMain flex flex-col items-center justify-center space-y-3">
         <div className="w-12 h-12 rounded-full border-4 border-teal border-t-transparent animate-spin" />
@@ -498,17 +501,28 @@ const AppContent: React.FC = () => {
   const topBarConfig = {
     teacher: {
       title: `Good morning, ${currentUser.full_name} 👋`,
-      subtitle: 'Wednesday 22 October 2026 · Year 5 · Room 4',
-      pills: [
-        latestHandover && !isHandoverAcknowledged
-          ? { label: '🔔 Handover Needs Ack', color: 'red' as const }
-          : { label: '✓ Handover Acknowledged', color: 'green' as const },
-        isBreakfastSkipped
-          ? { label: '🍽 Skipped Breakfast', color: 'amber' as const }
-          : { label: '🥣 Breakfast Eaten', color: 'teal' as const },
-        { label: '⚡ Assembly 9:05am', color: 'red' as const },
-        { label: '📚 Maths: Straight Lines', color: 'gold' as const },
-      ],
+      subtitle: teacherSubView === 'matrix'
+        ? `${currentUser.school_name || "Inclusive School"} · ${child?.room_name || 'Room 4'} Classroom Hub · ${pupils.length} SEND Learners`
+        : `1:1 Support Focus · ${child?.preferred_name || child?.first_name || 'Pupil'} ${child?.last_name || ''}`,
+      pills: teacherSubView === 'matrix'
+        ? [
+            { label: `🏫 ${pupils.length} SEND Learners`, color: 'teal' as const },
+            { label: `📋 ${pupils.filter(p => p.support_profile?.has_ehcp).length} Active EHCPs`, color: 'purple' as const },
+            latestHandover && !isHandoverAcknowledged
+              ? { label: '🔔 Handover Needs Ack', color: 'red' as const }
+              : { label: '✓ Handovers Logged', color: 'green' as const },
+            { label: '⚡ Assembly 9:05am', color: 'amber' as const },
+          ]
+        : [
+            latestHandover && !isHandoverAcknowledged
+              ? { label: '🔔 Handover Needs Ack', color: 'red' as const }
+              : { label: '✓ Handover Acknowledged', color: 'green' as const },
+            isBreakfastSkipped
+              ? { label: '🍽 Skipped Breakfast', color: 'amber' as const }
+              : { label: '🥣 Breakfast Eaten', color: 'teal' as const },
+            { label: '⚡ Assembly 9:05am', color: 'red' as const },
+            { label: '📚 Maths: Straight Lines', color: 'gold' as const },
+          ],
       actionButton: {
         label: '+ Log Observation',
         onClick: () => setIsObsModalOpen(true),
@@ -609,7 +623,7 @@ const AppContent: React.FC = () => {
         <div className="p-3.5 sm:p-5 lg:p-7 max-w-7xl w-full mx-auto flex-1 animate-in fade-in duration-200">
           {activeView === 'teacher' && (
             <TeacherView
-              child={child!}
+              child={child}
               timeline={timeline}
               briefing={briefing}
               latestHandover={latestHandover}
@@ -618,6 +632,7 @@ const AppContent: React.FC = () => {
                 setTeacherSubView(view);
                 setActiveNavId(view === 'matrix' ? 'room4-matrix' : 'preflight-handover');
               }}
+              onSelectPupil={handleChildSelect}
               onRefreshBriefing={handleRefreshBriefing}
               onAcknowledgeHandover={handleAcknowledgeHandover}
               onOpenObservationModal={() => setIsObsModalOpen(true)}

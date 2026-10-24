@@ -192,13 +192,17 @@ def get_classroom_matrix(
             "subject_accommodations": subj_acc,
         })
 
+    teacher_name = (current_user and current_user.full_name) or "Ms Clara Johnson"
+    year_group = cohort[0]["year_group"] if cohort else "Year 5"
+    assigned_ta = "Melissa Grant" if any(p.get("has_ehcp") for p in cohort) else "Shared Classroom TA"
+
     return {
-        "room_name": "Room 4",
-        "year_group": "Year 5",
-        "lead_teacher": "Ms Clara Johnson",
-        "assigned_ta": "Melissa Grant",
+        "room_name": normalized_room,
+        "year_group": year_group,
+        "lead_teacher": teacher_name,
+        "assigned_ta": assigned_ta,
         "total_send_count": len(cohort),
-        "ehcp_count": sum(1 for p in cohort if p["has_ehcp"]),
+        "ehcp_count": sum(1 for p in cohort if p.get("has_ehcp")),
         "cohort": cohort,
     }
 

@@ -70,14 +70,14 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
-              <span>🏫 Room 4 SEND Classroom Matrix</span>
+              <span>🏫 {matrixData?.room_name || 'Room 4'} SEND Classroom Matrix</span>
               <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-teal/10 text-teal dark:text-teal-300 font-semibold border border-teal/20">
-                Year 5 · Ms Clara Johnson
+                {matrixData?.year_group || 'Year 5'} · {matrixData?.lead_teacher || 'Ms Clara Johnson'}
               </span>
             </h2>
           </div>
           <p className="text-xs text-textDim dark:text-slate-400 mt-1">
-            Whole-class overview of differentiated adaptations, sensory triggers, and today&apos;s readiness signals for all 4 SEND pupils.
+            Whole-class overview of differentiated adaptations, sensory triggers, and today&apos;s readiness signals for all {cohort.length} SEND pupils.
           </p>
         </div>
 
@@ -109,20 +109,34 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
       {/* Cohort Stats Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <div className="stat-card border-teal">
-          <div className="font-serif text-2xl font-bold text-teal dark:text-teal-300">4</div>
-          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">SEND Learners in Room 4</div>
+          <div className="font-serif text-2xl font-bold text-teal dark:text-teal-300">
+            {matrixData?.total_send_count ?? cohort.length}
+          </div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
+            SEND Learners in {matrixData?.room_name || 'Classroom'}
+          </div>
         </div>
         <div className="stat-card border-purple-dark dark:border-purple-500">
-          <div className="font-serif text-2xl font-bold text-purple-dark dark:text-purple-300">2</div>
+          <div className="font-serif text-2xl font-bold text-purple-dark dark:text-purple-300">
+            {matrixData?.ehcp_count ?? cohort.filter((p) => p.has_ehcp).length}
+          </div>
           <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Statutory EHCPs Active</div>
         </div>
         <div className="stat-card border-amber-dark dark:border-amber-500">
-          <div className="font-serif text-2xl font-bold text-amber-dark dark:text-amber-300">1</div>
-          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Arrival Amber Alert (Phoenix ⚠️)</div>
+          <div className="font-serif text-2xl font-bold text-amber-dark dark:text-amber-300">
+            {cohort.filter((p) => p.readiness_level === 'amber').length}
+          </div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
+            Arrival Caution Alerts ({cohort.filter((p) => p.readiness_level === 'amber').map((p) => p.preferred_name || p.name.split(' ')[0]).join(', ') || 'None 🟢'})
+          </div>
         </div>
         <div className="stat-card border-emerald-600 dark:border-emerald-500">
-          <div className="font-serif text-2xl font-bold text-emerald-700 dark:text-emerald-300">1-to-1 TA</div>
-          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">Melissa Grant Assigned</div>
+          <div className="font-serif text-2xl font-bold text-emerald-700 dark:text-emerald-300">
+            {matrixData?.assigned_ta ? '1-to-1 TA' : 'Class TA'}
+          </div>
+          <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
+            {matrixData?.assigned_ta ? `${matrixData.assigned_ta} Assigned` : 'Shared TA Support'}
+          </div>
         </div>
       </div>
 
@@ -149,55 +163,68 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
         </div>
       </div>
 
-      {/* Matrix Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {cohort.map((pupil) => {
-          const subjectAccommodation =
-            selectedSubject !== 'all'
-              ? pupil.subject_accommodations[selectedSubject] || pupil.subject_accommodations.maths
-              : null;
+      {cohort.length === 0 ? (
+        <div className="card p-12 text-center text-textDim dark:text-slate-400 space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-teal/10 text-teal flex items-center justify-center mx-auto text-2xl font-bold">
+            🏫
+          </div>
+          <h4 className="font-bold text-base text-navy dark:text-white">No Pupils in Classroom Register</h4>
+          <p className="text-xs max-w-md mx-auto">
+            There are currently no active SEND learners assigned to {matrixData?.room_name || "this classroom"}.
+          </p>
+        </div>
+      ) : (
+        /* Matrix Cards Grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {cohort.map((pupil) => {
+            const subjectAccommodation =
+              selectedSubject !== 'all'
+                ? pupil.subject_accommodations[selectedSubject] || pupil.subject_accommodations.maths
+                : null;
 
-          return (
-            <div
-              key={pupil.id}
-              className={`card p-5 border-l-4 transition-all space-y-4 ${
-                pupil.readiness_level === 'amber'
-                  ? 'border-l-amber-500 bg-amber-50/15 dark:bg-amber-950/20'
-                  : 'border-l-teal'
-              }`}
-            >
-              {/* Card Header */}
-              <div className="flex items-start justify-between gap-2 pb-3 border-b border-borderMain">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-teal/10 dark:bg-teal-950/60 flex items-center justify-center font-bold text-teal dark:text-teal-300 text-base border border-teal/20">
-                    {pupil.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-navy dark:text-white">{pupil.name}</h3>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                        pupil.has_ehcp
-                          ? 'bg-purple-light dark:bg-purple-950/60 text-purple-dark dark:text-purple-300 border-purple-200 dark:border-purple-800/40'
-                          : 'bg-teal/10 dark:bg-teal-950/60 text-teal dark:text-teal-300 border-teal/20 dark:border-teal-800/40'
-                      }`}>
-                        {pupil.support_tier}
-                      </span>
+            return (
+              <div
+                key={pupil.id}
+                className={`card p-5 border-l-4 transition-all space-y-4 ${
+                  pupil.readiness_level === 'amber'
+                    ? 'border-l-amber-500 bg-amber-50/15 dark:bg-amber-950/20'
+                    : 'border-l-teal'
+                }`}
+              >
+                {/* Card Header */}
+                <div className="flex items-start justify-between gap-2 pb-3 border-b border-borderMain">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-2xl bg-teal/10 dark:bg-teal-950/60 flex items-center justify-center font-bold text-teal dark:text-teal-300 text-base border border-teal/20">
+                      {pupil.name.charAt(0)}
                     </div>
-                    <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
-                      {pupil.primary_need} · {pupil.year_group}
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-navy dark:text-white">{pupil.name}</h3>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                          pupil.has_ehcp
+                            ? 'bg-purple-light dark:bg-purple-950/60 text-purple-dark dark:text-purple-300 border-purple-200 dark:border-purple-800/40'
+                            : 'bg-teal/10 dark:bg-teal-950/60 text-teal dark:text-teal-300 border-teal/20 dark:border-teal-800/40'
+                        }`}>
+                          {pupil.support_tier}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-textDim dark:text-slate-400 mt-0.5">
+                        {pupil.primary_need} · {pupil.year_group}
+                      </div>
                     </div>
                   </div>
+
+                  {onSelectPupil && (
+                    <button
+                      onClick={() => onSelectPupil(pupil.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal/10 hover:bg-teal text-teal hover:text-white dark:bg-teal-950/60 dark:text-teal-300 dark:hover:bg-teal border border-teal/20 text-xs font-bold transition-all shadow-2xs active:scale-95 cursor-pointer"
+                      title={`Open 1:1 Focus for ${pupil.name}`}
+                    >
+                      <span>1:1 Focus</span>
+                      <span>→</span>
+                    </button>
+                  )}
                 </div>
-
-                {onSelectPupil && pupil.name.includes('Phoenix') && (
-                  <button
-                    onClick={() => onSelectPupil(pupil.id)}
-                    className="text-[11px] font-bold text-teal dark:text-teal-300 hover:underline cursor-pointer"
-                  >
-                    Focus View →
-                  </button>
-                )}
-              </div>
 
               {/* Today's Readiness Banner */}
               <div className={`p-2.5 rounded-xl border text-xs flex items-center gap-2 ${
@@ -276,6 +303,7 @@ export const ClassSendMatrix: React.FC<ClassSendMatrixProps> = ({ onSelectPupil 
           );
         })}
       </div>
+      )}
 
       {/* Supply Teacher 60-Second Briefing Modal */}
       {showSupplyModal && (
