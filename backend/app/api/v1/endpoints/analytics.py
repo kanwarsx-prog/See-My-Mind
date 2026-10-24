@@ -11,7 +11,9 @@ from app.schemas.analytics import (
     StrategyEfficacyResponse,
     TriggersReportResponse,
 )
+from app.schemas.sen_report import SenInformationReportResponse
 from app.services.analytics_service import AnalyticsService
+from app.services.sen_report_service import SenReportService
 
 router = APIRouter()
 
@@ -77,3 +79,16 @@ def export_analytics_csv(
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
+
+
+@router.get("/governor-report", response_model=SenInformationReportResponse)
+def get_statutory_governor_report(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_roles(["senco", "admin"])),
+):
+    """Generate the official Statutory SEN Information Report and Governor Pack
+    under Regulation 51 & Schedule 1 of the SEND Regulations 2014."""
+    return SenReportService.generate_sen_information_report(
+        db=db, school_id=current_user.school_id
+    )
+

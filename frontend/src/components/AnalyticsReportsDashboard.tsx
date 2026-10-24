@@ -10,6 +10,7 @@ import {
   Layers,
   Sparkles,
   ShieldCheck,
+  FileText,
 } from 'lucide-react';
 import { api } from '../api';
 import {
@@ -18,7 +19,9 @@ import {
   TriggersReportResponse,
   StrategyEfficacyResponse,
   ProvisionAuditResponse,
+  SenInformationReportResponse,
 } from '../types';
+import { SenInformationReportModal } from './SenInformationReportModal';
 
 export const AnalyticsReportsDashboard: React.FC = () => {
   const [overview, setOverview] = useState<SchoolAnalyticsOverview | null>(null);
@@ -29,10 +32,27 @@ export const AnalyticsReportsDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [downloadingCsv, setDownloadingCsv] = useState<string | null>(null);
   const [selectedTrigger, setSelectedTrigger] = useState<string | null>('sensory_acoustic');
+  const [senReport, setSenReport] = useState<SenInformationReportResponse | null>(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [loadingReport, setLoadingReport] = useState(false);
 
   useEffect(() => {
     loadAllAnalytics();
   }, []);
+
+  const handleOpenReportModal = async () => {
+    try {
+      setLoadingReport(true);
+      const data = await api.getSenInformationReport();
+      setSenReport(data);
+      setIsReportModalOpen(true);
+    } catch (err) {
+      console.error('Failed to load Statutory SEN Information Report:', err);
+      alert('Failed to generate Statutory SEN Information Report: ' + err);
+    } finally {
+      setLoadingReport(false);
+    }
+  };
 
   const loadAllAnalytics = async () => {
     try {
@@ -97,8 +117,22 @@ export const AnalyticsReportsDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* 1-Click CSV Export Group */}
+        {/* Actions: Statutory Report & CSV Exports */}
         <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+          <button
+            onClick={handleOpenReportModal}
+            disabled={loadingReport}
+            className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-navy hover:bg-slate-800 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow disabled:opacity-60"
+            title="Generate official statutory report complying with Regulation 51 & Schedule 1 SEND Regulations 2014"
+          >
+            {loadingReport ? (
+              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <FileText className="w-3.5 h-3.5 text-teal" />
+            )}
+            <span>{loadingReport ? 'Compiling Pack...' : 'Statutory SEN Report (Reg 51)'}</span>
+          </button>
+
           <button
             onClick={() => handleExportCsv('provision')}
             disabled={downloadingCsv !== null}
@@ -540,6 +574,15 @@ export const AnalyticsReportsDashboard: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Statutory SEN Information Report & Governor Pack Modal */}
+      {isReportModalOpen && (
+        <SenInformationReportModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          report={senReport}
+        />
+      )}
     </div>
   );
 };

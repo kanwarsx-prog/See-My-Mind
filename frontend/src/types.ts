@@ -669,4 +669,90 @@ export interface ProvisionAuditResponse {
   bands: FundingBandBreakdown[];
 }
 
+// Statutory SEN Information Report & Governor Pack (Regulation 51)
+export interface StatutorySchoolHeader {
+  school_name: string;
+  urn: string;
+  dfe_number: string;
+  academic_year: string;
+  lead_senco: string;
+  senco_qualifications: string;
+  headteacher: string;
+  send_governor: string;
+  publication_date: string;
+}
+
+export interface CaseloadNeedCategory {
+  code_of_practice_area: string;
+  primary_diagnoses: string[];
+  pupil_count: number;
+  percentage_of_send: number;
+  key_adaptations_provided: string[];
+}
+
+export interface CaseloadDemographics {
+  total_pupils_in_school: number;
+  total_send_count: number;
+  send_percentage_school: number;
+  ehcp_count: number;
+  ehcp_percentage_school: number;
+  sen_support_count: number;
+  needs_distribution: CaseloadNeedCategory[];
+}
+
+export interface StatutoryProvisionAuditSummary {
+  total_high_needs_funding: string;
+  weekly_ta_hours_allocated: number;
+  weekly_ta_hours_delivered: number;
+  statutory_delivery_compliance_rate: number;
+  band_breakdown: Array<{
+    band: string;
+    annual_amount: string;
+    pupils: number;
+    total_spend: string;
+    allocated_hours: string;
+    delivered_hours: string;
+    compliance: string;
+  }>;
+  deployment_model: string;
+}
+
+export interface EmpiricalEfficacyAudit {
+  de_escalation_win_rate: number;
+  total_interventions_recorded: number;
+  fixed_term_exclusions: number;
+  permanent_exclusions: number;
+  average_attendance_rate: number;
+  breakthrough_milestones_logged: number;
+  top_effective_strategies: string[];
+  statutory_evaluation_narrative: string;
+}
+
+export interface CoProductionAudit {
+  daily_morning_handovers_active: number;
+  pupil_voice_checkins_this_term: number;
+  parent_satisfaction_percentage: number;
+  multi_agency_partners: string[];
+}
+
+export interface StatutoryReviewComplianceAudit {
+  annual_reviews_due_this_year: number;
+  annual_reviews_completed_or_on_track: number;
+  overdue_reviews: number;
+  statutory_compliance_rate: number;
+}
+
+export interface SenInformationReportResponse {
+  header: StatutorySchoolHeader;
+  demographics: CaseloadDemographics;
+  provision_audit: StatutoryProvisionAuditSummary;
+  efficacy: EmpiricalEfficacyAudit;
+  co_production: CoProductionAudit;
+  annual_review_compliance: StatutoryReviewComplianceAudit;
+  senco_strategic_commentary: string;
+  priorities_for_next_year: string[];
+  governance_declaration: string;
+}
+
+
 

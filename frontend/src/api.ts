@@ -34,6 +34,7 @@ import {
   TriggersReportResponse,
   StrategyEfficacyResponse,
   ProvisionAuditResponse,
+  SenInformationReportResponse,
 } from './types';
 
 const API_BASE =
@@ -609,6 +610,14 @@ export const api = {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+  },
+
+  async getSenInformationReport(): Promise<SenInformationReportResponse> {
+    const res = await fetch(`${API_BASE}/analytics/governor-report`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch statutory SEN information report');
+    return res.json();
   },
 };
 
