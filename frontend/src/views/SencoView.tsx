@@ -361,7 +361,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
           <p className="text-xs text-textDim dark:text-slate-400 mt-0.5">
             {activeTab === 'provision_map' && `${provisionMatrix?.lead_senco || currentUser?.full_name || 'Lead SENCO'} • ${provisionMatrix?.total_send_count ?? pupils.length} SEND pupils, ${provisionMatrix?.high_needs_funding_total || '£0'} High Needs Funding, ${provisionMatrix?.total_ta_hours_weekly ?? 0} weekly 1:1 TA hours.`}
             {activeTab === 'staff_team' && 'Directly recruit and manage classroom teachers, 1:1 TAs, and specialists assigned to SEND pupils.'}
-            {activeTab === 'review_pack' && `Statutory Section 44 longitudinal evidence synthesis for ${reviewPack?.child_name || 'Phoenix Carter'}.`}
+            {activeTab === 'review_pack' && (child || reviewPack ? `Statutory Section 44 longitudinal evidence synthesis for ${child?.full_name || reviewPack?.child_name || 'Pupil'}.` : `No pupil registered yet for ${currentUser?.school_name || 'this school'}.`)}
             {activeTab === 'assistant' && 'Query longitudinal observation history, morning handovers, and provision records with verifiable citations.'}
             {activeTab === 'reports_analytics' && 'Empirical longitudinal analytics for Local Authority panels, Ofsted compliance, and multi-agency CAMHS evidence.'}
           </p>
@@ -392,29 +392,49 @@ export const SencoView: React.FC<SencoViewProps> = ({
       {/* ============================================================== */}
       {activeTab === 'review_pack' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          {/* Pupil Target Bar & Quick Export */}
-          <div className="bg-gradient-to-r from-purple-50/90 via-cardBg to-indigo-50/50 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-navy text-textMain dark:text-white p-5 rounded-2xl border border-purple-200/60 dark:border-purple-900/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold font-serif text-purple-700 dark:text-mint border border-purple-200 dark:border-white/10">
-                PC
+          {!child && !reviewPack ? (
+            <div className="card p-12 text-center text-textDim dark:text-slate-400 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-teal/10 text-teal flex items-center justify-center mx-auto text-2xl font-bold">
+                📋
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold font-serif text-navy dark:text-white">
-                    {reviewPack?.child_name || 'Phoenix Carter'}
-                  </h3>
-                  <span className="text-[10px] bg-purple-100 dark:bg-purple-400/20 text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-400/30 px-2 py-0.5 rounded-full font-bold">
-                    Statutory EHCP
-                  </span>
-                  <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
-                    Review Due in 14 Days
-                  </span>
-                </div>
-                <p className="text-xs text-textDim dark:text-white/70 mt-0.5">
-                  Year 5 &bull; Primary Need: {reviewPack?.primary_need || 'Autism Spectrum Condition (ASC)'} &bull; {timeline.length} Evidence Events Logged
-                </p>
-              </div>
+              <h4 className="font-bold text-base text-navy dark:text-white">No SEND Pupil Selected</h4>
+              <p className="text-xs max-w-md mx-auto">
+                There are currently no active SEND pupils registered for {currentUser?.school_name || "this school"}. Click &ldquo;+ Register SEND Pupil&rdquo; above to onboard your first pupil.
+              </p>
+              {onRegisterChild && (
+                <button
+                  onClick={onRegisterChild}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-teal hover:bg-teal-dark text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+                >
+                  <span>+ Register First Pupil</span>
+                </button>
+              )}
             </div>
+          ) : (
+            <>
+              {/* Pupil Target Bar & Quick Export */}
+              <div className="bg-gradient-to-r from-purple-50/90 via-cardBg to-indigo-50/50 dark:from-purple-950/40 dark:via-indigo-950/30 dark:to-navy text-textMain dark:text-white p-5 rounded-2xl border border-purple-200/60 dark:border-purple-900/40 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold font-serif text-purple-700 dark:text-mint border border-purple-200 dark:border-white/10">
+                    {(child?.first_name?.[0] || reviewPack?.child_name?.[0] || 'S') + (child?.last_name?.[0] || '')}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base sm:text-lg font-bold font-serif text-navy dark:text-white">
+                        {child?.full_name || (child ? `${child.first_name} ${child.last_name}` : (reviewPack?.child_name || 'SEND Pupil'))}
+                      </h3>
+                      <span className="text-[10px] bg-purple-100 dark:bg-purple-400/20 text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-400/30 px-2 py-0.5 rounded-full font-bold">
+                        Statutory EHCP
+                      </span>
+                      <span className="text-[10px] bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
+                        Review Due in 14 Days
+                      </span>
+                    </div>
+                    <p className="text-xs text-textDim dark:text-white/70 mt-0.5">
+                      {child?.year_group || 'SEND Pupil'} &bull; Primary Need: {reviewPack?.primary_need || 'SEND Support'} &bull; {timeline.length} Evidence Events Logged
+                    </p>
+                  </div>
+                </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
               {loadingPack && (
@@ -495,7 +515,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                   <div className="space-y-3 text-xs">
                     <div className="p-3 bg-teal-50/40 rounded-xl border border-teal/20 space-y-1">
                       <div className="font-bold text-navy flex items-center gap-1.5">
-                        <span>🧒 Phoenix&apos;s Voice & What Matters:</span>
+                        <span>🧒 {child?.preferred_name || child?.first_name || reviewPack.child_name.split(' ')[0]}&apos;s Voice & What Matters:</span>
                       </div>
                       <p className="text-gray-700 leading-relaxed italic">
                         &ldquo;{reviewPack.section_a.child_views}&rdquo;
@@ -504,7 +524,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
                     <div className="p-3 bg-amber-50/40 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/40 space-y-1">
                       <div className="font-bold text-navy dark:text-white">
-                        <span>👩‍👦 Dana Carter (Parent Views & Progress):</span>
+                        <span>👩‍👦 {child ? `${child.preferred_name || child.first_name}'s Parent / Carer` : (reviewPack.child_name ? `${reviewPack.child_name.split(' ')[0]}'s Parent / Carer` : 'Parent / Carer')} (Parent Views & Progress):</span>
                       </div>
                       <p className="text-textSub dark:text-slate-300 leading-relaxed">
                         {reviewPack.section_a.parent_views}
@@ -637,6 +657,8 @@ export const SencoView: React.FC<SencoViewProps> = ({
               dossier={camhsDossier}
             />
           )}
+            </>
+          )}
         </div>
       )}
 
@@ -649,37 +671,37 @@ export const SencoView: React.FC<SencoViewProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <div className="stat-card border-teal">
               <div className="font-serif text-2xl font-bold text-teal">
-                {provisionMatrix?.total_send_count || 34}
+                {provisionMatrix?.total_send_count ?? 0}
               </div>
               <div className="text-[10px] text-gray-500 mt-0.5">Whole-School SEND Caseload</div>
             </div>
             <div className="stat-card border border-gray-100 border-l-4 border-l-purple-600">
               <div className="font-serif text-2xl font-bold text-purple-900">
-                {provisionMatrix?.ehcp_count || 12}
+                {provisionMatrix?.ehcp_count ?? 0}
               </div>
               <div className="text-[10px] text-gray-600 mt-0.5">Statutory EHCPs Managed</div>
             </div>
             <div className="stat-card border border-gray-100 border-l-4 border-l-indigo-600">
               <div className="font-serif text-2xl font-bold text-indigo-800">
-                {provisionMatrix?.sen_support_count || 22}
+                {provisionMatrix?.sen_support_count ?? 0}
               </div>
               <div className="text-[10px] text-gray-600 mt-0.5">SEN Support (K) Learners</div>
             </div>
             <div className="stat-card border border-gray-100 border-l-4 border-l-emerald-600">
               <div className="font-serif text-2xl font-bold text-emerald-800">
-                {provisionMatrix ? `${provisionMatrix.total_ta_hours_weekly.toFixed(0)}h` : '185h'}
+                {provisionMatrix ? `${provisionMatrix.total_ta_hours_weekly.toFixed(0)}h` : '0h'}
               </div>
               <div className="text-[10px] text-gray-600 mt-0.5">1:1 TA Hours / Week</div>
             </div>
             <div className="stat-card border border-gray-100 border-l-4 border-l-amber-500">
               <div className="font-serif text-2xl font-bold text-amber-800">
-                {provisionMatrix?.high_needs_funding_total || '£148,600'}
+                {provisionMatrix?.high_needs_funding_total || '£0'}
               </div>
               <div className="text-[10px] text-gray-600 mt-0.5">High Needs Block Funding</div>
             </div>
             <div className="stat-card border border-gray-100 border-l-4 border-l-rose-500">
               <div className="font-serif text-2xl font-bold text-rose-700">
-                {provisionMatrix?.reviews_due_next_30_days || 3}
+                {provisionMatrix?.reviews_due_next_30_days ?? 0}
               </div>
               <div className="text-[10px] text-gray-600 mt-0.5">Reviews Due in &le; 30 Days</div>
             </div>
@@ -694,9 +716,9 @@ export const SencoView: React.FC<SencoViewProps> = ({
 
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
               {[
-                { key: 'all', label: 'All Pupils (34)' },
-                { key: 'ehcp', label: 'Statutory EHCP (12)' },
-                { key: 'k', label: 'SEN Support (22)' },
+                { key: 'all', label: `All Pupils (${provisionMatrix?.total_send_count ?? 0})` },
+                { key: 'ehcp', label: `Statutory EHCP (${provisionMatrix?.ehcp_count ?? 0})` },
+                { key: 'k', label: `SEN Support (${provisionMatrix?.sen_support_count ?? 0})` },
                 { key: 'asc', label: 'ASC / Autism' },
                 { key: 'adhd', label: 'ADHD' },
                 { key: 'due_soon', label: '⚠️ Reviews Due Soon (≤30d)' },
@@ -849,7 +871,7 @@ export const SencoView: React.FC<SencoViewProps> = ({
                 <h3 className="text-sm font-bold text-navy">Ask NOYA &bull; SEND Longitudinal Evidence Retrieval</h3>
               </div>
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-                Ask questions across Phoenix&apos;s observation history, morning handovers, and EHCP provision records. Answers include verifiable citations.
+                Ask questions across {child?.preferred_name || child?.first_name || 'the pupil'}&apos;s observation history, morning handovers, and EHCP provision records. Answers include verifiable citations.
               </p>
 
               <form onSubmit={handleAsk} className="flex flex-col sm:flex-row gap-2 mb-4">
@@ -1012,21 +1034,23 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </div>
 
               <div className="space-y-3">
-                <div className="p-3 rounded-xl border border-gray-100 bg-gray-50 text-xs space-y-1">
-                  <div className="flex justify-between font-bold text-navy">
-                    <span>Phoenix Carter (Year 5)</span>
-                    <span className="text-coral-dark text-[10px]">Today: Assembly Alert</span>
+                {provisionMatrix && provisionMatrix.pupils.length > 0 ? (
+                  provisionMatrix.pupils.slice(0, 3).map((p) => (
+                    <div key={p.id} className="p-3 rounded-xl border border-gray-100 bg-gray-50 text-xs space-y-1">
+                      <div className="flex justify-between font-bold text-navy">
+                        <span>{p.name} ({p.year_group})</span>
+                        <span className={`text-[10px] font-semibold ${p.review_status === 'due_soon' ? 'text-coral-dark' : 'text-emerald-700'}`}>
+                          {p.review_status === 'due_soon' ? '⚠️ Review Due Soon' : 'Active'}
+                        </span>
+                      </div>
+                      <p className="text-gray-500 text-[11px]">{p.primary_need} &bull; {p.support_tier} &bull; Key Worker: {p.assigned_ta}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 rounded-xl border border-gray-100 bg-gray-50 text-xs text-gray-400 text-center">
+                    No active triage alerts for this school&apos;s caseload.
                   </div>
-                  <p className="text-gray-500 text-[11px]">ASC &bull; Noise defenders prepared &bull; Handover received from Dana Carter</p>
-                </div>
-
-                <div className="p-3 rounded-xl border border-gray-100 bg-gray-50 text-xs space-y-1">
-                  <div className="flex justify-between font-bold text-navy">
-                    <span>Luca Moretti (Year 4)</span>
-                    <span className="text-emerald-700 text-[10px]">Stable</span>
-                  </div>
-                  <p className="text-gray-500 text-[11px]">Speech & Language therapy scheduled for Thursday 2:00pm</p>
-                </div>
+                )}
               </div>
             </div>
           </div>
