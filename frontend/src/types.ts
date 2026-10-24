@@ -754,5 +754,81 @@ export interface SenInformationReportResponse {
   governance_declaration: string;
 }
 
+// CAMHS / Pediatrician Multi-Agency Clinical Dossier (NICE NG87 / CG128)
+export interface ClinicalPatientHeader {
+  child_id: string;
+  full_name: string;
+  preferred_name: string;
+  date_of_birth: string;
+  chronological_age: string;
+  nhs_number: string;
+  school_name: string;
+  school_urn: string;
+  year_group: string;
+  primary_need: string;
+  lead_senco_name: string;
+  class_teacher_name: string;
+  primary_ta_name: string;
+  parent_carer_name: string;
+  referring_clinic: string;
+  reporting_window: string;
+}
+
+export interface MedicationTitrationAudit {
+  medication_name: string;
+  dosage: string;
+  formulation: string;
+  prescribed_schedule: string;
+  administration_time_logged: string;
+  peak_bioavailability_window: string;
+  mid_morning_dip_window: string;
+  caloric_co_ingestion_compliance: string;
+  fasted_vs_fed_incident_ratio: string;
+  clinical_observation: string;
+}
+
+export interface CrossSettingConcordanceItem {
+  domain: string;
+  home_presentation: string;
+  school_presentation: string;
+  concordance_level: string;
+  clinical_significance: string;
+}
+
+export interface SensoryEnvironmentAudit {
+  primary_sensory_triggers: string[];
+  acoustic_decibel_tolerance: string;
+  average_latency_to_de_escalate_minutes: number;
+  top_effective_accommodations: string[];
+  ineffective_or_escalating_actions: string[];
+  fixed_or_permanent_exclusions: number;
+}
+
+export interface RestraintCollapseAnalysis {
+  masking_index_score: number;
+  school_compliance_rating: string;
+  post_school_collapse_frequency: string;
+  autonomic_depletion_mechanism: string;
+  home_decompression_recommendation: string;
+}
+
+export interface ClinicalRecommendationItem {
+  category: string;
+  recommendation: string;
+  statutory_anchor: string;
+}
+
+export interface CamhsClinicalDossierResponse {
+  patient_header: ClinicalPatientHeader;
+  medication_audit: MedicationTitrationAudit;
+  cross_setting_concordance: CrossSettingConcordanceItem[];
+  sensory_environment_audit: SensoryEnvironmentAudit;
+  restraint_collapse_analysis: RestraintCollapseAnalysis;
+  clinical_recommendations: ClinicalRecommendationItem[];
+  nice_guideline_compliance: string;
+  compiled_at: string;
+}
+
+
 
 

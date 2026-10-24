@@ -9,6 +9,7 @@ import {
   SchoolProvisionMatrixResponse,
   ProvisionMapPupil,
   AdminUserItem,
+  CamhsClinicalDossierResponse,
 } from '../types';
 import {
   ShieldCheck,
@@ -35,6 +36,7 @@ import {
 } from 'lucide-react';
 import { api } from '../api';
 import { AnnualReviewPackModal } from '../components/AnnualReviewPackModal';
+import { CamhsEvidenceDossierModal } from '../components/CamhsEvidenceDossierModal';
 import { AbcTooltip } from '../components/AbcTooltip';
 import { AnalyticsReportsDashboard } from '../components/AnalyticsReportsDashboard';
 
@@ -86,6 +88,26 @@ export const SencoView: React.FC<SencoViewProps> = ({
   const [reviewPack, setReviewPack] = useState<AnnualReviewPackResponse | null>(null);
   const [loadingPack, setLoadingPack] = useState(false);
   const [showPackModal, setShowPackModal] = useState(false);
+
+  // CAMHS Clinical Dossier state
+  const [camhsDossier, setCamhsDossier] = useState<CamhsClinicalDossierResponse | null>(null);
+  const [showCamhsModal, setShowCamhsModal] = useState(false);
+  const [loadingCamhs, setLoadingCamhs] = useState(false);
+
+  const handleOpenCamhsModal = async () => {
+    if (!child?.id) return;
+    try {
+      setLoadingCamhs(true);
+      const data = await api.getCamhsClinicalDossier(child.id);
+      setCamhsDossier(data);
+      setShowCamhsModal(true);
+    } catch (err) {
+      console.error('Failed to load CAMHS dossier:', err);
+      alert('Failed to generate clinical dossier: ' + err);
+    } finally {
+      setLoadingCamhs(false);
+    }
+  };
 
   // Caseload Provision Matrix state
   const [provisionMatrix, setProvisionMatrix] = useState<SchoolProvisionMatrixResponse | null>(null);
@@ -385,12 +407,26 @@ export const SencoView: React.FC<SencoViewProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
               {loadingPack && (
                 <div className="text-[11px] text-teal dark:text-mint font-semibold animate-pulse mr-2">
                   Synthesizing evidence...
                 </div>
               )}
+              <button
+                onClick={handleOpenCamhsModal}
+                disabled={loadingCamhs}
+                className="w-full sm:w-auto justify-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer active:scale-95 disabled:opacity-60"
+                title="NICE NG87 / CG128 Multi-Agency Clinical Dossier for CAMHS"
+              >
+                {loadingCamhs ? (
+                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <FileText className="w-4 h-4 text-white" />
+                )}
+                <span>CAMHS Clinical Dossier</span>
+              </button>
+
               <button
                 onClick={() => setShowPackModal(true)}
                 className="w-full sm:w-auto justify-center px-4 py-2.5 bg-gradient-to-r from-teal to-mint text-navy rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow-md flex items-center gap-2 cursor-pointer active:scale-95"
@@ -581,6 +617,15 @@ export const SencoView: React.FC<SencoViewProps> = ({
               isOpen={showPackModal}
               onClose={() => setShowPackModal(false)}
               pack={reviewPack}
+            />
+          )}
+
+          {/* Full Screen CAMHS Clinical Dossier Modal */}
+          {showCamhsModal && (
+            <CamhsEvidenceDossierModal
+              isOpen={showCamhsModal}
+              onClose={() => setShowCamhsModal(false)}
+              dossier={camhsDossier}
             />
           )}
         </div>

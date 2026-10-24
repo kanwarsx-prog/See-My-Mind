@@ -7,10 +7,12 @@ import {
   MedicationCorrelationResponse,
   ParentWinsGalleryItem,
   EveningCheckInCreate,
+  CamhsClinicalDossierResponse,
 } from '../types';
 import { api } from '../api';
 import { DecompressionBridgeCard } from '../components/DecompressionBridgeCard';
 import { EveningCheckInModal } from '../components/EveningCheckInModal';
+import { CamhsEvidenceDossierModal } from '../components/CamhsEvidenceDossierModal';
 import {
   BatteryCharging,
   Clock,
@@ -74,6 +76,26 @@ export const ParentView: React.FC<ParentViewProps> = ({
 
   // Evening modal
   const [eveningModalOpen, setEveningModalOpen] = useState(false);
+
+  // CAMHS Clinical Dossier state
+  const [camhsDossier, setCamhsDossier] = useState<CamhsClinicalDossierResponse | null>(null);
+  const [camhsModalOpen, setCamhsModalOpen] = useState(false);
+  const [loadingDossier, setLoadingDossier] = useState(false);
+
+  const handleOpenCamhsModal = async () => {
+    if (!child.id) return;
+    try {
+      setLoadingDossier(true);
+      const data = await api.getCamhsClinicalDossier(child.id);
+      setCamhsDossier(data);
+      setCamhsModalOpen(true);
+    } catch (err) {
+      console.error('Failed to load CAMHS dossier:', err);
+      alert('Failed to generate clinical dossier: ' + err);
+    } finally {
+      setLoadingDossier(false);
+    }
+  };
 
   // Morning handover form state
   const [sleep, setSleep] = useState('Restless (woke in night)');
@@ -544,13 +566,29 @@ export const ParentView: React.FC<ParentViewProps> = ({
                     </h2>
                   </div>
 
-                  <button
-                    onClick={handleCopyPediatricianSummary}
-                    className="px-4 py-2 bg-cardBg dark:bg-white/10 hover:bg-cardSubtle dark:hover:bg-white/20 active:scale-95 text-xs text-textMain dark:text-white rounded-xl flex items-center gap-2 transition-all cursor-pointer border border-borderMain dark:border-white/10 self-start md:self-auto shadow-2xs"
-                  >
-                    {copiedSummary ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-600 dark:text-amber-300" />}
-                    <span>{copiedSummary ? 'Copied Pediatrician Digest!' : 'Copy CAMHS / Pediatrician Summary'}</span>
-                  </button>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <button
+                      onClick={handleOpenCamhsModal}
+                      disabled={loadingDossier}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-xs font-bold text-white rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-sm hover:shadow disabled:opacity-60"
+                      title="NICE NG87 / CG128 Multi-Agency Clinical Evidence Dossier"
+                    >
+                      {loadingDossier ? (
+                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <FileText className="w-3.5 h-3.5 text-blue-200" />
+                      )}
+                      <span>{loadingDossier ? 'Compiling Dossier...' : 'Generate CAMHS Dossier'}</span>
+                    </button>
+
+                    <button
+                      onClick={handleCopyPediatricianSummary}
+                      className="px-3.5 py-2 bg-cardBg dark:bg-white/10 hover:bg-cardSubtle dark:hover:bg-white/20 active:scale-95 text-xs text-textMain dark:text-white rounded-xl flex items-center gap-1.5 transition-all cursor-pointer border border-borderMain dark:border-white/10 shadow-2xs"
+                    >
+                      {copiedSummary ? <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-4 h-4 text-amber-600 dark:text-amber-300" />}
+                      <span>{copiedSummary ? 'Copied' : 'Quick Copy'}</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -632,6 +670,19 @@ export const ParentView: React.FC<ParentViewProps> = ({
                 <pre className="text-[11px] font-mono text-textMain dark:text-slate-200 bg-cardBg p-4 rounded-xl border border-borderMain whitespace-pre-wrap leading-relaxed">
                   {correlation.pediatrician_summary}
                 </pre>
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-borderMain">
+                  <span className="text-[11px] text-textDim dark:text-slate-400">
+                    Need the complete formal report with St. Jude's letterhead, medication graph, and signature blocks?
+                  </span>
+                  <button
+                    onClick={handleOpenCamhsModal}
+                    disabled={loadingDossier}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-xs font-bold text-white rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm hover:shadow"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Open Full Printable Clinical Dossier (A4)</span>
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -721,6 +772,15 @@ export const ParentView: React.FC<ParentViewProps> = ({
         onClose={() => setEveningModalOpen(false)}
         onSubmit={handleEveningSubmit}
       />
+
+      {/* Formal CAMHS & Pediatrician Clinical Dossier Modal */}
+      {camhsModalOpen && (
+        <CamhsEvidenceDossierModal
+          isOpen={camhsModalOpen}
+          onClose={() => setCamhsModalOpen(false)}
+          dossier={camhsDossier}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Query, Response
+from uuid import UUID
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
 from app import models
@@ -11,8 +12,10 @@ from app.schemas.analytics import (
     StrategyEfficacyResponse,
     TriggersReportResponse,
 )
+from app.schemas.clinical_dossier import CamhsClinicalDossierResponse
 from app.schemas.sen_report import SenInformationReportResponse
 from app.services.analytics_service import AnalyticsService
+from app.services.clinical_dossier_service import ClinicalDossierService
 from app.services.sen_report_service import SenReportService
 
 router = APIRouter()
@@ -91,4 +94,19 @@ def get_statutory_governor_report(
     return SenReportService.generate_sen_information_report(
         db=db, school_id=current_user.school_id
     )
+
+
+@router.get("/camhs-dossier/{child_id}", response_model=CamhsClinicalDossierResponse)
+def get_camhs_clinical_dossier(
+    child_id: UUID,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_roles(["parent", "senco", "teacher", "ta", "admin"])),
+):
+    """Generates a formal, NICE NG87/CG128-compliant clinical evidence dossier for CAMHS and Community Pediatricians."""
+    try:
+        return ClinicalDossierService.generate_camhs_dossier(db=db, child_id=child_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
 

@@ -35,6 +35,7 @@ import {
   StrategyEfficacyResponse,
   ProvisionAuditResponse,
   SenInformationReportResponse,
+  CamhsClinicalDossierResponse,
 } from './types';
 
 const API_BASE =
@@ -617,6 +618,14 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Failed to fetch statutory SEN information report');
+    return res.json();
+  },
+
+  async getCamhsClinicalDossier(childId: string): Promise<CamhsClinicalDossierResponse> {
+    const res = await fetch(`${API_BASE}/analytics/camhs-dossier/${childId}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Failed to fetch CAMHS clinical dossier');
     return res.json();
   },
 };
